@@ -1,10 +1,6 @@
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
+  width: 8px;
 }
 
 /* Handle */

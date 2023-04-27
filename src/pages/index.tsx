@@ -1,6 +1,7 @@
+import React from "react";
+
 import Head from "next/head";
 import { Typography, Container } from "@mui/material";
-
 import Base from "@/layouts/Base";
 
 export default function Home() {
@@ -14,7 +15,7 @@ export default function Home() {
       </Head>
       <Base>
         <Container>
-          <Typography variant="h1">Home</Typography>
+          <Typography variant="h1">Choose your Deck</Typography>
         </Container>
       </Base>
     </>

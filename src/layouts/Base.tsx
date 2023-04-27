@@ -1,5 +1,5 @@
 import React from "react";
-import { Inter } from "next/font/google";
+import { Roboto_Serif } from "next/font/google";
 import { Box } from "@mui/material";
 
 import Navbar from "@/components/Navbar";
@@ -9,11 +9,14 @@ interface Props {
   children: React.ReactNode;
 }
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Roboto_Serif({
+  weight: ["300", "700", "800"],
+  subsets: ["latin"],
+});
 
 const Base: React.FC<Props> = ({ children }) => {
   return (
-    <main className={`${inter.className}`}>
+    <main className={`${font.className}`}>
       <Box sx={styles.root}>
         <Header />
         <Box sx={styles.video}>

@@ -26,8 +26,7 @@ const BASE_BUTTON_STYLES = {
 export const THEME = createTheme({
   typography: {
     fontFamily: [
-      "Inter",
-      "Roboto",
+      "",
       '"Helvetica Neue"',
       "Arial",
       "sans-serif",

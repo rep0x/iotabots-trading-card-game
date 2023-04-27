@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.16.4",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@metamask/providers": "^10.2.1",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.2",
     "@types/node": "18.16.1",
@@ -18,6 +20,7 @@
     "@types/react-dom": "18.2.1",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
+    "ethers": "^6.3.0",
     "next": "13.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

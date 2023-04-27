@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
-export const transitions = {
+export const TRANSITIONS = {
   300: "all 300ms cubic-bezier(0.65, 0, 0.35, 1) 0s",
   120: "all 120ms cubic-bezier(0.65, 0, 0.35, 1) 0s",
 };
@@ -56,17 +56,28 @@ export const THEME = createTheme({
   },
   palette: {
     mode: "dark",
+    common: {
+      black: "#060A12",
+      white: "#E8E3D2",
+    },
     primary: {
-      main: "#0FD698",
+      main: "#DECB23",
       contrastText: "#fff",
     },
     secondary: {
-      main: "#121212",
+      main: "#7E633A",
+      light: "#E8E3D2",
       contrastText: "#fff",
     },
+    info: {
+      main: "#238FDE",
+    },
     background: {
-      paper: "#121212",
-      default: "#1d1d1d",
+      paper: "#060A12",
+      default: "#0D1424",
+    },
+    text: {
+      primary: "#E8E3D2",
     },
   },
 

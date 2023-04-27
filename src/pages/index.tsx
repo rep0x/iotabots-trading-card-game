@@ -1,10 +1,7 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
-import { Typography } from "@mui/material";
+import { Typography, Container } from "@mui/material";
 
 import Base from "@/layouts/Base";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
@@ -16,9 +13,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Base>
-        <main className={`${inter.className}`}>
-          <Typography>Home</Typography>
-        </main>
+        <Container>
+          <Typography variant="h1">Home</Typography>
+        </Container>
       </Base>
     </>
   );

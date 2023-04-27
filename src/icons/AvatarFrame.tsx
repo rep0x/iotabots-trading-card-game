@@ -1,0 +1,47 @@
+/* eslint-disable max-len */
+import React from 'react'
+
+const AvatarFrame: React.FC = () => (
+  <svg width='136' height='136' viewBox='0 0 136 136' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <g filter='url(#filter0_d_289_5192)'>
+      <path fillRule='evenodd' clipRule='evenodd' d='M68 128C101.137 128 128 101.137 128 68C128 34.8629 101.137 8 68 8C34.8629 8 8 34.8629 8 68C8 101.137 34.8629 128 68 128ZM68 119C96.1665 119 119 96.1665 119 68C119 39.8335 96.1665 17 68 17C39.8335 17 17 39.8335 17 68C17 96.1665 39.8335 119 68 119Z' fill='#121C25' />
+    </g>
+    <g filter='url(#filter1_d_289_5192)'>
+      <path fillRule='evenodd' clipRule='evenodd' d='M68 117.333C95.2461 117.333 117.333 95.2461 117.333 68C117.333 40.754 95.2461 18.6667 68 18.6667C40.754 18.6667 18.6667 40.754 18.6667 68C18.6667 95.2461 40.754 117.333 68 117.333ZM68 121.778C97.7007 121.778 121.778 97.7007 121.778 68C121.778 38.2994 97.7007 14.2222 68 14.2222C38.2994 14.2222 14.2222 38.2994 14.2222 68C14.2222 97.7007 38.2994 121.778 68 121.778Z' fill='url(#paint0_linear_289_5192)' />
+    </g>
+    <path fillRule='evenodd' clipRule='evenodd' d='M68 126.222C100.155 126.222 126.222 100.155 126.222 68C126.222 35.8448 100.155 9.77778 68 9.77778C35.8448 9.77778 9.77778 35.8448 9.77778 68C9.77778 100.155 35.8448 126.222 68 126.222ZM68 128C101.137 128 128 101.137 128 68C128 34.8629 101.137 8 68 8C34.8629 8 8 34.8629 8 68C8 101.137 34.8629 128 68 128Z' fill='url(#paint1_linear_289_5192)' />
+    <defs>
+      <filter id='filter0_d_289_5192' x='0' y='0' width='136' height='136' filterUnits='userSpaceOnUse' colorInterpolationFilters='sRGB'>
+        <feFlood floodOpacity='0' result='BackgroundImageFix' />
+        <feColorMatrix in='SourceAlpha' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0' result='hardAlpha' />
+        <feOffset />
+        <feGaussianBlur stdDeviation='4' />
+        <feComposite in2='hardAlpha' operator='out' />
+        <feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0' />
+        <feBlend mode='normal' in2='BackgroundImageFix' result='effect1_dropShadow_289_5192' />
+        <feBlend mode='normal' in='SourceGraphic' in2='effect1_dropShadow_289_5192' result='shape' />
+      </filter>
+      <filter id='filter1_d_289_5192' x='6.22223' y='6.22223' width='123.556' height='123.556' filterUnits='userSpaceOnUse' colorInterpolationFilters='sRGB'>
+        <feFlood floodOpacity='0' result='BackgroundImageFix' />
+        <feColorMatrix in='SourceAlpha' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0' result='hardAlpha' />
+        <feOffset />
+        <feGaussianBlur stdDeviation='4' />
+        <feComposite in2='hardAlpha' operator='out' />
+        <feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0' />
+        <feBlend mode='normal' in2='BackgroundImageFix' result='effect1_dropShadow_289_5192' />
+        <feBlend mode='normal' in='SourceGraphic' in2='effect1_dropShadow_289_5192' result='shape' />
+      </filter>
+      <linearGradient id='paint0_linear_289_5192' x1='68' y1='14.2222' x2='68' y2='121.778' gradientUnits='userSpaceOnUse'>
+        <stop stopColor='#F0E0AC' />
+        <stop offset='1' stopColor='#715C39' />
+      </linearGradient>
+      <linearGradient id='paint1_linear_289_5192' x1='68' y1='8' x2='68' y2='128' gradientUnits='userSpaceOnUse'>
+        <stop stopColor='#F0E0AC' />
+        <stop offset='1' stopColor='#715C39' />
+      </linearGradient>
+    </defs>
+  </svg>
+
+)
+
+export default AvatarFrame

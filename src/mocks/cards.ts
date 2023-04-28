@@ -12,19 +12,7 @@ export interface Card {
 
 export const CARDS: Card[] = [
   {
-    id: "0",
-    address: "",
-    type: "bot",
-    name: "Ball Bot",
-    image: "https://assets.iotabots.io/tcg/1.png",
-    mana: 1,
-    attack: 1,
-    defense: 1,
-    hits: 1,
-  },
-  {
     id: "1",
-
     address: "",
     type: "bot",
     name: "Ball Bot",
@@ -276,7 +264,6 @@ export const CARDS: Card[] = [
   },
   {
     id: "22",
-
     address: "",
     type: "bot",
     name: "Alpha Bot",

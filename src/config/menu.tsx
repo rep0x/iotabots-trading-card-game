@@ -10,9 +10,9 @@ export const MENU = [
     link: "/",
   },
   {
-    label: "Collection",
+    label: "Cards",
     icon: <CollectionIcon />,
-    link: "/collection",
+    link: "/cards",
   },
   {
     label: "Shop",

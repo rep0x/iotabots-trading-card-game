@@ -2,6 +2,7 @@ import React from "react";
 import { SignedIn, useUser } from "@clerk/nextjs";
 import { Box, Button } from "@mui/material";
 import { api } from "@/utils/api";
+import toast from "react-hot-toast";
 
 const Create = () => {
   const { user } = useUser();
@@ -14,6 +15,10 @@ const Create = () => {
     onSuccess: () => {
       setValue("");
       ctx.posts.getAll.invalidate();
+      toast.success("Läuft digga");
+    },
+    onError: () => {
+      toast.error("Das klappt leider net");
     },
   });
 

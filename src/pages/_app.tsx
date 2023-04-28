@@ -8,12 +8,12 @@ import { api } from "@/utils/api";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <ThemeProvider theme={THEME}>
-      <ClerkProvider {...pageProps}>
+    <ClerkProvider {...pageProps}>
+      <ThemeProvider theme={THEME}>
         <CssBaseline />
         <Component {...pageProps} />
-      </ClerkProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </ClerkProvider>
   );
 };
 

@@ -1,9 +1,21 @@
 import React from "react";
 import { SignedIn, useUser } from "@clerk/nextjs";
 import { Box } from "@mui/material";
+import { api } from "@/utils/api";
 
 const Create = () => {
   const { user } = useUser();
+
+  const [value, setValue] = React.useState("");
+
+  const ctx = api.useContext();
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setValue("");
+      ctx.posts.getAll.invalidate();
+    },
+  });
 
   if (!user) return null;
 
@@ -11,7 +23,13 @@ const Create = () => {
     <SignedIn>
       <Box sx={styles.create}>
         <img src={user.profileImageUrl} alt="user-avatar" />
-        <input placeholder="Your message" />
+        <input
+          placeholder="Your message"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          disabled={isPosting}
+        />
+        <button onClick={() => mutate({ content: value })}>Post</button>
       </Box>
     </SignedIn>
   );

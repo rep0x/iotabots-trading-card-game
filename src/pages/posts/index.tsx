@@ -11,7 +11,7 @@ import Create from "@/components/Create";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Posts() {
-  const { data, isLoading } = api.posts.getAll.useQuery();
+  const { data, isLoading, isError } = api.posts.getAll.useQuery();
 
   return (
     <>
@@ -32,37 +32,10 @@ export default function Posts() {
               <LoadingSpinner />
             </Box>
           )}
-          {!data && <Typography>Something went wrong</Typography>}
-          {data?.map((post) => (
-            <Post key={post.post.id} {...post} />
-          ))}
+          {isError && <Typography>Something went wrong</Typography>}
+          {data && data.map((post) => <Post key={post.post.id} {...post} />)}
         </Container>
       </Base>
     </>
   );
 }
-
-const styles = {
-  create: {
-    display: "flex",
-    alignItems: "center",
-
-    "& img": {
-      borderRadius: "50%",
-      height: 40,
-      width: 40,
-      mr: 2,
-    },
-
-    "& input": {
-      bgcolor: "rgba(0,0,0,.8)",
-      outline: "none",
-      boxShadow: "none",
-      border: "none",
-      borderRadius: 1,
-      height: 40,
-      p: 1,
-      color: "common.white",
-    },
-  },
-};

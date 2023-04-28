@@ -39,7 +39,7 @@ const Header = () => {
       // which is backed by a variety of third-party services (such
       // as INFURA). They do not have private keys installed so are
       // only have read-only access
-      console.log("MetaMask not installed; using read-only defaults");
+
       provider = null; //ethers.getDefaultProvider();
     } else {
       // Connect to the MetaMask EIP-1193 object. This is a standard
@@ -53,7 +53,6 @@ const Header = () => {
       signer = await provider.getSigner();
       const balance = await provider.getBalance(address);
       const balanceInEth = ethers.formatEther(balance);
-      console.log(balanceInEth);
     }
   };
 

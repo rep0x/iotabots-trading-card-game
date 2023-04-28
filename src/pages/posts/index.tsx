@@ -8,6 +8,10 @@ import { RouterOutputs, api } from "@/utils/api";
 import { SignedIn, useUser } from "@clerk/nextjs";
 import { shortenAddress } from "@/utils/shortenAddress";
 
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+
 type PostWithUser = RouterOutputs["posts"]["getAll"][number];
 const Post = (props: PostWithUser) => {
   const { post, author } = props;
@@ -16,7 +20,7 @@ const Post = (props: PostWithUser) => {
       <img src={author.profileImageUrl} alt="" />
       <Box display="flex" flexDirection="column">
         <Typography color="text.secondary" fontSize={14}>
-          {shortenAddress(author.id)} · 12 days ago
+          {shortenAddress(author.id)} · {dayjs(post.createdAt).fromNow()}
         </Typography>
         <Typography>{post.content}</Typography>
       </Box>

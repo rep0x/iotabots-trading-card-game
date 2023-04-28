@@ -6,8 +6,8 @@ import Base from "@/layouts/Base";
 
 import { api } from "@/utils/api";
 
-import Post from "./components/Post";
-import Create from "./components/Create";
+import Post from "@/components/Post";
+import Create from "@/components/Create";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Posts() {

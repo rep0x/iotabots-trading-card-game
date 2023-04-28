@@ -8,9 +8,10 @@ import { api } from "@/utils/api";
 
 import Post from "./components/Post";
 import Create from "./components/Create";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Posts() {
-  const { data } = api.posts.getAll.useQuery();
+  const { data, isLoading } = api.posts.getAll.useQuery();
 
   return (
     <>
@@ -26,6 +27,12 @@ export default function Posts() {
             Posts
           </Typography>
           <Create />
+          {isLoading && (
+            <Box mt={2}>
+              <LoadingSpinner />
+            </Box>
+          )}
+          {!data && <Typography>Something went wrong</Typography>}
           {data?.map((post) => (
             <Post key={post.post.id} {...post} />
           ))}

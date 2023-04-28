@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "@/globals.css";
 import { THEME } from "@/theme";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider, CssBaseline } from "@mui/material";

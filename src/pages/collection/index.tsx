@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { Typography, Container } from "@mui/material";
+import { Typography, Container, Box } from "@mui/material";
 
 import Base from "@/layouts/Base";
+import { CARDS } from "@/mocks/cards";
 
 export default function Collection() {
   return (
@@ -13,10 +14,31 @@ export default function Collection() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Base>
-        <Container>
+        <Container maxWidth="lg">
           <Typography variant="h1">Collection</Typography>
+          <Box sx={styles.grid}>
+            {CARDS.map((card) => (
+              <Box sx={styles.card}>
+                <img src={card.image} alt={`${card.id} trading card`} />
+                {card.id}
+              </Box>
+            ))}
+          </Box>
         </Container>
       </Base>
     </>
   );
 }
+
+const styles = {
+  grid: {
+    display: "flex",
+    gap: 4,
+    flexWrap: "wrap",
+  },
+  card: {
+    "& img": {
+      maxWidth: 200,
+    },
+  },
+};

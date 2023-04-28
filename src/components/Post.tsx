@@ -28,7 +28,7 @@ const styles = {
   post: {
     bgcolor: "rgba(0,0,0,0.8)",
     p: 2,
-    borderRadius: 1,
+    borderRadius: 2,
     mt: 2,
     display: "flex",
     alignItems: "center",

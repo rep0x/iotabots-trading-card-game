@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import Currency from "../Currency";
 import PlayerInfo from "../PlayerInfo";
@@ -68,15 +68,21 @@ const Header = () => {
         <Box sx={styles.player}>
           <PlayerInfo name={shortenAddress(address)} avatar={PLAYER.avatar} />
         </Box>
-        <Box sx={styles.currencies}>
-          <Currency type="premium" value="242" />
-          <Currency type="default" value="2.400" />
+        <Box sx={styles.infos}>
+          <Box sx={styles.currencies}>
+            <Currency type="premium" value="242" />
+            <Currency type="default" value="2.400" />
+          </Box>
+          <UserButton />
         </Box>
-        <UserButton />
       </SignedIn>
       <SignedOut>
         <Box sx={styles.buttons}>
-          <SignInWithMetamaskButton />
+          <SignInWithMetamaskButton>
+            <Button size="large" variant="contained">
+              Connect
+            </Button>
+          </SignInWithMetamaskButton>
         </Box>
       </SignedOut>
     </Box>
@@ -100,6 +106,11 @@ const styles = {
     px: 6,
   },
   player: { transform: "translateY(40px)" },
+  infos: {
+    display: "flex",
+    alignItems: "center",
+    gap: 4,
+  },
   currencies: {
     display: "flex",
     alignItems: "center",

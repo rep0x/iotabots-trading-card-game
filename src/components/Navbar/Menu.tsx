@@ -43,7 +43,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "8px",
+    borderRadius: 2,
     mr: 4,
     cursor: "pointer",
     transition: TRANSITIONS[300],

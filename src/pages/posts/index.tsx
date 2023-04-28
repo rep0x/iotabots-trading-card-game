@@ -22,7 +22,7 @@ export default function Posts() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Base>
-        <Container>
+        <Container maxWidth="sm">
           <Typography variant="h1" gutterBottom>
             Posts
           </Typography>

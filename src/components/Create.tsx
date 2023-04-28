@@ -1,6 +1,6 @@
 import React from "react";
 import { SignedIn, useUser } from "@clerk/nextjs";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { api } from "@/utils/api";
 
 const Create = () => {
@@ -24,12 +24,14 @@ const Create = () => {
       <Box sx={styles.create}>
         <img src={user.profileImageUrl} alt="user-avatar" />
         <input
-          placeholder="Your message"
+          placeholder="Post some emojis"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           disabled={isPosting}
         />
-        <button onClick={() => mutate({ content: value })}>Post</button>
+        <Button onClick={() => mutate({ content: value })} variant="contained">
+          Sumbit
+        </Button>
       </Box>
     </SignedIn>
   );
@@ -39,20 +41,21 @@ const styles = {
   create: {
     display: "flex",
     alignItems: "center",
+    gap: 2,
 
     "& img": {
       borderRadius: "50%",
       height: 40,
       width: 40,
-      mr: 2,
     },
 
     "& input": {
+      flex: 1,
       bgcolor: "rgba(0,0,0,.8)",
       outline: "none",
       boxShadow: "none",
       border: "none",
-      borderRadius: 1,
+      borderRadius: 2,
       height: 40,
       p: 1,
       color: "common.white",

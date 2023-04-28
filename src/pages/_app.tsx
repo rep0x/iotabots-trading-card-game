@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import { THEME } from "@/theme";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import type { AppProps, AppType } from "next/app";
+import type { AppProps } from "next/app";
 
 import { api } from "@/utils/api";
 

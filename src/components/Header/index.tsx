@@ -62,6 +62,7 @@ const Header = () => {
       getBalance();
     }
   }, [user]);
+
   return (
     <Box sx={styles.root}>
       <SignedIn>

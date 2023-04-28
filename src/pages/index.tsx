@@ -4,11 +4,7 @@ import Head from "next/head";
 import { Typography, Container } from "@mui/material";
 import Base from "@/layouts/Base";
 
-import { api } from "@/utils/api";
-
 export default function Home() {
-  const { data } = api.posts.getAll.useQuery();
-
   return (
     <>
       <Head>
@@ -20,9 +16,6 @@ export default function Home() {
       <Base>
         <Container>
           <Typography variant="h1">Choose your Deck</Typography>
-          {data?.map((post) => (
-            <div key={post.id}>{post.content}</div>
-          ))}
         </Container>
       </Base>
     </>

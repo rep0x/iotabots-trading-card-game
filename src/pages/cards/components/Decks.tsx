@@ -12,7 +12,7 @@ import Button from "@/components/Button";
 import DeckBox from "./DeckBox";
 
 const Decks: React.FC = () => {
-  const { setFormData, setFormActive } = React.useContext(CardsContext);
+  const { setFormData, setFormState } = React.useContext(CardsContext);
   const { data } = api.decks.getAll.useQuery();
 
   if (!data) return null;
@@ -22,15 +22,15 @@ const Decks: React.FC = () => {
     const cards = deck.cards as Prisma.JsonArray;
 
     const newCards = cards.map((card) => {
-      const test = card as {
+      const nextCard = card as {
         id: string;
         count: number;
       };
-      if (!test) return;
-      const mockCard = CARDS[Number(test.id) - 1];
+      if (!nextCard) return;
+      const mockCard = CARDS[Number(nextCard.id) - 1];
       return {
         ...mockCard,
-        count: test.count,
+        count: nextCard.count,
       };
     });
 
@@ -40,55 +40,48 @@ const Decks: React.FC = () => {
       name: deck.name,
       cards: newCards as CountCard[],
     });
-    setFormActive(true);
+    setFormState("index");
   };
 
   return (
-    <Box sx={styles.root}>
+    <>
       <Box sx={styles.header}>
         <Typography variant="h5" mb={2}>
           My Decks
         </Typography>
         <DividerSvg />
       </Box>
-      {data &&
-        data.map((deck) => (
-          <DeckBox key={deck.id} {...deck} onClick={() => openDeck(deck)} />
-        ))}
+      <Box sx={styles.grid}>
+        {data &&
+          data.map((deck) => (
+            <DeckBox key={deck.id} {...deck} onClick={() => openDeck(deck)} />
+          ))}
+      </Box>
       {data.length === 0 && (
         <Typography color="text.secondary">
           You dont have any decks yet.
         </Typography>
       )}
-      <Button
-        sx={{ mt: 4 }}
-        color="secondary"
-        onClick={() => setFormActive(true)}
-      >
+      <Button color="secondary" onClick={() => setFormState("create")}>
         Create Deck
       </Button>
-    </Box>
+    </>
   );
 };
 
 const styles = {
-  root: {
-    bgcolor: "rgba(0,0,0,.66)",
-    border: "2px solid",
-    borderColor: "secondary.main",
-    borderRadius: "8px",
-    p: 5,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    minWidth: 400,
-  },
   header: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    mb: 2,
+  },
+  grid: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "stretch",
+    gap: 3,
   },
 };
 

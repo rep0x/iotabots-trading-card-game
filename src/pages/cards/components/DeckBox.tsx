@@ -31,8 +31,6 @@ const styles = {
   root: {
     position: "relative",
     p: 3,
-    mt: 4,
-    mb: 2,
     width: "100%",
     height: 80,
     borderRadius: "8px",

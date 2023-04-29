@@ -1,33 +1,43 @@
 import React from "react";
 import { Box, Typography, LinearProgress } from "@mui/material";
-import DeckItem from "./DeckItem";
+
 import { CardsContext } from "@/context/CardsContext";
 import { countDeck } from "@/utils/countDeck";
-import Progress from "@/icons/Progress";
+
+import DeckItem from "./DeckItem";
+import { toast } from "react-hot-toast";
 
 const Form = () => {
-  const { formData, setFormData, setFormActive } =
+  const { formData, setFormData, changeCollectionCardCount } =
     React.useContext(CardsContext);
   const { cards } = formData;
-  const count = countDeck(formData.cards);
 
-  const changeCount = (id: string, number: number): void => {
+  const deckCount = countDeck(formData.cards);
+
+  const changeCount = (id: string, amount: number): void => {
     const index = cards.findIndex((item) => item.id === id);
     const currentCount = cards[index].count;
 
-    if (number === -1 && currentCount === 1) {
+    if (amount === -1 && currentCount === 1) {
       setFormData({
         name: formData.name,
         cards: cards.filter((item) => item.id !== id),
       });
+      changeCollectionCardCount(Number(id), amount * -1);
       return;
     }
 
-    formData.cards[index].count += number;
+    if (amount > 0 && deckCount >= 33) {
+      toast.error("Max 33 cards in a deck");
+      return;
+    }
+
+    formData.cards[index].count += amount;
     setFormData({
       name: formData.name,
       cards: [...formData.cards],
     });
+    changeCollectionCardCount(Number(id), -amount);
   };
 
   return (
@@ -54,7 +64,7 @@ const Form = () => {
           }}
         >
           <Box display="flex" gap={1}>
-            <Typography fontWeight="bold">{`${count}`}</Typography>
+            <Typography fontWeight="bold">{`${deckCount}`}</Typography>
 
             <Typography color="text.secondary">/</Typography>
             <Typography color="text.secondary">33</Typography>
@@ -69,7 +79,7 @@ const Form = () => {
             <LinearProgress
               color="info"
               variant="determinate"
-              value={(count / 33) * 100}
+              value={(deckCount / 33) * 100}
               sx={{ borderRadius: 1 }}
             />
           </Box>
@@ -101,9 +111,6 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    mb: 0,
-    p: 4,
-    pb: 3,
 
     "& input": {
       flex: 1,
@@ -120,8 +127,7 @@ const styles = {
   grid: {
     overflowY: "auto",
     flexGrow: 1,
-    px: 2,
-    pb: 2,
+    width: "calc(100% + 24px)",
   },
 };
 

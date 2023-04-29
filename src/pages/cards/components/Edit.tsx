@@ -7,7 +7,7 @@ import { api } from "@/utils/api";
 import toast from "react-hot-toast";
 import Form from "@/pages/cards/components/Form";
 
-const Create: React.FC = () => {
+const EditDeck: React.FC = () => {
   const { formData, setFormState, setFormData } =
     React.useContext(CardsContext);
   const { cards } = formData;
@@ -54,4 +54,4 @@ const Create: React.FC = () => {
   );
 };
 
-export default Create;
+export default EditDeck;

@@ -5,11 +5,11 @@ import { Typography, Container, Box } from "@mui/material";
 import Base from "@/layouts/Base";
 import { CardsContext } from "@/context/CardsContext";
 
-import EditDeck from "./components/Create";
+import Create from "./components/Create";
 import Decks from "./components/Decks";
 
 export default function Cards() {
-  const { formActive, collection, addCardToDeck } =
+  const { formState, collection, addCardToDeck } =
     React.useContext(CardsContext);
 
   return (
@@ -32,7 +32,7 @@ export default function Cards() {
                   key={card.id}
                   className={`count-${count}`}
                   sx={styles.card}
-                  onClick={() => addCardToDeck(card)}
+                  onClick={() => (count > 0 ? addCardToDeck(card) : null)}
                 >
                   <img src={card.image} alt={`${card.id} trading card`} />
                   <Box sx={styles.cardCount}>
@@ -41,9 +41,10 @@ export default function Cards() {
                 </Box>
               ))}
             </Box>
-            <Box>
-              {!formActive && <Decks />}
-              {!!formActive && <EditDeck />}
+            <Box sx={styles.sidebar}>
+              {formState === "index" && <Decks />}
+              {formState === "create" && <Create />}
+              {formState === "edit" && <Create />}
             </Box>
           </Box>
         </Container>
@@ -55,6 +56,7 @@ export default function Cards() {
 const styles = {
   grid: {
     display: "flex",
+    alignItems: "flex-start",
   },
 
   cardGrid: {
@@ -75,6 +77,7 @@ const styles = {
     },
 
     "&.count-0": {
+      cursor: "not-allowed",
       "& img": {
         opacity: 0.2,
       },
@@ -96,5 +99,23 @@ const styles = {
     color: "background.paper",
     borderRadius: "50%",
     boxShadow: 3,
+  },
+
+  sidebar: {
+    position: "sticky",
+    top: -40,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    minWidth: 400,
+    height: "auto",
+    maxHeight: "calc(100vh - 285px)",
+    p: 4,
+    bgcolor: "rgba(0,0,0,.66)",
+    border: "2px solid",
+    borderColor: "secondary.main",
+    borderRadius: "8px",
+    gap: 4,
   },
 };

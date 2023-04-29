@@ -43,7 +43,7 @@ const styles = {
   root: {
     display: "flex",
     alignItems: "center",
-    p: 2,
+    p: 1,
     border: "1px solid",
     borderColor: "rgba(255,255,255,0.0)",
     borderRadius: "8px",

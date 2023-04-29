@@ -10,11 +10,15 @@ import { CountCard } from "@/mocks/deck";
 import Button from "@/components/Button";
 
 import DeckBox from "./DeckBox";
+import { useUser } from "@clerk/nextjs";
 
 const Decks: React.FC = () => {
-  const { setFormData, setFormState, setSelectedDeck, updateCollection } =
+  const { setFormData, setFormState, setSelectedDeck } =
     React.useContext(CardsContext);
-  const { data } = api.decks.getAll.useQuery();
+
+  const { user } = useUser();
+  console.log("👩‍🦰 User", user);
+  const { data, refetch } = api.decks.getAll.useQuery();
 
   if (!data) return null;
 

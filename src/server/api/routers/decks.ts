@@ -1,8 +1,8 @@
+import { z } from "zod";
 import { clerkClient } from "@clerk/nextjs/server";
-import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 import { User } from "@clerk/nextjs/dist/api";
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 
 const filterUserForClient = (user: User) => {
   return {
@@ -27,9 +27,6 @@ export const decksRouter = createTRPCRouter({
         limit: 100,
       })
     ).map(filterUserForClient);
-
-    console.log("clerk getUserList", users);
-    console.log("CONTEXT currentUser", ctx.currentUser);
 
     return decks.map((deck) => {
       const user = users.find((user) => user.id === deck.userId);

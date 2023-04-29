@@ -46,6 +46,10 @@ const Edit: React.FC = () => {
   };
 
   const onBack = () => {
+    setFormData({
+      name: "",
+      cards: [],
+    });
     resetCollection();
     setFormState("index");
   };

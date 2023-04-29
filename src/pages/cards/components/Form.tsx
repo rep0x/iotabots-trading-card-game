@@ -98,7 +98,7 @@ const Form = () => {
         ))}
         {formData && cards.length === 0 && (
           <Typography color="text.secondary" align="center">
-            Select some cards
+            Choose 33 cards, max 3 of each kind
           </Typography>
         )}
       </Box>

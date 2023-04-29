@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 
 import Currency from "../Currency";
 import PlayerInfo from "../PlayerInfo";
@@ -13,6 +13,7 @@ import {
 
 import { ethers } from "ethers";
 import { shortenAddress } from "@/utils/shortenAddress";
+import Button from "../Button";
 
 interface Player {
   name: string;
@@ -79,9 +80,7 @@ const Header = () => {
       <SignedOut>
         <Box sx={styles.buttons}>
           <SignInWithMetamaskButton>
-            <Button size="large" variant="contained">
-              Connect
-            </Button>
+            <Button color="secondary">Connect</Button>
           </SignInWithMetamaskButton>
         </Box>
       </SignedOut>

@@ -8,6 +8,7 @@ import { CardsContext } from "@/context/CardsContext";
 import Create from "./components/Create";
 import Decks from "./components/Decks";
 import Edit from "./components/Edit";
+import CollectionCard from "./components/CollectionCard";
 
 export default function Cards() {
   const { formState, collection, addCardToDeck, selectedDeck } =
@@ -28,18 +29,8 @@ export default function Cards() {
           </Typography>
           <Box sx={styles.grid}>
             <Box sx={styles.cardGrid}>
-              {collection.map(({ card, count }) => (
-                <Box
-                  key={card.id}
-                  className={`count-${count}`}
-                  sx={styles.card}
-                  onClick={() => (count > 0 ? addCardToDeck(card) : null)}
-                >
-                  <img src={card.image} alt={`${card.id} trading card`} />
-                  <Box sx={styles.cardCount}>
-                    <Typography fontWeight="bold">{count}</Typography>
-                  </Box>
-                </Box>
+              {collection.map((item) => (
+                <CollectionCard key={item.card.id} {...item} />
               ))}
             </Box>
             <Box sx={styles.sidebar}>
@@ -64,42 +55,6 @@ const styles = {
     display: "flex",
     gap: 4,
     flexWrap: "wrap",
-  },
-
-  card: {
-    position: "relative",
-    height: 280,
-
-    "& img": {
-      boxShadow: 4,
-      borderRadius: 3,
-      overflow: "hidden",
-      maxWidth: 200,
-    },
-
-    "&.count-0": {
-      cursor: "not-allowed",
-      "& img": {
-        opacity: 0.2,
-      },
-    },
-  },
-
-  cardCount: {
-    position: "absolute",
-    bottom: 10,
-    left: "50%",
-    transform: "translate(-50%, 50%)",
-    zIndex: 1,
-    height: 32,
-    width: 32,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    bgcolor: "#fff",
-    color: "background.paper",
-    borderRadius: "50%",
-    boxShadow: 3,
   },
 
   sidebar: {

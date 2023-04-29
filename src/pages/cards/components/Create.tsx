@@ -26,7 +26,7 @@ const Create: React.FC = () => {
       setFormState("index");
     },
     onError: () => {
-      toast.error("Gabutt");
+      toast.error("You need to connect first");
     },
   });
 
@@ -43,6 +43,10 @@ const Create: React.FC = () => {
   };
 
   const onBack = () => {
+    setFormData({
+      name: "",
+      cards: [],
+    });
     resetCollection();
     setFormState("index");
   };

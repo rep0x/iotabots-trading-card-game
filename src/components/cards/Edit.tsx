@@ -1,37 +1,40 @@
 import React from "react";
 import { Box } from "@mui/material";
-import Button from "../../../components/Button";
+import Button from "@/components/Button";
 
 import { CardsContext } from "@/context/CardsContext";
 import { api } from "@/utils/api";
 import toast from "react-hot-toast";
-import Form from "@/pages/cards/components/Form";
+import Form from "./Form";
 
-const Create: React.FC = () => {
-  const { formData, setFormState, setFormData, resetCollection } =
+const DEFAULT_FORMDATA = {
+  name: "",
+  cards: [],
+};
+
+const Edit: React.FC = () => {
+  const { formData, setFormState, setFormData, selectedDeck, resetCollection } =
     React.useContext(CardsContext);
   const { cards } = formData;
 
   const ctx = api.useContext();
 
-  const { mutate } = api.decks.create.useMutation({
+  const { mutate } = api.decks.update.useMutation({
     onSuccess: () => {
-      toast.success("Created new deck ");
+      toast.success("Deck successfully updated ");
       ctx.decks.getAll.invalidate();
-      setFormData({
-        name: "",
-        cards: [],
-      });
+      setFormData(DEFAULT_FORMDATA);
       resetCollection();
       setFormState("index");
     },
     onError: () => {
-      toast.error("You need to connect first.");
+      toast.error("Gabutt");
     },
   });
 
-  const onSave = (): void => {
+  const onSave = () => {
     mutate({
+      id: selectedDeck || "",
       name: formData.name,
       cards: cards.map((item) => {
         return {
@@ -55,9 +58,9 @@ const Create: React.FC = () => {
     <>
       <Form />
       <Box sx={styles.buttons}>
-        <Button onClick={onBack}>Cancel</Button>
+        <Button onClick={onBack}>Back</Button>
         <Button color="secondary" onClick={onSave}>
-          Create Deck
+          Save
         </Button>
       </Box>
     </>
@@ -72,4 +75,4 @@ const styles = {
   },
 };
 
-export default Create;
+export default Edit;

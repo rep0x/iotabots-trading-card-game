@@ -5,13 +5,13 @@ import { Typography, Container, Box } from "@mui/material";
 import Base from "@/layouts/Base";
 import { CardsContext } from "@/context/CardsContext";
 
-import Create from "./components/Create";
-import Decks from "./components/Decks";
-import Edit from "./components/Edit";
-import CollectionCard from "./components/CollectionCard";
+import Create from "@/components/cards/Create";
+import Decks from "@/components/cards/Decks";
+import Edit from "@/components/cards/Edit";
+import CollectionCard from "@/components/cards/CollectionCard";
 
 export default function Cards() {
-  const { formState, collection, addCardToDeck, selectedDeck } =
+  const { formState, collection, selectedDeck } =
     React.useContext(CardsContext);
 
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { getCardContract } from "../../../utils/getContracts";
+import { getCardContract } from "../../utils/getContracts";
 
 import { CollectionItem } from "@/mocks/collection";
 import { CardsContext } from "@/context/CardsContext";
@@ -76,7 +76,7 @@ const CollectionCard = (props: CollectionItem) => {
       }}
       onClick={onClick}
     >
-      <img src={card.image} alt={`${card.id} trading card`} />
+      <img src={card.image || ""} alt={`${card.id} trading card`} />
       <Box sx={styles.counter}>
         <Box sx={styles.counterWrapper}>
           <Box sx={styles.label}>

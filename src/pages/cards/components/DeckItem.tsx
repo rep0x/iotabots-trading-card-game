@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, IconButton, Typography } from "@mui/material";
-import ManaImage from "../../icons/Mana.png";
-import MinusSvg from "../../icons/MinusSvg";
-import PlusSvg from "../../icons/PlusSvg";
+
+import ManaImage from "@/icons/Mana.png";
+import MinusSvg from "@/icons/MinusSvg";
+import PlusSvg from "@/icons/PlusSvg";
 import { TRANSITIONS } from "@/theme";
 
 interface DeckItemProps {

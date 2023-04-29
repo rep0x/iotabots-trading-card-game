@@ -1,12 +1,14 @@
 import React from "react";
 import Head from "next/head";
-import { Typography, Container, Box } from "@mui/material";
 import toast from "react-hot-toast";
+import { Typography, Container, Box } from "@mui/material";
+
 import Base from "@/layouts/Base";
 import { CARDS, Card } from "@/mocks/cards";
-import Decks from "@/components/Deck/Decks";
-import EditDeck from "@/components/Deck/EditDeck";
 import { CardsContext } from "@/context/CardsContext";
+
+import EditDeck from "./components/Create";
+import Decks from "./components/Decks";
 
 export default function Cards() {
   const { setFormData, formData, formActive } = React.useContext(CardsContext);

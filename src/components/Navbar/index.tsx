@@ -1,20 +1,22 @@
 import React from "react";
-
+import { useRouter } from "next/router";
 import { Box } from "@mui/material";
+
+import { TRANSITIONS } from "@/theme";
 
 import PlayButton from "../PlayButton";
 import Menu from "./Menu";
-import { TRANSITIONS } from "@/theme";
 
 const Navbar = () => {
-  const isHome = true;
+  const { pathname } = useRouter();
+  const isHome = pathname === "/";
 
   return (
     <Box sx={styles.root}>
       <Menu />
       <Box
         sx={{
-          transform: isHome ? "scale(1)" : "scale(0.8)",
+          transform: isHome ? "scale(1)" : "scale(0)",
           ...styles.wrapper,
         }}
       >

@@ -1,29 +1,15 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
-import Button from "../Button";
+import { Box, Typography, LinearProgress } from "@mui/material";
 import DeckItem from "./DeckItem";
-import { countDeck } from "../../utils/countDeck";
 import { CardsContext } from "@/context/CardsContext";
-import { api } from "@/utils/api";
-import toast from "react-hot-toast";
+import { countDeck } from "@/utils/countDeck";
+import Progress from "@/icons/Progress";
 
-const EditDeck: React.FC = () => {
+const Form = () => {
   const { formData, setFormData, setFormActive } =
     React.useContext(CardsContext);
   const { cards } = formData;
   const count = countDeck(formData.cards);
-
-  const ctx = api.useContext();
-
-  const { mutate } = api.decks.create.useMutation({
-    onSuccess: () => {
-      toast.success("Läuft ");
-      ctx.decks.getAll.invalidate();
-    },
-    onError: () => {
-      toast.error("Gabutt");
-    },
-  });
 
   const changeCount = (id: string, number: number): void => {
     const index = cards.findIndex((item) => item.id === id);
@@ -31,7 +17,7 @@ const EditDeck: React.FC = () => {
 
     if (number === -1 && currentCount === 1) {
       setFormData({
-        name: "Test",
+        name: formData.name,
         cards: cards.filter((item) => item.id !== id),
       });
       return;
@@ -44,24 +30,8 @@ const EditDeck: React.FC = () => {
     });
   };
 
-  const onSave = (): void => {
-    setFormActive(false);
-    console.log("Form Data on Save", formData);
-    mutate({
-      name: formData.name,
-      cards: cards.map((item) => {
-        return {
-          id: item.id,
-          count: item.count,
-        };
-      }),
-    });
-  };
-
-  console.log("Formdat", formData);
-
   return (
-    <Box sx={styles.root}>
+    <div>
       <Box sx={styles.header}>
         <Box display="flex" flexDirection="column" flex={1}>
           <input
@@ -74,18 +44,33 @@ const EditDeck: React.FC = () => {
             }
           />
         </Box>
-        <Box display="flex">
-          <Typography
-            variant="body2"
-            color="text.primary"
-            fontWeight="bold"
-            mr={2}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          <Box display="flex" gap={1}>
+            <Typography fontWeight="bold">{`${count}`}</Typography>
+
+            <Typography color="text.secondary">/</Typography>
+            <Typography color="text.secondary">33</Typography>
+          </Box>
+          <Box
+            sx={{
+              height: 16,
+              width: 60,
+              pt: 1 / 2,
+            }}
           >
-            {`${count}`}
-          </Typography>
-          <Typography color="text.secondary" variant="body2">
-            / 33
-          </Typography>
+            <LinearProgress
+              color="info"
+              variant="determinate"
+              value={(count / 33) * 100}
+              sx={{ borderRadius: 1 }}
+            />
+          </Box>
         </Box>
       </Box>
       <Box sx={styles.grid}>
@@ -100,32 +85,16 @@ const EditDeck: React.FC = () => {
           />
         ))}
         {formData && cards.length === 0 && (
-          <Typography align="center">Select some cards</Typography>
+          <Typography color="text.secondary" align="center">
+            Select some cards
+          </Typography>
         )}
       </Box>
-      <Box display="flex" justifyContent="center" p={4}>
-        <Button onClick={() => setFormActive(false)}>Cancel</Button>
-        <Button color="secondary" onClick={onSave}>
-          Save Deck
-        </Button>
-      </Box>
-    </Box>
+    </div>
   );
 };
 
 const styles = {
-  root: {
-    position: "sticky",
-    bgcolor: "rgba(0,0,0,.66)",
-    border: "2px solid",
-    borderColor: "secondary.main",
-    borderRadius: "8px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "stretch",
-    width: 400,
-    maxHeight: "calc(100vh - 400px)",
-  },
   header: {
     display: "flex",
     alignItems: "center",
@@ -154,4 +123,4 @@ const styles = {
   },
 };
 
-export default EditDeck;
+export default Form;

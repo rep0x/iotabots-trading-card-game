@@ -1,13 +1,15 @@
 import React from "react";
+import { Prisma } from "@prisma/client";
 import { Box, Typography } from "@mui/material";
-import DeckBox from "./DeckBox";
-import DividerSvg from "../../icons/DividerSvg";
-import { CountCard, DECKS } from "../../mocks/deck";
-import Button from "../Button";
+
 import { CardsContext } from "@/context/CardsContext";
 import { RouterOutputs, api } from "@/utils/api";
-import { Prisma } from "@prisma/client";
 import { CARDS } from "@/mocks/cards";
+import DividerSvg from "@/icons/DividerSvg";
+import { CountCard } from "@/mocks/deck";
+import Button from "@/components/Button";
+
+import DeckBox from "./DeckBox";
 
 const Decks: React.FC = () => {
   const { setFormData, setFormActive } = React.useContext(CardsContext);
@@ -54,7 +56,9 @@ const Decks: React.FC = () => {
           <DeckBox key={deck.id} {...deck} onClick={() => openDeck(deck)} />
         ))}
       {data.length === 0 && (
-        <Typography>You dont have any decks yet.</Typography>
+        <Typography color="text.secondary">
+          You dont have any decks yet.
+        </Typography>
       )}
       <Button
         sx={{ mt: 4 }}
@@ -69,9 +73,9 @@ const Decks: React.FC = () => {
 
 const styles = {
   root: {
-    bgcolor: "background.paper",
+    bgcolor: "rgba(0,0,0,.66)",
     border: "2px solid",
-    borderColor: "text.primary",
+    borderColor: "secondary.main",
     borderRadius: "8px",
     p: 5,
     display: "flex",

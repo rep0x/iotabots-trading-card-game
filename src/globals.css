@@ -35,3 +35,7 @@ html {
     transform: rotate(360deg);
   }
 }
+
+body * {
+  font-family: "__Roboto_Serif_f3cccc";
+}

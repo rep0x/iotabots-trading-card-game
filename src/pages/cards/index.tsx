@@ -12,18 +12,24 @@ export default function Cards() {
   const { setFormData, formData, formActive } = React.useContext(CardsContext);
 
   const addCardToDeck = (card: Card) => {
-    const insertAt = formData.findIndex((item) => item.id === card.id);
+    const insertAt = formData.cards.findIndex((item) => item.id === card.id);
 
     if (insertAt === -1) {
-      setFormData([...formData, { ...card, count: 1 }]);
+      setFormData({
+        name: formData.name,
+        cards: [...formData.cards, { ...card, count: 1 }],
+      });
     } else {
-      const currentCount = formData[insertAt].count;
+      const currentCount = formData.cards[insertAt].count;
       if (currentCount === 3) {
         toast.error("Maximum 3 of each card");
         return;
       }
-      formData[insertAt].count += 1;
-      setFormData([...formData]);
+      formData.cards[insertAt].count += 1;
+      setFormData({
+        name: formData.name,
+        cards: [...formData.cards],
+      });
     }
   };
 

@@ -3,7 +3,6 @@ import { Box, Typography } from "@mui/material";
 import Button from "../Button";
 import DeckItem from "./DeckItem";
 import { countDeck } from "../../utils/countDeck";
-import { CountCard } from "@/mocks/deck";
 import { CardsContext } from "@/context/CardsContext";
 import { api } from "@/utils/api";
 import toast from "react-hot-toast";
@@ -11,10 +10,12 @@ import toast from "react-hot-toast";
 const EditDeck: React.FC = () => {
   const { formData, setFormData, setFormActive } =
     React.useContext(CardsContext);
+  const { cards } = formData;
+  const count = countDeck(formData.cards);
 
   const ctx = api.useContext();
 
-  const { mutate, isLoading: isCreating } = api.decks.create.useMutation({
+  const { mutate } = api.decks.create.useMutation({
     onSuccess: () => {
       toast.success("Läuft ");
       ctx.decks.getAll.invalidate();
@@ -24,26 +25,31 @@ const EditDeck: React.FC = () => {
     },
   });
 
-  const deckName = "Starter Deck";
-  const count = countDeck(formData);
-
   const changeCount = (id: string, number: number): void => {
-    const index = formData.findIndex((item) => item.id === id);
-    const currentCount = formData[index].count;
+    const index = cards.findIndex((item) => item.id === id);
+    const currentCount = cards[index].count;
 
     if (number === -1 && currentCount === 1) {
-      setFormData(formData.filter((item) => item.id !== id));
+      setFormData({
+        name: "Test",
+        cards: cards.filter((item) => item.id !== id),
+      });
       return;
     }
 
-    formData[index].count += number;
-    setFormData([...formData]);
+    formData.cards[index].count += number;
+    setFormData({
+      name: formData.name,
+      cards: [...formData.cards],
+    });
   };
 
   const onSave = (): void => {
     setFormActive(false);
+    console.log("Form Data on Save", formData);
     mutate({
-      cards: formData.map((item) => {
+      name: formData.name,
+      cards: cards.map((item) => {
         return {
           id: item.id,
           count: item.count,
@@ -52,13 +58,21 @@ const EditDeck: React.FC = () => {
     });
   };
 
+  console.log("Formdat", formData);
+
   return (
     <Box sx={styles.root}>
       <Box sx={styles.header}>
-        <Box display="flex" flexDirection="column" flexGrow={1}>
-          <Typography variant="h5" color="text.primary">
-            {deckName}
-          </Typography>
+        <Box display="flex" flexDirection="column" flex={1}>
+          <input
+            value={formData.name}
+            onChange={(e) =>
+              setFormData({
+                name: e.target.value,
+                cards: [...formData.cards],
+              })
+            }
+          />
         </Box>
         <Box display="flex">
           <Typography
@@ -75,7 +89,7 @@ const EditDeck: React.FC = () => {
         </Box>
       </Box>
       <Box sx={styles.grid}>
-        {formData.map((card, index) => (
+        {cards.map((card, index) => (
           <DeckItem
             key={`${card.id}-${index}`}
             id={card.id}
@@ -85,7 +99,7 @@ const EditDeck: React.FC = () => {
             changeCount={changeCount}
           />
         ))}
-        {formData && formData.length === 0 && (
+        {formData && cards.length === 0 && (
           <Typography align="center">Select some cards</Typography>
         )}
       </Box>
@@ -119,6 +133,18 @@ const styles = {
     mb: 0,
     p: 4,
     pb: 3,
+
+    "& input": {
+      flex: 1,
+      width: "100%",
+      bgcolor: "transparent",
+      outline: "none",
+      border: "none",
+      boxShadow: "none",
+      color: "text.primary",
+      fontWeight: "bold",
+      fontSize: 24,
+    },
   },
   grid: {
     overflowY: "auto",

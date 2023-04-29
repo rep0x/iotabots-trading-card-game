@@ -1,11 +1,16 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { CountCard } from "@/mocks/deck";
 
+export interface FormData {
+  name: string;
+  cards: CountCard[];
+}
+
 export interface CardsContextType {
   formActive: boolean;
   setFormActive: Dispatch<SetStateAction<boolean>>;
-  formData: CountCard[];
-  setFormData: Dispatch<SetStateAction<CountCard[]>>;
+  formData: FormData;
+  setFormData: Dispatch<SetStateAction<FormData>>;
 }
 
 export const CardsContext = React.createContext<CardsContextType>(
@@ -18,7 +23,10 @@ interface Props {
 
 export const CardsProvider: React.FC<Props> = ({ children }) => {
   const [formActive, setFormActive] = React.useState(false);
-  const [formData, setFormData] = React.useState<CountCard[]>([]);
+  const [formData, setFormData] = React.useState<FormData>({
+    name: "Starter Deck",
+    cards: [],
+  });
 
   const context: CardsContextType = {
     formActive,

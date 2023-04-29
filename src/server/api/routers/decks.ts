@@ -41,6 +41,32 @@ export const decksRouter = createTRPCRouter({
   create: privateProcedure
     .input(
       z.object({
+        name: z.string(),
+        cards: z.array(
+          z.object({
+            count: z.number().min(1).max(3),
+            id: z.string(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.currentUser;
+
+      const deck = await ctx.prisma.deck.create({
+        data: {
+          userId,
+          cards: input.cards,
+          name: input.name,
+        },
+      });
+
+      return deck;
+    }),
+
+  update: privateProcedure
+    .input(
+      z.object({
         cards: z.array(
           z.object({
             count: z.number().min(1).max(3),

@@ -6,21 +6,14 @@ import { CountCard, DECKS } from "../../mocks/deck";
 import Button from "../Button";
 import { CardsContext } from "@/context/CardsContext";
 import { RouterOutputs, api } from "@/utils/api";
-import { useRouter } from "next/router";
 import { Prisma } from "@prisma/client";
 import { CARDS } from "@/mocks/cards";
 
 const Decks: React.FC = () => {
   const { setFormData, setFormActive } = React.useContext(CardsContext);
-  const { data, isLoading } = api.decks.getAll.useQuery();
-  console.log("data decks", data);
+  const { data } = api.decks.getAll.useQuery();
 
   if (!data) return null;
-
-  interface MockCard {
-    id: string;
-    count: number;
-  }
 
   type Deck = RouterOutputs["decks"]["getAll"][number];
   const openDeck = (deck: Deck) => {
@@ -41,7 +34,10 @@ const Decks: React.FC = () => {
 
     if (!newCards) return null;
 
-    setFormData(newCards as CountCard[]);
+    setFormData({
+      name: deck.name,
+      cards: newCards as CountCard[],
+    });
     setFormActive(true);
   };
 

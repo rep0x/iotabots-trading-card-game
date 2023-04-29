@@ -35,7 +35,6 @@ export default function Shop() {
       signer = await provider.getSigner();
       const balance = await provider.getBalance(address);
       const balanceInEth = ethers.formatEther(balance);
-      console.log("balanceInEth", balanceInEth);
     }
   };
 

@@ -11,7 +11,7 @@ export interface DeckItemType {
 }
 
 export interface DeckType {
-  id: number;
+  id: string;
   name: string;
   cards: DeckItemType[];
 }

@@ -20,3 +20,15 @@ model Post {
 
   @@index([authorId])
 }
+
+model Deck {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  userId      String
+  name        String    @default("Starter Kit")    
+  cards       Json
+
+  @@index([userId])
+}

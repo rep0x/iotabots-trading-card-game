@@ -2,12 +2,48 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import DeckBox from "./DeckBox";
 import DividerSvg from "../../icons/DividerSvg";
-import { DECKS } from "../../mocks/deck";
+import { CountCard, DECKS } from "../../mocks/deck";
 import Button from "../Button";
 import { CardsContext } from "@/context/CardsContext";
+import { RouterOutputs, api } from "@/utils/api";
+import { useRouter } from "next/router";
+import { Prisma } from "@prisma/client";
+import { CARDS } from "@/mocks/cards";
 
 const Decks: React.FC = () => {
-  const { setFormActive } = React.useContext(CardsContext);
+  const { setFormData, setFormActive } = React.useContext(CardsContext);
+  const { data, isLoading } = api.decks.getAll.useQuery();
+  console.log("data decks", data);
+
+  if (!data) return null;
+
+  interface MockCard {
+    id: string;
+    count: number;
+  }
+
+  type Deck = RouterOutputs["decks"]["getAll"][number];
+  const openDeck = (deck: Deck) => {
+    const cards = deck.cards as Prisma.JsonArray;
+
+    const newCards = cards.map((card) => {
+      const test = card as {
+        id: string;
+        count: number;
+      };
+      if (!test) return null;
+      const mockCard = CARDS[Number(test.id) - 1];
+      return {
+        ...mockCard,
+        count: test.count,
+      };
+    });
+
+    if (!newCards) return null;
+
+    setFormData(newCards as CountCard[]);
+    setFormActive(true);
+  };
 
   return (
     <Box sx={styles.root}>
@@ -17,11 +53,11 @@ const Decks: React.FC = () => {
         </Typography>
         <DividerSvg />
       </Box>
-      {!!DECKS &&
-        DECKS.map((deck) => (
-          <DeckBox {...deck} onClick={() => console.log("open deck")} />
+      {data &&
+        data.map((deck) => (
+          <DeckBox {...deck} onClick={() => openDeck(deck)} />
         ))}
-      {DECKS.length === 0 && (
+      {data.length === 0 && (
         <Typography>You don't have any decks yet.</Typography>
       )}
       <Button

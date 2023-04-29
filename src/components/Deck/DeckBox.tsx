@@ -1,15 +1,16 @@
 import React from "react";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import { DeckType } from "../../types";
 import { TRANSITIONS } from "@/theme";
-import { Box, Typography, colors } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { RouterOutputs } from "@/utils/api";
 
-interface Props extends DeckType {
+type UserDeck = RouterOutputs["decks"]["getAll"][number];
+interface Props extends UserDeck {
   onClick: () => void;
 }
 
-const DeckBox: React.FC<Props> = (props) => {
-  const { name, id, onClick } = props;
+const DeckBox = (props: Props) => {
+  const { name, onClick } = props;
 
   return (
     <Box

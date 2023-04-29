@@ -5,10 +5,24 @@ import DeckItem from "./DeckItem";
 import { countDeck } from "../../utils/countDeck";
 import { CountCard } from "@/mocks/deck";
 import { CardsContext } from "@/context/CardsContext";
+import { api } from "@/utils/api";
+import toast from "react-hot-toast";
 
 const EditDeck: React.FC = () => {
   const { formData, setFormData, setFormActive } =
     React.useContext(CardsContext);
+
+  const ctx = api.useContext();
+
+  const { mutate, isLoading: isCreating } = api.decks.create.useMutation({
+    onSuccess: () => {
+      toast.success("Läuft ");
+      ctx.decks.getAll.invalidate();
+    },
+    onError: () => {
+      toast.error("Gabutt");
+    },
+  });
 
   const deckName = "Starter Deck";
   const count = countDeck(formData);
@@ -28,9 +42,14 @@ const EditDeck: React.FC = () => {
 
   const onSave = (): void => {
     setFormActive(false);
-    if (count === 33) {
-      // On Save Create or Edit call goes here
-    }
+    mutate({
+      cards: formData.map((item) => {
+        return {
+          id: item.id,
+          count: item.count,
+        };
+      }),
+    });
   };
 
   return (

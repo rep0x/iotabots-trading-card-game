@@ -60,7 +60,7 @@ const Edit: React.FC = () => {
       <Box sx={styles.buttons}>
         <Button onClick={onBack}>Back</Button>
         <Button color="secondary" onClick={onSave}>
-          Edit Deck
+          Save
         </Button>
       </Box>
     </>

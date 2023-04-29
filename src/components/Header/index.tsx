@@ -14,6 +14,7 @@ import {
 import { ethers } from "ethers";
 import { shortenAddress } from "@/utils/shortenAddress";
 import Button from "../Button";
+import Logo from "../Logo";
 
 interface Player {
   name: string;
@@ -79,6 +80,7 @@ const Header = () => {
       </SignedIn>
       <SignedOut>
         <Box sx={styles.buttons}>
+          <Logo />
           <SignInWithMetamaskButton>
             <Button color="secondary">Connect</Button>
           </SignInWithMetamaskButton>

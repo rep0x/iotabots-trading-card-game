@@ -6,10 +6,12 @@ import { countDeck } from "@/utils/countDeck";
 
 import DeckItem from "./DeckItem";
 import { toast } from "react-hot-toast";
+import StyledBox from "@/components/StyledBox";
 
 const Form = () => {
-  const { formData, setFormData, changeCollectionCardCount } =
+  const { formData, setFormData, changeCollectionCardCount, collection } =
     React.useContext(CardsContext);
+
   const { cards } = formData;
 
   const deckCount = countDeck(formData.cards);
@@ -17,6 +19,7 @@ const Form = () => {
   const changeCount = (id: string, amount: number): void => {
     const index = cards.findIndex((item) => item.id === id);
     const currentCount = cards[index].count;
+    const collectionBalance = collection[Number(id) - 1].count;
 
     if (amount === -1 && currentCount === 1) {
       setFormData({
@@ -29,6 +32,11 @@ const Form = () => {
 
     if (amount > 0 && deckCount >= 33) {
       toast.error("Max 33 cards in a deck");
+      return;
+    }
+
+    if (amount > 0 && collectionBalance === 0) {
+      toast.error("Not enough of this card");
       return;
     }
 
@@ -63,16 +71,23 @@ const Form = () => {
             alignItems: "flex-end",
           }}
         >
-          <Box display="flex" gap={1}>
-            <Typography fontWeight="bold">{`${deckCount}`}</Typography>
+          <Box display="flex" gap={1} mb={1}>
+            <Typography
+              sx={styles.typo}
+              fontWeight="bold"
+            >{`${deckCount}`}</Typography>
 
-            <Typography color="text.secondary">/</Typography>
-            <Typography color="text.secondary">33</Typography>
+            <Typography sx={styles.typo} color="text.secondary">
+              /
+            </Typography>
+            <Typography sx={styles.typo} color="text.secondary">
+              33
+            </Typography>
           </Box>
           <Box
             sx={{
               height: 16,
-              width: 60,
+              width: 70,
               pt: 1 / 2,
             }}
           >
@@ -80,7 +95,7 @@ const Form = () => {
               color="info"
               variant="determinate"
               value={(deckCount / 33) * 100}
-              sx={{ borderRadius: 1 }}
+              sx={{ borderRadius: 1, height: 8 }}
             />
           </Box>
         </Box>
@@ -97,9 +112,9 @@ const Form = () => {
           />
         ))}
         {formData && cards.length === 0 && (
-          <Typography color="text.secondary" align="center">
+          <StyledBox textAlign="center">
             Choose 33 cards, max 3 of each kind
-          </Typography>
+          </StyledBox>
         )}
       </Box>
     </>
@@ -129,6 +144,10 @@ const styles = {
     flexGrow: 1,
     width: "calc(100% + 60px)",
     px: 2 * 1.5,
+  },
+  typo: {
+    fontSize: 20,
+    lineHeight: 1,
   },
 };
 

@@ -1,12 +1,12 @@
 import CollectionIcon from "@/icons/CollectionIcon";
 import HistoryIcon from "@/icons/HistoryIcon";
-import HomeIcon from "@/icons/HomeIcon";
 import ShopIcon from "@/icons/ShopIcon";
+import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 
 export const MENU = [
   {
-    label: "Home",
-    icon: <HomeIcon />,
+    label: "Play",
+    icon: <PlayCircleRoundedIcon />,
     link: "/",
   },
   {

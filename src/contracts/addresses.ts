@@ -1,0 +1,3 @@
+export const ADDRESSES = {
+  shop: "0xdD0C18F5F75878CD9f3EE3bAf8F9A6B1036270Ee",
+};

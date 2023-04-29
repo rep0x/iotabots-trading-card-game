@@ -11,18 +11,19 @@ import Button from "@/components/Button";
 
 import DeckBox from "./DeckBox";
 import { useUser } from "@clerk/nextjs";
+import StyledBox from "@/components/StyledBox";
+
+type Deck = RouterOutputs["decks"]["getAll"][number];
 
 const Decks: React.FC = () => {
   const { setFormData, setFormState, setSelectedDeck } =
     React.useContext(CardsContext);
 
   const { user } = useUser();
-  console.log("👩‍🦰 User", user);
   const { data, refetch } = api.decks.getAll.useQuery();
 
   if (!data) return null;
 
-  type Deck = RouterOutputs["decks"]["getAll"][number];
   const openDeck = (deck: Deck) => {
     const cards = deck.cards as Prisma.JsonArray;
 
@@ -57,21 +58,34 @@ const Decks: React.FC = () => {
         </Typography>
         <DividerSvg />
       </Box>
-      {data && data.length > 0 && (
-        <Box sx={styles.grid}>
-          {data.map((deck) => (
-            <DeckBox key={deck.id} {...deck} onClick={() => openDeck(deck)} />
-          ))}
-        </Box>
+      {!user ? (
+        <StyledBox textAlign="center">
+          You must log in to create decks.
+        </StyledBox>
+      ) : (
+        <>
+          {data && data.length > 0 && (
+            <Box sx={styles.grid}>
+              {data.map((deck) => (
+                <DeckBox
+                  key={deck.id}
+                  {...deck}
+                  onClick={() => openDeck(deck)}
+                />
+              ))}
+            </Box>
+          )}
+          {data.length === 0 && (
+            <StyledBox textAlign="center">
+              You dont have any decks yet.
+            </StyledBox>
+          )}
+
+          <Button color="secondary" onClick={() => setFormState("create")}>
+            Create Deck
+          </Button>
+        </>
       )}
-      {data.length === 0 && (
-        <Typography color="text.secondary">
-          You dont have any decks yet.
-        </Typography>
-      )}
-      <Button color="secondary" onClick={() => setFormState("create")}>
-        Create Deck
-      </Button>
     </>
   );
 };

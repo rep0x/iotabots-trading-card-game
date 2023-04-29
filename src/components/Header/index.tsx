@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, GlobalStyles } from "@mui/material";
 
 import Currency from "../Currency";
 import PlayerInfo from "../PlayerInfo";
@@ -29,6 +29,7 @@ const PLAYER: Player | undefined = {
 
 const Header = () => {
   const { user } = useUser();
+  const [balance, setBalance] = React.useState<string | null>(null);
 
   const address = user?.primaryWeb3Wallet?.web3Wallet || "";
 
@@ -55,6 +56,7 @@ const Header = () => {
       signer = await provider.getSigner();
       const balance = await provider.getBalance(address);
       const balanceInEth = ethers.formatEther(balance);
+      setBalance(Number(balanceInEth).toFixed(0));
     }
   };
 
@@ -66,16 +68,45 @@ const Header = () => {
 
   return (
     <Box sx={styles.root}>
+      <GlobalStyles
+        styles={{
+          ".cl-userButtonPopoverCard": {
+            bgcolor: "red !important",
+          },
+        }}
+      />
       <SignedIn>
-        <Box sx={styles.player}>
-          <PlayerInfo name={shortenAddress(address)} avatar={PLAYER.avatar} />
-        </Box>
+        <Logo />
         <Box sx={styles.infos}>
           <Box sx={styles.currencies}>
-            <Currency type="premium" value="242" />
-            <Currency type="default" value="2.400" />
+            {balance && <Currency type="default" value={balance} />}
           </Box>
-          <UserButton />
+          <Box sx={{ display: "flex", position: "relative" }}>
+            <PlayerInfo name={shortenAddress(address)} avatar={PLAYER.avatar} />
+            <Box
+              sx={{
+                position: "absolute",
+                zIndex: 10,
+                top: 0,
+                right: 0,
+                width: "100%",
+                height: "100%",
+
+                "& .cl-avatarBox": {
+                  height: 60,
+                  width: 60,
+                  opacity: 0,
+                },
+
+                "& .cl-avatarImage": {
+                  height: 60,
+                  width: 60,
+                },
+              }}
+            >
+              <UserButton userProfileUrl="https://assets.iotabots.io/compressed/1.png?auto=format&fit=max&w=828" />
+            </Box>
+          </Box>
         </Box>
       </SignedIn>
       <SignedOut>
@@ -104,7 +135,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    px: 6,
+    px: 2,
   },
   player: { transform: "translateY(40px)" },
   infos: {

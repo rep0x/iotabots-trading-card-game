@@ -81,9 +81,11 @@ const Decks: React.FC = () => {
             </StyledBox>
           )}
 
-          <Button color="secondary" onClick={() => setFormState("create")}>
-            Create Deck
-          </Button>
+          {!!user && (
+            <Button color="secondary" onClick={() => setFormState("create")}>
+              Create Deck
+            </Button>
+          )}
         </>
       )}
     </>

@@ -26,7 +26,7 @@ const Create: React.FC = () => {
       setFormState("index");
     },
     onError: () => {
-      toast.error("You need to connect first");
+      toast.error("You need to connect first.");
     },
   });
 

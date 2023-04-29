@@ -1,6 +1,23 @@
 import React from "react";
 
-const Svg = () => {
+interface Props {
+  state?: "disabled" | "default";
+}
+
+const Svg = (props: Props) => {
+  const { state = "default" } = props;
+
+  const states = {
+    disabled: {
+      from: "rgba(0,0,0,0.5)",
+      to: "rgba(0,0,0,0.8)",
+    },
+    default: {
+      from: "#254180",
+      to: "#229BEC",
+    },
+  };
+
   return (
     <svg
       width="292"
@@ -265,8 +282,8 @@ const Svg = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(146 146) rotate(90) scale(106)"
         >
-          <stop stopColor="#254180" />
-          <stop offset="1" stopColor="#229BEC" />
+          <stop stopColor={states[state].from} />
+          <stop offset="1" stopColor={states[state].to} />
         </radialGradient>
         <linearGradient
           id="paint3_linear_301_7298"
@@ -276,9 +293,13 @@ const Svg = () => {
           y2="247"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#508ECF" />
-          <stop offset="0.497405" stopColor="#519AE6" stopOpacity="0" />
-          <stop offset="1" stopColor="#ABC4DE" />
+          <stop stopColor={states[state].from} />
+          <stop
+            offset="0.497405"
+            stopColor={states[state].to}
+            stopOpacity="0"
+          />
+          <stop offset="1" stopColor={states[state].from} />
         </linearGradient>
         <clipPath id="clip0_301_7298">
           <rect x="40" y="40" width="212" height="212" rx="106" fill="white" />

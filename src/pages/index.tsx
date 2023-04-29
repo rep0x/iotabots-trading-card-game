@@ -4,15 +4,17 @@ import Head from "next/head";
 import { Typography, Container, Box, Grid } from "@mui/material";
 import Base from "@/layouts/Base";
 import { RouterOutputs, api } from "@/utils/api";
-import Button from "@/components/Button";
+import PlayButton from "@/components/PlayButton";
 import DividerSvg from "@/icons/DividerSvg";
 import { TRANSITIONS } from "@/theme";
 import StyledBox from "@/components/StyledBox";
+import { useUser } from "@clerk/nextjs";
 
 type Deck = RouterOutputs["decks"]["getAll"][number];
 
 export default function Home() {
   const { data, refetch } = api.decks.getAll.useQuery();
+  const { user } = useUser();
 
   const [selectedDeck, setSelectedDeck] = React.useState<Deck | null>(null);
 
@@ -25,19 +27,31 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Base>
+        <Box
+          sx={{
+            position: "fixed",
+            zIndex: 100,
+            bottom: 50,
+            right: 50,
+          }}
+        >
+          <PlayButton disabled={selectedDeck === null} />
+        </Box>
         <Container>
           <Typography variant="h1" gutterBottom>
             Choose your Deck
           </Typography>
-
+          {!user && (
+            <StyledBox>You need to connect with Metamask to play</StyledBox>
+          )}
           {!!data && data.length > 0 && (
             <Box sx={styles.grid}>
               {data.map((deck) => {
                 const isSelected = deck.id === selectedDeck?.id;
                 return (
-                  <Grid item xs={6}>
+                  <Grid key={deck.id} item xs={6}>
                     <Box
-                      onClick={() => setSelectedDeck(deck)}
+                      onClick={() => setSelectedDeck(isSelected ? null : deck)}
                       sx={styles.card}
                       className={!!isSelected ? "selected" : ""}
                     >
@@ -60,7 +74,7 @@ export default function Home() {
           )}
 
           {!!data && data.length === 0 && (
-            <StyledBox>You need to connect with Metamask to play</StyledBox>
+            <StyledBox>You got to create a deck before you can play.</StyledBox>
           )}
         </Container>
       </Base>
@@ -87,16 +101,14 @@ const styles = {
     borderColor: "secondary.main",
     borderRadius: "8px",
     cursor: "pointer",
+    transition: TRANSITIONS[120],
 
     "&:hover": {
       bgcolor: "rgba(0,0,0,0.9)",
     },
     "&.selected": {
       bgcolor: "rgba(0,0,0,0.95)",
-
-      "& .cardContent": {
-        transform: "scale(1.1)",
-      },
+      transform: "scale(1.05)",
     },
   },
 

@@ -4,6 +4,9 @@ import { User } from "@clerk/nextjs/dist/api";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 
+import { CARDS } from "../../../mocks/cards";
+import { ethers } from "ethers";
+
 const filterUserForClient = (user: User) => {
   return {
     id: user.id,
@@ -55,6 +58,20 @@ export const decksRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.currentUser;
+
+      // Validate ownership of cards.
+      console.log("input.cards", input.cards);
+
+      input.cards.forEach((card) => {
+        let foundCard = CARDS.find((_card) => card.id === _card.id);
+        if (foundCard) {
+          console.log("foundCard", foundCard);
+
+          // balanceOf(foundCard.address)
+          let url = "https://json-rpc.evm.testnet.shimmer.network/";
+          let customHttpProvider = new ethers.JsonRpcProvider(url);
+        }
+      });
 
       const deck = await ctx.prisma.deck.create({
         data: {

@@ -5,12 +5,18 @@ import type { BoxProps } from "@mui/material";
 
 import Svg from "./Svg";
 
-const Play: React.FC<BoxProps> = (props) => {
+interface Props extends BoxProps {
+  disabled: boolean;
+}
+
+const Play: React.FC<Props> = (props) => {
   return (
     <Box sx={styles.root} {...props}>
-      <Svg />
+      <Svg state={props.disabled ? "disabled" : "default"} />
       <Box sx={styles.wrapper}>
-        <Typography variant="h3">PLAY</Typography>
+        <Typography sx={{ opacity: props.disabled ? "0.5" : "1" }} variant="h3">
+          PLAY
+        </Typography>
       </Box>
     </Box>
   );

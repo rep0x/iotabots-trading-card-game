@@ -9,7 +9,7 @@ interface AvatarProps {
   level?: number | null;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ avatar, level = 3 }) => (
+const Avatar: React.FC<AvatarProps> = ({ avatar, level }) => (
   <Box sx={styles.root}>
     <Box
       sx={{
@@ -31,15 +31,15 @@ const Avatar: React.FC<AvatarProps> = ({ avatar, level = 3 }) => (
 const styles = {
   root: {
     position: "relative",
-    height: 136,
-    width: 136,
+    height: 60,
+    width: 60,
   },
   avatar: {
     position: "absolute",
-    top: 18,
-    left: 18,
-    height: 100,
-    width: 100,
+    top: 4,
+    left: 4,
+    height: 50,
+    width: 50,
     backgroundSize: "cover",
     borderRadius: "50%",
   },

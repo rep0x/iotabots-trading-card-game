@@ -1,47 +1,36 @@
 import React from "react";
 import Head from "next/head";
-import { Typography, Container, Box, Grid } from "@mui/material";
+import { Typography, Container, Box, Grid, Skeleton } from "@mui/material";
 import Button from "@/components/Button";
 
 import Base from "@/layouts/Base";
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 import { useUser } from "@clerk/nextjs";
 import StarSvg from "@/icons/StarSvg";
 import RocketSvg from "@/icons/RocketSvg";
 
-import ShopABI from "../../contracts/Shop.json";
-import { ADDRESSES } from "@/contracts/addresses";
 import toast from "react-hot-toast";
+import { getShopContract } from "../../utils/getContracts";
 
 export default function Shop() {
   const { user } = useUser();
+  const [loading, setLoading] = React.useState(false);
 
   const address = user?.primaryWeb3Wallet?.web3Wallet || "";
 
   const buyStarterPack = async () => {
     if (!user) return;
+    setLoading(true);
     let signer = null;
 
     let provider;
     if (window.ethereum == null) {
-      // If MetaMask is not installed, we use the default provider,
-      // which is backed by a variety of third-party services (such
-      // as INFURA). They do not have private keys installed so are
-      // only have read-only access
-
       provider = null; //ethers.getDefaultProvider();
     } else {
-      // Connect to the MetaMask EIP-1193 object. This is a standard
-      // protocol that allows Ethers access to make all read-only
-      // requests through MetaMask.
       provider = new ethers.BrowserProvider(window.ethereum);
 
-      // It also provides an opportunity to request access to write
-      // operations, which will be performed by the private key
-      // that MetaMask manages for the user.
       signer = await provider.getSigner();
-      let contract = new Contract(ADDRESSES.shop, ShopABI.abi, signer);
-
+      let contract = await getShopContract(signer);
       try {
         let tx = await contract.buyStarterPack({
           value: ethers.parseEther("1"),
@@ -52,6 +41,34 @@ export default function Shop() {
         toast.error("error!");
       }
     }
+    setLoading(false);
+  };
+
+  const buyBoosterPack = async () => {
+    if (!user) return;
+    setLoading(true);
+    let signer = null;
+
+    let provider;
+    if (window.ethereum == null) {
+      provider = null; //ethers.getDefaultProvider();
+    } else {
+      provider = new ethers.BrowserProvider(window.ethereum);
+
+      signer = await provider.getSigner();
+      let contract = await getShopContract(signer);
+      try {
+        let tx = await contract.buyBoosterCards({
+          value: ethers.parseEther("1"),
+        });
+        await tx.wait();
+        toast.success("Success!");
+      } catch (error) {
+        console.log("error", error);
+        toast.error("error!");
+      }
+    }
+    setLoading(false);
   };
 
   const PACKS = [
@@ -65,7 +82,7 @@ export default function Shop() {
       icon: <RocketSvg />,
       name: "Booster Pack",
       description: "10 random cards",
-      onClick: () => null,
+      onClick: () => buyBoosterPack(),
     },
   ];
 
@@ -89,8 +106,8 @@ export default function Shop() {
             Shop
           </Typography>
           <Grid container spacing={6}>
-            {PACKS.flatMap(({ icon, name, description, onClick }) => (
-              <Grid item xs={6}>
+            {PACKS.map(({ icon, name, description, onClick }) => (
+              <Grid key={name} item xs={6}>
                 <Box sx={styles.card}>
                   {icon}
                   <Typography
@@ -105,12 +122,26 @@ export default function Shop() {
                     sx={{
                       color: "secondary.light",
                       opacity: "0.66",
+                      mb: 6,
                     }}
                   >
                     {description}
                   </Typography>
-                  <Button color="secondary" mt={6} onClick={onClick}>
-                    Buy
+                  <Button
+                    color="secondary"
+                    onClick={onClick}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <Skeleton
+                        animation="wave"
+                        variant="text"
+                        sx={{ bgcolor: "rgba(0,0,0,0.5)" }}
+                        width={60}
+                      />
+                    ) : (
+                      <div>Buy</div>
+                    )}
                   </Button>
                 </Box>
               </Grid>

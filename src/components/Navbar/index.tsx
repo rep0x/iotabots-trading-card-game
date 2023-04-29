@@ -14,14 +14,6 @@ const Navbar = () => {
   return (
     <Box sx={styles.root}>
       <Menu />
-      <Box
-        sx={{
-          transform: isHome ? "scale(1)" : "scale(0)",
-          ...styles.wrapper,
-        }}
-      >
-        <PlayButton />
-      </Box>
     </Box>
   );
 };
@@ -36,14 +28,6 @@ const styles = {
     backgroundColor: "rgba(0,0,0,0.8)",
     borderTop: "2px solid",
     borderColor: "secondary.main",
-  },
-  wrapper: {
-    position: "fixed",
-    bottom: 40,
-    right: 40,
-
-    transformOrigin: "bottom right",
-    transition: TRANSITIONS[300],
   },
 };
 

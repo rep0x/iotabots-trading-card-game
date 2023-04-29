@@ -55,10 +55,10 @@ const Decks: React.FC = () => {
       </Box>
       {data &&
         data.map((deck) => (
-          <DeckBox {...deck} onClick={() => openDeck(deck)} />
+          <DeckBox key={deck.id} {...deck} onClick={() => openDeck(deck)} />
         ))}
       {data.length === 0 && (
-        <Typography>You don't have any decks yet.</Typography>
+        <Typography>You dont have any decks yet.</Typography>
       )}
       <Button
         sx={{ mt: 4 }}

@@ -15,6 +15,8 @@ export type FormState = "index" | "edit" | "create";
 export interface CardsContextType {
   formState: FormState;
   setFormState: Dispatch<SetStateAction<FormState>>;
+  selectedDeck: string | null;
+  setSelectedDeck: Dispatch<SetStateAction<string | null>>;
   formData: FormData;
   setFormData: Dispatch<SetStateAction<FormData>>;
   collection: CollectionItem[];
@@ -33,6 +35,7 @@ interface Props {
 
 export const CardsProvider: React.FC<Props> = ({ children }) => {
   const [formState, setFormState] = React.useState<FormState>("index");
+  const [selectedDeck, setSelectedDeck] = React.useState<string | null>(null);
   const [formData, setFormData] = React.useState<FormData>({
     name: "",
     cards: [],
@@ -51,23 +54,20 @@ export const CardsProvider: React.FC<Props> = ({ children }) => {
       return;
     }
 
-    // Card not yet in deck: Put new card at the end
     if (insertAt === -1) {
       setFormData({
         name: formData.name,
         cards: [...formData.cards, { ...card, count: 1 }],
       });
       changeCollectionCardCount(Number(card.id), -1);
-    }
-    // Card already in deck
-    else {
+    } else {
       const currentCount = formData.cards[insertAt].count;
-      // Max limit reached already
+
       if (currentCount === 3) {
         toast.error("Maximum 3 of each card");
         return;
       }
-      // Add card to deck
+
       formData.cards[insertAt].count += 1;
       setFormData({
         name: formData.name,
@@ -80,6 +80,8 @@ export const CardsProvider: React.FC<Props> = ({ children }) => {
   const context: CardsContextType = {
     formState,
     setFormState,
+    selectedDeck,
+    setSelectedDeck,
     formData,
     setFormData,
     collection,

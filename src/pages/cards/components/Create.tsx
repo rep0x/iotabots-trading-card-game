@@ -47,7 +47,7 @@ const Create: React.FC = () => {
       <Box display="flex" justifyContent="center">
         <Button onClick={() => setFormState("index")}>Cancel</Button>
         <Button color="secondary" onClick={onSave}>
-          Save Deck
+          Create Deck
         </Button>
       </Box>
     </>

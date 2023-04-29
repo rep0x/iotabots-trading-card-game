@@ -12,7 +12,8 @@ import Button from "@/components/Button";
 import DeckBox from "./DeckBox";
 
 const Decks: React.FC = () => {
-  const { setFormData, setFormState } = React.useContext(CardsContext);
+  const { setFormData, setFormState, setSelectedDeck } =
+    React.useContext(CardsContext);
   const { data } = api.decks.getAll.useQuery();
 
   if (!data) return null;
@@ -40,7 +41,8 @@ const Decks: React.FC = () => {
       name: deck.name,
       cards: newCards as CountCard[],
     });
-    setFormState("index");
+    setFormState("edit");
+    setSelectedDeck(deck.id);
   };
 
   return (
@@ -51,12 +53,13 @@ const Decks: React.FC = () => {
         </Typography>
         <DividerSvg />
       </Box>
-      <Box sx={styles.grid}>
-        {data &&
-          data.map((deck) => (
+      {data && data.length > 0 && (
+        <Box sx={styles.grid}>
+          {data.map((deck) => (
             <DeckBox key={deck.id} {...deck} onClick={() => openDeck(deck)} />
           ))}
-      </Box>
+        </Box>
+      )}
       {data.length === 0 && (
         <Typography color="text.secondary">
           You dont have any decks yet.

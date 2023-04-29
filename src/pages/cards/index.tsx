@@ -7,9 +7,10 @@ import { CardsContext } from "@/context/CardsContext";
 
 import Create from "./components/Create";
 import Decks from "./components/Decks";
+import Edit from "./components/Edit";
 
 export default function Cards() {
-  const { formState, collection, addCardToDeck } =
+  const { formState, collection, addCardToDeck, selectedDeck } =
     React.useContext(CardsContext);
 
   return (
@@ -44,7 +45,7 @@ export default function Cards() {
             <Box sx={styles.sidebar}>
               {formState === "index" && <Decks />}
               {formState === "create" && <Create />}
-              {formState === "edit" && <Create />}
+              {formState === "edit" && selectedDeck && <Edit />}
             </Box>
           </Box>
         </Container>
@@ -108,7 +109,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    minWidth: 400,
+    minWidth: 440,
     height: "auto",
     maxHeight: "calc(100vh - 285px)",
     p: 4,

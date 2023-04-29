@@ -67,6 +67,8 @@ export const decksRouter = createTRPCRouter({
   update: privateProcedure
     .input(
       z.object({
+        id: z.string(),
+        name: z.string(),
         cards: z.array(
           z.object({
             count: z.number().min(1).max(3),
@@ -78,10 +80,14 @@ export const decksRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.currentUser;
 
-      const deck = await ctx.prisma.deck.create({
+      const deck = await ctx.prisma.deck.update({
+        where: {
+          id: input.id,
+        },
         data: {
           userId,
           cards: input.cards,
+          name: input.name,
         },
       });
 

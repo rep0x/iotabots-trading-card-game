@@ -7,14 +7,14 @@ import { api } from "@/utils/api";
 import toast from "react-hot-toast";
 import Form from "@/pages/cards/components/Form";
 
-const EditDeck: React.FC = () => {
-  const { formData, setFormState, setFormData } =
+const Edit: React.FC = () => {
+  const { formData, setFormState, setFormData, selectedDeck } =
     React.useContext(CardsContext);
   const { cards } = formData;
 
   const ctx = api.useContext();
 
-  const { mutate } = api.decks.create.useMutation({
+  const { mutate } = api.decks.update.useMutation({
     onSuccess: () => {
       toast.success("Läuft ");
       ctx.decks.getAll.invalidate();
@@ -31,6 +31,7 @@ const EditDeck: React.FC = () => {
 
   const onSave = (): void => {
     mutate({
+      id: selectedDeck || "",
       name: formData.name,
       cards: cards.map((item) => {
         return {
@@ -54,4 +55,4 @@ const EditDeck: React.FC = () => {
   );
 };
 
-export default EditDeck;
+export default Edit;

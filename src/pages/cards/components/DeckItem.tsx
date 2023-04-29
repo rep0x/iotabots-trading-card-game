@@ -80,10 +80,10 @@ const styles = {
     alignItems: "center",
     overflow: "hidden",
     maxWidth: 30,
-    transition: TRANSITIONS[300],
+    transition: TRANSITIONS[120],
   },
   button: {
-    transition: TRANSITIONS[300],
+    transition: TRANSITIONS[120],
     opacity: 0.5,
     "&:hover": {
       opacity: 1,

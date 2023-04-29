@@ -1,39 +1,16 @@
 import React from "react";
 import Head from "next/head";
-import toast from "react-hot-toast";
 import { Typography, Container, Box } from "@mui/material";
 
 import Base from "@/layouts/Base";
-import { CARDS, Card } from "@/mocks/cards";
 import { CardsContext } from "@/context/CardsContext";
 
 import EditDeck from "./components/Create";
 import Decks from "./components/Decks";
 
 export default function Cards() {
-  const { setFormData, formData, formActive } = React.useContext(CardsContext);
-
-  const addCardToDeck = (card: Card) => {
-    const insertAt = formData.cards.findIndex((item) => item.id === card.id);
-
-    if (insertAt === -1) {
-      setFormData({
-        name: formData.name,
-        cards: [...formData.cards, { ...card, count: 1 }],
-      });
-    } else {
-      const currentCount = formData.cards[insertAt].count;
-      if (currentCount === 3) {
-        toast.error("Maximum 3 of each card");
-        return;
-      }
-      formData.cards[insertAt].count += 1;
-      setFormData({
-        name: formData.name,
-        cards: [...formData.cards],
-      });
-    }
-  };
+  const { formActive, collection, addCardToDeck } =
+    React.useContext(CardsContext);
 
   return (
     <>
@@ -50,14 +27,17 @@ export default function Cards() {
           </Typography>
           <Box sx={styles.grid}>
             <Box sx={styles.cardGrid}>
-              {CARDS.map((card) => (
+              {collection.map(({ card, count }) => (
                 <Box
                   key={card.id}
+                  className={`count-${count}`}
                   sx={styles.card}
                   onClick={() => addCardToDeck(card)}
                 >
                   <img src={card.image} alt={`${card.id} trading card`} />
-                  {card.id}
+                  <Box sx={styles.cardCount}>
+                    <Typography fontWeight="bold">{count}</Typography>
+                  </Box>
                 </Box>
               ))}
             </Box>
@@ -82,9 +62,39 @@ const styles = {
     gap: 4,
     flexWrap: "wrap",
   },
+
   card: {
+    position: "relative",
+    height: 280,
+
     "& img": {
+      boxShadow: 4,
+      borderRadius: 3,
+      overflow: "hidden",
       maxWidth: 200,
     },
+
+    "&.count-0": {
+      "& img": {
+        opacity: 0.2,
+      },
+    },
+  },
+
+  cardCount: {
+    position: "absolute",
+    bottom: 10,
+    left: "50%",
+    transform: "translate(-50%, 50%)",
+    zIndex: 1,
+    height: 32,
+    width: 32,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    bgcolor: "#fff",
+    color: "background.paper",
+    borderRadius: "50%",
+    boxShadow: 3,
   },
 };

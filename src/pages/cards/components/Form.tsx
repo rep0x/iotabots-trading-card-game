@@ -31,11 +31,13 @@ const Form = () => {
   };
 
   return (
-    <div>
+    <>
       <Box sx={styles.header}>
         <Box display="flex" flexDirection="column" flex={1}>
           <input
+            autoFocus
             value={formData.name}
+            placeholder="Deck name"
             onChange={(e) =>
               setFormData({
                 name: e.target.value,
@@ -90,7 +92,7 @@ const Form = () => {
           </Typography>
         )}
       </Box>
-    </div>
+    </>
   );
 };
 

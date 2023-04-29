@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 import Form from "@/pages/cards/components/Form";
 
 const EditDeck: React.FC = () => {
-  const { formData, setFormActive } = React.useContext(CardsContext);
+  const { formData, setFormActive, setFormData } =
+    React.useContext(CardsContext);
   const { cards } = formData;
 
   const ctx = api.useContext();
@@ -17,6 +18,10 @@ const EditDeck: React.FC = () => {
     onSuccess: () => {
       toast.success("Läuft ");
       ctx.decks.getAll.invalidate();
+      setFormData({
+        name: "",
+        cards: [],
+      });
     },
     onError: () => {
       toast.error("Gabutt");
@@ -52,6 +57,7 @@ const EditDeck: React.FC = () => {
 
 const styles = {
   root: {
+    top: -40,
     position: "sticky",
     bgcolor: "rgba(0,0,0,.66)",
     border: "2px solid",
@@ -61,7 +67,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "stretch",
     width: 400,
-    maxHeight: "calc(100vh - 400px)",
+    maxHeight: "calc(100vh - 285px)",
   },
   header: {
     display: "flex",

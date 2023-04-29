@@ -26,7 +26,7 @@ const Decks: React.FC = () => {
         id: string;
         count: number;
       };
-      if (!test) return null;
+      if (!test) return;
       const mockCard = CARDS[Number(test.id) - 1];
       return {
         ...mockCard,

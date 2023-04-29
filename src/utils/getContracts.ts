@@ -8,8 +8,6 @@ export const getShopContract = async (sender: any) => {
 };
 
 export const getCardContract = async (card_address: any, sender: any) => {
-  console.log("add");
-  console.log("add ", card_address);
   let contract = new Contract(card_address, CardABI.abi, sender);
   return contract;
 };

@@ -64,7 +64,6 @@ export default function Shop() {
         await tx.wait();
         toast.success("Success!");
       } catch (error) {
-        console.log("error", error);
         toast.error("error!");
       }
     }

@@ -32,13 +32,10 @@ const CollectionCard = (props: CollectionItem) => {
 
       signer = await provider.getSigner();
       if (card.address) {
-        console.log("card address", card.address);
         let contract = await getCardContract(card.address, provider);
         const player_address = user?.primaryWeb3Wallet?.web3Wallet || "";
 
         let balance = await contract.balanceOf(player_address);
-        console.log("balance", balance);
-        console.log(balance);
 
         setNfTCount(Number(balance));
         collection[Number(card.id) - 1].count =

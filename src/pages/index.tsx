@@ -18,6 +18,12 @@ export default function Home() {
 
   const [selectedDeck, setSelectedDeck] = React.useState<Deck | null>(null);
 
+  const { data: games } = api.games.getAll.useQuery();
+
+  const onPlay = () => {
+    console.log(games);
+  };
+
   return (
     <>
       <Head>
@@ -27,18 +33,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Base>
-        <Box
-          sx={{
-            position: "fixed",
-            zIndex: 100,
-            bottom: 50,
-            right: 50,
-          }}
-        >
-          <PlayButton disabled={selectedDeck === null} />
+        <Box sx={styles.play}>
+          <PlayButton disabled={selectedDeck === null} onClick={() => onPlay} />
         </Box>
         <Container>
-          <Typography variant="h1" gutterBottom>
+          <Typography variant="h1" mb={4}>
             Choose your Deck
           </Typography>
           {!user && (
@@ -86,6 +85,13 @@ const styles = {
   grid: {
     display: "flex",
     gap: 4,
+  },
+
+  play: {
+    position: "fixed",
+    zIndex: 100,
+    bottom: 50,
+    right: 50,
   },
 
   card: {

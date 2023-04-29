@@ -41,7 +41,8 @@ const CollectionCard = (props: CollectionItem) => {
         console.log(balance);
 
         setNfTCount(Number(balance));
-        collection[Number(card.id) - 1].count = Number(balance);
+        collection[Number(card.id) - 1].count =
+          balance >= 3 ? 3 : Number(balance);
         setCollection([...collection]);
       }
     }

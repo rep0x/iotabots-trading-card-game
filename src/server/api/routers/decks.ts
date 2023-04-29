@@ -6,6 +6,7 @@ import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 
 import { CARDS } from "../../../mocks/cards";
 import { ethers } from "ethers";
+import { getCardContract } from "@/utils/getContracts";
 
 const filterUserForClient = (user: User) => {
   return {
@@ -60,18 +61,30 @@ export const decksRouter = createTRPCRouter({
       const userId = ctx.currentUser;
 
       // Validate ownership of cards.
-      console.log("input.cards", input.cards);
+      const user = await clerkClient.users.getUser(userId);
 
-      input.cards.forEach((card) => {
+      const player_address = user?.web3Wallets[0]?.web3Wallet || "";
+
+      for (let index = 0; index < input.cards.length; index++) {
+        const card = input.cards[index];
         let foundCard = CARDS.find((_card) => card.id === _card.id);
         if (foundCard) {
-          console.log("foundCard", foundCard);
-
           // balanceOf(foundCard.address)
           let url = "https://json-rpc.evm.testnet.shimmer.network/";
           let customHttpProvider = new ethers.JsonRpcProvider(url);
+
+          let contract = await getCardContract(
+            foundCard.address,
+            customHttpProvider
+          );
+
+          let balance = await contract.balanceOf(player_address);
+
+          balance = Number(balance);
+
+          if (balance < card.count) return false;
         }
-      });
+      }
 
       const deck = await ctx.prisma.deck.create({
         data: {

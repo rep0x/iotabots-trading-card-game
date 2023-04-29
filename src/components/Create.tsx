@@ -3,9 +3,12 @@ import { SignedIn, useUser } from "@clerk/nextjs";
 import { Box, Button } from "@mui/material";
 import { api } from "@/utils/api";
 import toast from "react-hot-toast";
+import { COLLECTION } from "@/mocks/collection";
+import { CardsContext } from "@/context/CardsContext";
 
 const Create = () => {
   const { user } = useUser();
+  const { setCollection } = React.useContext(CardsContext);
 
   const [value, setValue] = React.useState("");
 
@@ -16,6 +19,7 @@ const Create = () => {
       setValue("");
       ctx.posts.getAll.invalidate();
       toast.success("Läuft digga");
+      setCollection(COLLECTION);
     },
     onError: () => {
       toast.error("Das klappt leider net");

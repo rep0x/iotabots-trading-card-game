@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import Form from "@/pages/cards/components/Form";
 
 const Create: React.FC = () => {
-  const { formData, setFormState, setFormData } =
+  const { formData, setFormState, setFormData, resetCollection } =
     React.useContext(CardsContext);
   const { cards } = formData;
 
@@ -16,12 +16,13 @@ const Create: React.FC = () => {
 
   const { mutate } = api.decks.create.useMutation({
     onSuccess: () => {
-      toast.success("Läuft ");
+      toast.success("Created new deck ");
       ctx.decks.getAll.invalidate();
       setFormData({
         name: "",
         cards: [],
       });
+      resetCollection();
       setFormState("index");
     },
     onError: () => {
@@ -41,17 +42,30 @@ const Create: React.FC = () => {
     });
   };
 
+  const onBack = () => {
+    resetCollection();
+    setFormState("index");
+  };
+
   return (
     <>
       <Form />
-      <Box display="flex" justifyContent="center">
-        <Button onClick={() => setFormState("index")}>Cancel</Button>
+      <Box sx={styles.buttons}>
+        <Button onClick={onBack}>Cancel</Button>
         <Button color="secondary" onClick={onSave}>
           Create Deck
         </Button>
       </Box>
     </>
   );
+};
+
+const styles = {
+  buttons: {
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+  },
 };
 
 export default Create;

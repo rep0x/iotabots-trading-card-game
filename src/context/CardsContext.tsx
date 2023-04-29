@@ -1,6 +1,10 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { CountCard } from "@/mocks/deck";
-import { COLLECTION, CollectionItem } from "@/mocks/collection";
+import {
+  COLLECTION,
+  CollectionItem,
+  RANDOM_COLLECTION,
+} from "@/mocks/collection";
 import { Card } from "@/mocks/cards";
 import { toast } from "react-hot-toast";
 import { countDeck } from "@/utils/countDeck";
@@ -23,6 +27,8 @@ export interface CardsContextType {
   setCollection: Dispatch<SetStateAction<CollectionItem[]>>;
   addCardToDeck: (card: Card) => void;
   changeCollectionCardCount: (id: number, amount: number) => void;
+  updateCollection: () => void;
+  resetCollection: () => void;
 }
 
 export const CardsContext = React.createContext<CardsContextType>(
@@ -77,6 +83,28 @@ export const CardsProvider: React.FC<Props> = ({ children }) => {
     }
   };
 
+  const updateCollection = React.useCallback(() => {
+    const nextCollection = COLLECTION;
+    formData.cards.map((card) => {
+      nextCollection[Number(card.id) - 1].count -= card.count;
+    });
+    setCollection([...nextCollection]);
+  }, [formData]);
+
+  const resetCollection = React.useCallback(() => {
+    const nextCollection = COLLECTION;
+    formData.cards.map((card) => {
+      nextCollection[Number(card.id) - 1].count += card.count;
+    });
+    setCollection([...nextCollection]);
+  }, [formData]);
+
+  React.useEffect(() => {
+    if (formState === "edit") {
+      updateCollection();
+    }
+  }, [formState]);
+
   const context: CardsContextType = {
     formState,
     setFormState,
@@ -88,6 +116,8 @@ export const CardsProvider: React.FC<Props> = ({ children }) => {
     setCollection,
     addCardToDeck,
     changeCollectionCardCount,
+    updateCollection,
+    resetCollection,
   };
 
   return (

@@ -127,7 +127,8 @@ const styles = {
   grid: {
     overflowY: "auto",
     flexGrow: 1,
-    width: "calc(100% + 24px)",
+    width: "calc(100% + 60px)",
+    px: 2 * 1.5,
   },
 };
 

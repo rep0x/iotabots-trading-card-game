@@ -109,7 +109,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    minWidth: 440,
+    minWidth: 410,
     height: "auto",
     maxHeight: "calc(100vh - 285px)",
     p: 4,

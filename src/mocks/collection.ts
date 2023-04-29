@@ -80,4 +80,6 @@ export const FULL_COLLECTION: CollectionItem[] = [
   { card: CARDS[21], count: 3 },
 ];
 
+export const DEFAULT_COLLECTION = RANDOM_COLLECTION;
+
 export const COLLECTION = RANDOM_COLLECTION;

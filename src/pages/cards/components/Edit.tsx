@@ -7,8 +7,13 @@ import { api } from "@/utils/api";
 import toast from "react-hot-toast";
 import Form from "@/pages/cards/components/Form";
 
+const DEFAULT_FORMDATA = {
+  name: "",
+  cards: [],
+};
+
 const Edit: React.FC = () => {
-  const { formData, setFormState, setFormData, selectedDeck } =
+  const { formData, setFormState, setFormData, selectedDeck, resetCollection } =
     React.useContext(CardsContext);
   const { cards } = formData;
 
@@ -16,12 +21,10 @@ const Edit: React.FC = () => {
 
   const { mutate } = api.decks.update.useMutation({
     onSuccess: () => {
-      toast.success("Läuft ");
+      toast.success("Deck successfully updated ");
       ctx.decks.getAll.invalidate();
-      setFormData({
-        name: "",
-        cards: [],
-      });
+      setFormData(DEFAULT_FORMDATA);
+      resetCollection();
       setFormState("index");
     },
     onError: () => {
@@ -29,7 +32,7 @@ const Edit: React.FC = () => {
     },
   });
 
-  const onSave = (): void => {
+  const onSave = () => {
     mutate({
       id: selectedDeck || "",
       name: formData.name,
@@ -42,17 +45,30 @@ const Edit: React.FC = () => {
     });
   };
 
+  const onBack = () => {
+    resetCollection();
+    setFormState("index");
+  };
+
   return (
     <>
       <Form />
-      <Box display="flex" justifyContent="center">
-        <Button onClick={() => setFormState("index")}>Cancel</Button>
+      <Box sx={styles.buttons}>
+        <Button onClick={onBack}>Back</Button>
         <Button color="secondary" onClick={onSave}>
-          Save Deck
+          Edit Deck
         </Button>
       </Box>
     </>
   );
+};
+
+const styles = {
+  buttons: {
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+  },
 };
 
 export default Edit;

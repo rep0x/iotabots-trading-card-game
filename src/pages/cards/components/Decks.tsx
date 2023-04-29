@@ -12,7 +12,7 @@ import Button from "@/components/Button";
 import DeckBox from "./DeckBox";
 
 const Decks: React.FC = () => {
-  const { setFormData, setFormState, setSelectedDeck } =
+  const { setFormData, setFormState, setSelectedDeck, updateCollection } =
     React.useContext(CardsContext);
   const { data } = api.decks.getAll.useQuery();
 

@@ -15,6 +15,9 @@ const filterUserForClient = (user: User) => {
 export const decksRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const decks = await ctx.prisma.deck.findMany({
+      where: {
+        userId: ctx.currentUser || "",
+      },
       take: 100,
       orderBy: [{ createdAt: "desc" }],
     });
@@ -24,6 +27,9 @@ export const decksRouter = createTRPCRouter({
         limit: 100,
       })
     ).map(filterUserForClient);
+
+    console.log("clerk getUserList", users);
+    console.log("CONTEXT currentUser", ctx.currentUser);
 
     return decks.map((deck) => {
       const user = users.find((user) => user.id === deck.userId);

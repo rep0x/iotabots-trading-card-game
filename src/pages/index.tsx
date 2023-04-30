@@ -9,19 +9,70 @@ import DividerSvg from "@/icons/DividerSvg";
 import { TRANSITIONS } from "@/theme";
 import StyledBox from "@/components/StyledBox";
 import { useUser } from "@clerk/nextjs";
+import { toast } from "react-hot-toast";
+import { clearInterval } from "timers";
+import { useRouter } from "next/router";
 
 type Deck = RouterOutputs["decks"]["getAll"][number];
 
 export default function Home() {
-  const { data, refetch } = api.decks.getAll.useQuery();
+  const { data } = api.decks.getAll.useQuery();
   const { user } = useUser();
 
   const [selectedDeck, setSelectedDeck] = React.useState<Deck | null>(null);
+  const [inQueue, setInQueue] = React.useState(false);
+  const [timeInQueue, setTimeInQueue] = React.useState(0);
 
-  const { data: games } = api.games.getAll.useQuery();
+  const { push } = useRouter();
+
+  const { mutate, data: gameStatus } = api.games.joinGame.useMutation({
+    onSuccess: () => {},
+    onError: () => {
+      toast.error("Error joining game, try againe");
+    },
+  });
+
+  React.useEffect(() => {
+    if (gameStatus === "joined") {
+      toast.success("Joined a game, should start now");
+      setInQueue(false);
+      push("/game");
+    }
+    if (gameStatus === "created") {
+      toast.success("Waiting for opponent");
+    }
+  }, [gameStatus]);
+
+  React.useEffect(() => {
+    let interval: NodeJS.Timer;
+
+    if (inQueue) {
+      setInterval(() => {
+        setTimeInQueue((prev) => prev + 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [inQueue]);
 
   const onPlay = () => {
-    console.log(games);
+    mutate();
+    setInQueue(true);
+  };
+
+  const onCancel = () => {
+    setInQueue(false);
+  };
+
+  const formatQueueTimer = () => {
+    let seconds = Math.floor(timeInQueue % 60);
+    const minutes = Math.floor(timeInQueue / 60);
+
+    if (seconds <= 9) {
+      return `${minutes}:0${seconds}`;
+    }
+
+    return `${minutes}:${seconds}`;
   };
 
   return (
@@ -34,12 +85,18 @@ export default function Home() {
       </Head>
       <Base>
         <Box sx={styles.play}>
-          <PlayButton disabled={selectedDeck === null} onClick={() => onPlay} />
+          <PlayButton
+            disabled={selectedDeck === null}
+            onClick={inQueue ? onCancel : onPlay}
+            label={!inQueue ? "Play" : undefined}
+            inQueue={inQueue ? formatQueueTimer() : undefined}
+          />
         </Box>
         <Container>
           <Typography variant="h1" mb={4}>
             Choose your Deck
           </Typography>
+
           {!user && (
             <StyledBox>You need to connect with Metamask to play</StyledBox>
           )}

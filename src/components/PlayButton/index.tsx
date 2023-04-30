@@ -7,16 +7,33 @@ import Svg from "./Svg";
 
 interface Props extends BoxProps {
   disabled: boolean;
+  label?: string;
+  inQueue?: string;
 }
 
 const Play: React.FC<Props> = (props) => {
+  const { disabled, label, inQueue } = props;
   return (
     <Box sx={styles.root} {...props}>
-      <Svg state={props.disabled ? "disabled" : "default"} />
+      <Svg state={disabled ? "disabled" : "default"} />
       <Box sx={styles.wrapper}>
-        <Typography sx={{ opacity: props.disabled ? "0.5" : "1" }} variant="h3">
-          PLAY
-        </Typography>
+        {label && (
+          <Typography sx={{ opacity: disabled ? "0.5" : "1" }} variant="h3">
+            {label}
+          </Typography>
+        )}
+        {inQueue && (
+          <>
+            <Typography sx={styles.typo}>In Queue</Typography>
+            <Typography
+              sx={{ textAlign: "center", my: 1, letterSpacing: 4 }}
+              variant="h3"
+            >
+              {inQueue}
+            </Typography>
+            <Typography sx={styles.typo}>Cancel</Typography>
+          </>
+        )}
       </Box>
     </Box>
   );
@@ -32,6 +49,14 @@ const styles = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+  },
+  typo: {
+    opacity: 0.8,
+    fontSize: 14,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 };
 

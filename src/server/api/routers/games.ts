@@ -1,7 +1,9 @@
+import { toast } from "react-hot-toast";
 import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 
 export const gamesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  joinGame: privateProcedure.mutation(async ({ ctx }) => {
+    console.log("Joining Game");
     const games = await ctx.prisma.game.findMany({
       where: {
         status: "waiting",
@@ -14,7 +16,7 @@ export const gamesRouter = createTRPCRouter({
 
     // Join Game with prisma.game.update and enter my user to player 2
     if (games.length > 0) {
-      const joinGame = await ctx.prisma.game.update({
+      await ctx.prisma.game.update({
         where: {
           id: games[0].id,
         },
@@ -26,18 +28,19 @@ export const gamesRouter = createTRPCRouter({
         },
       });
 
-      return joinGame;
+      return "joined";
 
       // Create Game with prisma.game.create and enter my user to player 1
     } else {
-      const createGame = await ctx.prisma.game.create({
+      await ctx.prisma.game.create({
         data: {
           player1: {
             id: userId,
           },
         },
       });
-      return createGame;
+
+      return "created";
     }
   }),
 });

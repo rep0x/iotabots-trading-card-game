@@ -58,4 +58,23 @@ export const gamesRouter = createTRPCRouter({
 
       return updatedGame;
     }),
+
+  getGames: privateProcedure.query(async ({ ctx }) => {
+    const userId = ctx.currentUser;
+
+    const games = ctx.prisma.game.findMany({
+      where: {
+        OR: [
+          {
+            player1: userId,
+          },
+          {
+            player2: userId,
+          },
+        ],
+      },
+    });
+
+    return games;
+  }),
 });

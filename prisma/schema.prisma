@@ -44,7 +44,6 @@ model Queue {
 
 
 enum Status {
-  waiting
   active
   finished
 }
@@ -63,7 +62,7 @@ model Game {
   currentPlayer Player    @default(player1)
   step          Int       @default(1)
 
-  status        Status    @default(waiting)
+  status        Status    @default(active)
 
   player1       String
   player2       String

@@ -30,7 +30,7 @@ const Player = (props: Props) => {
         <Avatar avatar={AVATAR} />
       </Box>
       <Box ml={2}>
-        <Typography variant="h6" fontWeight="bold" boxShadow={2}>
+        <Typography variant="h6" fontWeight="bold">
           {shortenAddress(currentPlayer)}
         </Typography>
         <Box sx={styles.energy}>

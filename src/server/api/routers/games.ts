@@ -27,4 +27,23 @@ export const gamesRouter = createTRPCRouter({
 
     return game;
   }),
+
+  surrender: privateProcedure
+    .input(
+      z.object({
+        gameId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const game = await ctx.prisma.game.update({
+        where: {
+          id: input.gameId,
+        },
+        data: {
+          status: "finished",
+        },
+      });
+
+      return game;
+    }),
 });

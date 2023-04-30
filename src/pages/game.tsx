@@ -1,25 +1,47 @@
 import React from "react";
 import Head from "next/head";
+import { useUser } from "@clerk/nextjs";
+import { toast } from "react-hot-toast";
 import { Box, Typography } from "@mui/material";
 
 import GameLayout from "@/layouts/Game";
 import Infos from "@/components/game/Infos";
 import { GameContext } from "@/context/GameContext";
-import { useUser } from "@clerk/nextjs";
-import Player from "@/components/game/Player";
 import Board from "@/components/game/Board";
 import GameState from "@/components/game/GameState";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import Button from "@/components/Button";
 
 export default function Game() {
-  const { game } = React.useContext(GameContext);
+  const { game, refetch } = React.useContext(GameContext);
   const { user } = useUser();
+  const { push } = useRouter();
 
-  if (!game || !user)
+  React.useEffect(() => {
+    refetch();
+  }, []);
+
+  if (!user) {
+    return <></>;
+  }
+
+  if (game === undefined) {
     return (
       <GameLayout>
         <Typography variant="h1">Game loading...</Typography>
       </GameLayout>
     );
+  }
+
+  if (game === null) {
+    return (
+      <GameLayout>
+        <Typography variant="h1">No active game</Typography>
+        <Button onClick={() => push("/")}>Back to Menu</Button>
+      </GameLayout>
+    );
+  }
 
   const me = game.player1 === user.id ? "player1" : "player2";
   const opponent = me === "player1" ? "player2" : "player1";

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import Player from "./Player";
 import { useUser } from "@clerk/nextjs";
@@ -8,6 +8,7 @@ import Deck from "./Deck";
 import Hand from "./Hand";
 import Junk from "./Junk";
 import Botzone from "./Botzone";
+import Surrender from "./Surrender";
 
 interface Props {
   player: "player1" | "player2";
@@ -27,6 +28,7 @@ const Board = (props: Props) => {
       <Box sx={styles.left} className="column">
         <Player player={player} />
         <Deck />
+        {!!isMe && <Surrender />}
       </Box>
       <Box sx={styles.center} className="column">
         <Hand me={isMe} />

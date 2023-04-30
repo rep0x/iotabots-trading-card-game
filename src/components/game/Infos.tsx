@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography, Box } from "@mui/material";
+
 import StyledBox from "../StyledBox";
 import { GameContext } from "@/context/GameContext";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
@@ -54,6 +55,7 @@ const Infos = () => {
 const styles = {
   infos: {
     position: "fixed",
+    zIndex: 1000,
     top: 16,
     right: 16,
     opacity: 0,
@@ -64,6 +66,7 @@ const styles = {
   },
   button: {
     position: "fixed",
+    zIndex: 1001,
     top: 28,
     right: 28,
     height: 40,

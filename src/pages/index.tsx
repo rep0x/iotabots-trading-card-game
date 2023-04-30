@@ -68,6 +68,7 @@ export default function Home() {
 
   const startGame = () => {
     toast.success("Game found starting now");
+    if (queue) deleteQueue({ id: queue.id });
     setInQueue(false);
     push("/game");
   };

@@ -42,21 +42,6 @@ model Queue {
   opponent      String?
 }
 
-model Game {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  createdBy     String    
-
-  round         Int       @default(1)
-  currentPlayer Player    @default(player1)
-  step          Int       @default(1)
-
-  status        Status    @default(waiting)
-
-  player1       Json
-  player2       Json?
-}
 
 enum Status {
   waiting
@@ -67,4 +52,19 @@ enum Status {
 enum Player {
   player1
   player2
+}
+
+model Game {
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  round         Int       @default(1)
+  currentPlayer Player    @default(player1)
+  step          Int       @default(1)
+
+  status        Status    @default(waiting)
+
+  player1       String
+  player2       String
 }

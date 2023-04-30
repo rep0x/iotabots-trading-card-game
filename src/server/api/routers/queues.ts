@@ -28,6 +28,14 @@ export const queuesRouter = createTRPCRouter({
         },
       });
 
+      // CREATE GAME
+      await ctx.prisma.game.create({
+        data: {
+          player1: updatedQueue.createdBy,
+          player2: userId,
+        },
+      });
+
       return updatedQueue;
     } else {
       const newQueue = await ctx.prisma.queue.create({

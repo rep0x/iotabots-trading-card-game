@@ -24,7 +24,6 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
   const { push } = useRouter();
 
   React.useEffect(() => {
-    console.log("EFFECT RENDERING");
     if (game === null) {
       push("/");
     }

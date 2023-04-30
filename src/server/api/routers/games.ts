@@ -35,15 +35,27 @@ export const gamesRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const game = await ctx.prisma.game.update({
+      const game = await ctx.prisma.game.findUnique({
+        where: {
+          id: input.gameId,
+        },
+      });
+
+      if (!game) {
+        return new TRPCError({ code: "NOT_FOUND", message: "Game not found." });
+      }
+
+      const updatedGame = await ctx.prisma.game.update({
         where: {
           id: input.gameId,
         },
         data: {
           status: "finished",
+          winner:
+            game?.player1 === ctx.currentUser ? game.player2 : game.player1,
         },
       });
 
-      return game;
+      return updatedGame;
     }),
 });

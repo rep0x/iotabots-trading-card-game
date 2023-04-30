@@ -67,4 +67,6 @@ model Game {
 
   player1       String
   player2       String
+
+  winner        String?
 }

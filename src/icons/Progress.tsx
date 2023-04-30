@@ -50,7 +50,7 @@ const Progress: React.FC<ProgressProps> = ({ progress, color = "#02BAF5" }) => (
     <g mask="url(#mask0_296_6863)">
       <path
         d="M17.6131 11L232.896 11L239 18.5L232.896 26L17.6131 26L12 18.5L17.6131 11Z"
-        fill="#00C2FF"
+        fill={color}
         fillOpacity="0.95"
       />
     </g>

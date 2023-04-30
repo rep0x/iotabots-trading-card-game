@@ -1,11 +1,27 @@
 import React from "react";
 import Head from "next/head";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-import Game from "@/layouts/Game";
+import GameLayout from "@/layouts/Game";
 import Infos from "@/components/game/Infos";
+import { GameContext } from "@/context/GameContext";
+import { useUser } from "@clerk/nextjs";
+import Player from "@/components/game/Player";
 
-const game = () => {
+export default function Game() {
+  const { game } = React.useContext(GameContext);
+  const { user } = useUser();
+
+  if (!game || !user)
+    return (
+      <GameLayout>
+        <Typography variant="h1">Game loading...</Typography>
+      </GameLayout>
+    );
+
+  const me = game.player1 === user.id ? "player1" : "player2";
+  const opponent = me === "player1" ? "player2" : "player1";
+
   return (
     <>
       <Head>
@@ -14,14 +30,12 @@ const game = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Game>
-        <Typography variant="h1" gutterBottom>
-          Game
-          <Infos />
-        </Typography>
-      </Game>
+      <GameLayout>
+        <Infos />
+
+        <Player player={opponent} />
+        <Player player={me} />
+      </GameLayout>
     </>
   );
-};
-
-export default game;
+}

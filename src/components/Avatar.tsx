@@ -1,8 +1,8 @@
 import React from "react";
+import { Box } from "@mui/material";
 
 import AvatarFrame from "../icons/AvatarFrame";
 import Badge from "./Badge";
-import { Box } from "@mui/material";
 
 interface AvatarProps {
   avatar: string;
@@ -10,7 +10,7 @@ interface AvatarProps {
 }
 
 const Avatar: React.FC<AvatarProps> = ({ avatar, level }) => (
-  <Box sx={styles.root}>
+  <Box sx={styles.root} className="avatar">
     <Box
       sx={{
         backgroundImage: `url(${avatar})`,

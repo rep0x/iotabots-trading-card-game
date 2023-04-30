@@ -31,6 +31,7 @@ export const queuesRouter = createTRPCRouter({
       // CREATE GAME
       await ctx.prisma.game.create({
         data: {
+          status: "active",
           player1: updatedQueue.createdBy,
           player2: userId,
         },

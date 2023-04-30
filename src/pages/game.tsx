@@ -3,6 +3,7 @@ import Head from "next/head";
 import { Typography } from "@mui/material";
 
 import Game from "@/layouts/Game";
+import Infos from "@/components/game/Infos";
 
 const game = () => {
   return (
@@ -14,7 +15,10 @@ const game = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Game>
-        <Typography>Home</Typography>
+        <Typography variant="h1" gutterBottom>
+          Game
+          <Infos />
+        </Typography>
       </Game>
     </>
   );

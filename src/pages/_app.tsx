@@ -7,6 +7,7 @@ import type { AppProps } from "next/app";
 import { api } from "@/utils/api";
 import { Toaster } from "react-hot-toast";
 import { CardsProvider } from "@/context/CardsContext";
+import { GameProvider } from "@/context/GameContext";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -14,8 +15,10 @@ const App = ({ Component, pageProps }: AppProps) => {
       <Toaster />
       <ThemeProvider theme={THEME}>
         <CardsProvider>
-          <CssBaseline />
-          <Component {...pageProps} />
+          <GameProvider>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </GameProvider>
         </CardsProvider>
       </ThemeProvider>
     </ClerkProvider>

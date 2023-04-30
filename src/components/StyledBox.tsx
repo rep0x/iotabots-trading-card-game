@@ -4,7 +4,7 @@ import { Box, BoxProps, Typography } from "@mui/material";
 const StyledBox: React.FC<BoxProps> = (props) => {
   return (
     <Box {...props} sx={{ ...styles, ...props.sx }}>
-      <Typography color="text.secondary">{props.children}</Typography>
+      <Box color="text.secondary">{props.children}</Box>
     </Box>
   );
 };

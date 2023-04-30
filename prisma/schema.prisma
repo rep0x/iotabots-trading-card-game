@@ -33,6 +33,15 @@ model Deck {
   @@index([userId])
 }
 
+model Queue {
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  createdBy     String
+  opponent      String?
+}
+
 model Game {
   id            String    @id @default(cuid())
   createdAt     DateTime  @default(now())

@@ -10,12 +10,11 @@ import { TRANSITIONS } from "@/theme";
 import StyledBox from "@/components/StyledBox";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "react-hot-toast";
-import { clearInterval } from "timers";
 import { useRouter } from "next/router";
 import { formatQueueTimer } from "@/utils/formatQueueTimer";
 
 type Deck = RouterOutputs["decks"]["getAll"][number];
-type Game = RouterOutputs["games"]["joinGame"];
+type Queue = RouterOutputs["queues"]["joinQueue"];
 
 const CHECK_GAME_INTEVALL = 10000; // in ms
 
@@ -26,53 +25,49 @@ export default function Home() {
   const [selectedDeck, setSelectedDeck] = React.useState<Deck | null>(null);
   const [inQueue, setInQueue] = React.useState(false);
   const [timeInQueue, setTimeInQueue] = React.useState(0);
-  const [game, setGame] = React.useState<Game | null>(null);
+  const [queue, setQueue] = React.useState<Queue | null>(null);
 
   const { push } = useRouter();
 
-  const { mutate: joinGame } = api.games.joinGame.useMutation({
+  const { mutate: joinQueue } = api.queues.joinQueue.useMutation({
     onSuccess: (res) => {
-      setGame(res);
-      if (res.status === "active") {
-        startGame();
-      }
-      if (res.status === "waiting") {
+      setQueue(res);
+      if (res.opponent === null) {
         setInQueue(true);
         toast.success("Waiting for opponent");
-      }
-    },
-    onError: () => {
-      toast.error("Error joining game, try again");
-    },
-  });
-
-  const { mutate: checkGameStatus } = api.games.checkGameStatus.useMutation({
-    onSuccess: (res) => {
-      if (res.status === "active") {
+      } else {
         startGame();
       }
-      if (res.status === "waiting") {
-        toast.success("Still waiting for oponent");
-      }
     },
     onError: () => {
-      toast.error("Error joining game, try again");
+      toast.error("Error joining queue, try again");
     },
   });
 
-  const { mutate: deleteGame } = api.games.deleteGame.useMutation({
+  const { mutate: checkQueueStatus } = api.queues.checkQueueStatus.useMutation({
     onSuccess: (res) => {
-      toast.success("Game deleted");
-      console.log("Delete Success", res);
+      if (res.opponent === null) {
+        toast.success("Still waiting for oponent");
+      } else {
+        startGame();
+      }
     },
-    onError: (res) => {
-      toast.error("Game could not be deleted");
-      console.log("Delete Error", res);
+    onError: () => {
+      toast.error("Error joining queue, try again");
+    },
+  });
+
+  const { mutate: deleteQueue } = api.queues.deleteQueue.useMutation({
+    onSuccess: () => {
+      toast.success("Queue canceled");
+    },
+    onError: () => {
+      toast.error("Queue could not be deleted");
     },
   });
 
   const startGame = () => {
-    toast.success("Game found, starting now");
+    toast.success("Game found starting now");
     setInQueue(false);
     push("/game");
   };
@@ -94,28 +89,28 @@ export default function Home() {
   React.useEffect(() => {
     let interval: NodeJS.Timer;
 
-    if (inQueue && game) {
+    if (inQueue && queue) {
       interval = setInterval(() => {
-        checkGameStatus({
-          id: game.id,
+        checkQueueStatus({
+          id: queue.id,
         });
       }, CHECK_GAME_INTEVALL);
     }
 
     return () => window.clearInterval(interval);
-  }, [inQueue, game]);
+  }, [inQueue, queue]);
 
   const onPlay = () => {
-    joinGame();
+    joinQueue();
     setInQueue(true);
   };
 
   const onCancel = () => {
     setInQueue(false);
     setTimeInQueue(0);
-    if (game) {
-      deleteGame({
-        id: game.id,
+    if (queue) {
+      deleteQueue({
+        id: queue.id,
       });
     }
   };

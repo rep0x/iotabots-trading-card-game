@@ -2,6 +2,7 @@ import { createTRPCRouter } from "./trpc";
 import { postsRouter } from "./routers/posts";
 import { decksRouter } from "./routers/decks";
 import { gamesRouter } from "./routers/games";
+import { queuesRouter } from "./routers/queues";
 
 /**
  * This is the primary router for your server.
@@ -11,6 +12,7 @@ import { gamesRouter } from "./routers/games";
 export const appRouter = createTRPCRouter({
   posts: postsRouter,
   decks: decksRouter,
+  queues: queuesRouter,
   games: gamesRouter,
 });
 

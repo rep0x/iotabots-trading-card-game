@@ -3,7 +3,8 @@ import { Typography, Box } from "@mui/material";
 import StyledBox from "../StyledBox";
 import { GameContext } from "@/context/GameContext";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
-import DisabledByDefaultRoundedIcon from "@mui/icons-material/DisabledByDefaultRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import { TRANSITIONS } from "@/theme";
 
 const Infos = () => {
   const { game } = React.useContext(GameContext);
@@ -23,7 +24,7 @@ const Infos = () => {
 
   return (
     <Box>
-      <Box sx={styles.root} className={open ? "open" : ""}>
+      <Box sx={styles.infos} className={open ? "open" : ""}>
         <StyledBox>
           <Box display="flex" alignItems="center" mb={2}>
             <InfoRoundedIcon />
@@ -39,15 +40,19 @@ const Infos = () => {
           ))}
         </StyledBox>
       </Box>
-      <Box sx={styles.button} onClick={() => setOpen(!open)}>
-        {open ? <DisabledByDefaultRoundedIcon /> : <InfoRoundedIcon />}
+      <Box
+        sx={styles.button}
+        onClick={() => setOpen(!open)}
+        className={open ? "open" : ""}
+      >
+        {open ? <CloseRoundedIcon /> : <InfoRoundedIcon />}
       </Box>
     </Box>
   );
 };
 
 const styles = {
-  root: {
+  infos: {
     position: "fixed",
     top: 16,
     right: 16,
@@ -69,6 +74,21 @@ const styles = {
     bgcolor: "rgba(0,0,0,0.8)",
     borderRadius: 2,
     boxShadow: 1,
+    cursor: "pointer",
+    transition: TRANSITIONS[120],
+
+    "& svg": {
+      transition: TRANSITIONS[120],
+    },
+
+    "&.open": {
+      bgcolor: "rgba(255,255,255,0.8)",
+      borderRadius: "50%",
+      transform: "rotate(180deg)",
+      "& svg": {
+        color: "background.paper",
+      },
+    },
   },
 };
 

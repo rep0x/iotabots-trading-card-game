@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, GlobalStyles } from "@mui/material";
+import { Box } from "@mui/material";
 
 import Currency from "../Currency";
 import PlayerInfo from "../PlayerInfo";
@@ -15,6 +15,8 @@ import { ethers } from "ethers";
 import { shortenAddress } from "@/utils/shortenAddress";
 import Button from "../Button";
 import Logo from "../Logo";
+import { GameContext } from "@/context/GameContext";
+import { useRouter } from "next/router";
 
 interface Player {
   name: string;
@@ -29,6 +31,8 @@ const PLAYER: Player | undefined = {
 
 const Header = () => {
   const { user } = useUser();
+  const { push } = useRouter();
+  const { game } = React.useContext(GameContext);
   const [balance, setBalance] = React.useState<string | null>(null);
 
   const address = user?.primaryWeb3Wallet?.web3Wallet || "";
@@ -68,16 +72,14 @@ const Header = () => {
 
   return (
     <Box sx={styles.root}>
-      <GlobalStyles
-        styles={{
-          ".cl-userButtonPopoverCard": {
-            bgcolor: "red !important",
-          },
-        }}
-      />
       <SignedIn>
         <Logo />
         <Box sx={styles.infos}>
+          {!!game && (
+            <Button color="secondary" onClick={() => push("/game")}>
+              Open Game
+            </Button>
+          )}
           <Box sx={styles.currencies}>
             {balance && <Currency type="default" value={balance} />}
           </Box>
@@ -141,7 +143,7 @@ const styles = {
   infos: {
     display: "flex",
     alignItems: "center",
-    gap: 4,
+    gap: 2,
   },
   currencies: {
     display: "flex",

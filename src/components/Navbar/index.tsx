@@ -2,14 +2,10 @@ import React from "react";
 import { useRouter } from "next/router";
 import { Box } from "@mui/material";
 
-import { TRANSITIONS } from "@/theme";
-
-import PlayButton from "../PlayButton";
 import Menu from "./Menu";
 
 const Navbar = () => {
   const { pathname } = useRouter();
-  const isHome = pathname === "/";
 
   return (
     <Box sx={styles.root}>

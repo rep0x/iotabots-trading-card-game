@@ -10,13 +10,11 @@ import StarSvg from "@/icons/StarSvg";
 import RocketSvg from "@/icons/RocketSvg";
 
 import toast from "react-hot-toast";
-import { getShopContract } from "../../utils/getContracts";
+import { getShopContract } from "../utils/getContracts";
 
 export default function Shop() {
   const { user } = useUser();
   const [loading, setLoading] = React.useState(false);
-
-  const address = user?.primaryWeb3Wallet?.web3Wallet || "";
 
   const buyStarterPack = async () => {
     if (!user) return;
@@ -84,12 +82,6 @@ export default function Shop() {
       onClick: () => buyBoosterPack(),
     },
   ];
-
-  React.useEffect(() => {
-    if (user) {
-      //getBalance();
-    }
-  }, [user]);
 
   return (
     <>

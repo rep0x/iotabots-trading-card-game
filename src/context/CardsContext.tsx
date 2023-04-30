@@ -1,10 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { CountCard } from "@/mocks/deck";
-import {
-  COLLECTION,
-  CollectionItem,
-  RANDOM_COLLECTION,
-} from "@/mocks/collection";
+import { COLLECTION, CollectionItem } from "@/mocks/collection";
 import { Card } from "@/mocks/cards";
 import { toast } from "react-hot-toast";
 import { countDeck } from "@/utils/countDeck";
@@ -46,11 +42,6 @@ export const CardsProvider: React.FC<Props> = ({ children }) => {
     name: "",
     cards: [],
   });
-
-  // Real connection is the actual nfts count of all cards a user has
-  const [realCollection, setRealCollection] = React.useState<
-    CollectionItem[] | null
-  >(null);
 
   // The collection is a manipulatable state for deck managment
   const [collection, setCollection] = React.useState(COLLECTION);

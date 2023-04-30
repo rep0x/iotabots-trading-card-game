@@ -12,7 +12,6 @@ interface Props {
 
 const Player = (props: Props) => {
   const { player } = props;
-
   const { game } = React.useContext(GameContext);
 
   if (!game) return null;
@@ -47,7 +46,9 @@ const styles = {
   root: {
     display: "flex",
     alignItems: "center",
+    width: 340,
   },
+
   avatar: {
     height: 88,
     width: 88,
@@ -56,9 +57,10 @@ const styles = {
     alignItems: "center",
 
     "& .avatar": {
-      transform: "scale(1.6)",
+      transform: "scale(1.6) translateY(4px)",
     },
   },
+
   energy: {
     display: "flex",
     flexDirection: "column",

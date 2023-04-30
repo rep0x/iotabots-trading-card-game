@@ -7,6 +7,8 @@ import Infos from "@/components/game/Infos";
 import { GameContext } from "@/context/GameContext";
 import { useUser } from "@clerk/nextjs";
 import Player from "@/components/game/Player";
+import Board from "@/components/game/Board";
+import GameState from "@/components/game/GameState";
 
 export default function Game() {
   const { game } = React.useContext(GameContext);
@@ -32,10 +34,21 @@ export default function Game() {
       </Head>
       <GameLayout>
         <Infos />
-
-        <Player player={opponent} />
-        <Player player={me} />
+        <Box sx={styles.root}>
+          <Board player={opponent} />
+          <GameState />
+          <Board player={me} />
+        </Box>
       </GameLayout>
     </>
   );
 }
+
+const styles = {
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    gap: 4,
+  },
+};

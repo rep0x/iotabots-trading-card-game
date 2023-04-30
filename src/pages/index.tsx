@@ -12,8 +12,12 @@ import { useUser } from "@clerk/nextjs";
 import { toast } from "react-hot-toast";
 import { clearInterval } from "timers";
 import { useRouter } from "next/router";
+import { formatQueueTimer } from "@/utils/formatQueueTimer";
 
 type Deck = RouterOutputs["decks"]["getAll"][number];
+type Game = RouterOutputs["games"]["joinGame"];
+
+const CHECK_GAME_INTEVALL = 10000; // in ms
 
 export default function Home() {
   const { data } = api.decks.getAll.useQuery();
@@ -22,57 +26,98 @@ export default function Home() {
   const [selectedDeck, setSelectedDeck] = React.useState<Deck | null>(null);
   const [inQueue, setInQueue] = React.useState(false);
   const [timeInQueue, setTimeInQueue] = React.useState(0);
+  const [game, setGame] = React.useState<Game | null>(null);
 
   const { push } = useRouter();
 
-  const { mutate, data: gameStatus } = api.games.joinGame.useMutation({
-    onSuccess: () => {},
+  const { mutate: joinGame } = api.games.joinGame.useMutation({
+    onSuccess: (res) => {
+      setGame(res);
+      if (res.status === "active") {
+        startGame();
+      }
+      if (res.status === "waiting") {
+        setInQueue(true);
+        toast.success("Waiting for opponent");
+      }
+    },
     onError: () => {
-      toast.error("Error joining game, try againe");
+      toast.error("Error joining game, try again");
     },
   });
 
-  React.useEffect(() => {
-    if (gameStatus === "joined") {
-      toast.success("Joined a game, should start now");
-      setInQueue(false);
-      push("/game");
-    }
-    if (gameStatus === "created") {
-      toast.success("Waiting for opponent");
-    }
-  }, [gameStatus]);
+  const { mutate: checkGameStatus } = api.games.checkGameStatus.useMutation({
+    onSuccess: (res) => {
+      if (res.status === "active") {
+        startGame();
+      }
+      if (res.status === "waiting") {
+        toast.success("Still waiting for oponent");
+      }
+    },
+    onError: () => {
+      toast.error("Error joining game, try again");
+    },
+  });
 
+  const { mutate: deleteGame } = api.games.deleteGame.useMutation({
+    onSuccess: (res) => {
+      toast.success("Game deleted");
+      console.log("Delete Success", res);
+    },
+    onError: (res) => {
+      toast.error("Game could not be deleted");
+      console.log("Delete Error", res);
+    },
+  });
+
+  const startGame = () => {
+    toast.success("Game found, starting now");
+    setInQueue(false);
+    push("/game");
+  };
+
+  // Updating Queue Timer [1s]
   React.useEffect(() => {
     let interval: NodeJS.Timer;
 
     if (inQueue) {
-      setInterval(() => {
+      interval = setInterval(() => {
         setTimeInQueue((prev) => prev + 1);
       }, 1000);
     }
 
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, [inQueue]);
 
+  // Checking Game State [10s]
+  React.useEffect(() => {
+    let interval: NodeJS.Timer;
+
+    if (inQueue && game) {
+      interval = setInterval(() => {
+        checkGameStatus({
+          id: game.id,
+        });
+      }, CHECK_GAME_INTEVALL);
+    }
+
+    return () => window.clearInterval(interval);
+  }, [inQueue, game]);
+
   const onPlay = () => {
-    mutate();
+    joinGame();
     setInQueue(true);
   };
 
   const onCancel = () => {
     setInQueue(false);
-  };
-
-  const formatQueueTimer = () => {
-    let seconds = Math.floor(timeInQueue % 60);
-    const minutes = Math.floor(timeInQueue / 60);
-
-    if (seconds <= 9) {
-      return `${minutes}:0${seconds}`;
+    setTimeInQueue(0);
+    if (game) {
+      deleteGame({
+        id: game.id,
+      });
     }
-
-    return `${minutes}:${seconds}`;
   };
 
   return (
@@ -89,7 +134,7 @@ export default function Home() {
             disabled={selectedDeck === null}
             onClick={inQueue ? onCancel : onPlay}
             label={!inQueue ? "Play" : undefined}
-            inQueue={inQueue ? formatQueueTimer() : undefined}
+            inQueue={inQueue ? formatQueueTimer(timeInQueue) : undefined}
           />
         </Box>
         <Container>
@@ -97,9 +142,16 @@ export default function Home() {
             Choose your Deck
           </Typography>
 
+          {/* No user yet */}
           {!user && (
-            <StyledBox>You need to connect with Metamask to play</StyledBox>
+            <StyledBox>You got to connect with Metamask to play</StyledBox>
           )}
+
+          {/* User but no decks */}
+          {user && !!data && data.length === 0 && (
+            <StyledBox>You got to create a deck before you can play</StyledBox>
+          )}
+
           {!!data && data.length > 0 && (
             <Box sx={styles.grid}>
               {data.map((deck) => {
@@ -127,10 +179,6 @@ export default function Home() {
                 );
               })}
             </Box>
-          )}
-
-          {!!data && data.length === 0 && (
-            <StyledBox>You got to create a deck before you can play.</StyledBox>
           )}
         </Container>
       </Base>

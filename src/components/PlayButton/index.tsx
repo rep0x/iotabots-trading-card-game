@@ -29,7 +29,7 @@ const Play: React.FC<Props> = (props) => {
               sx={{ textAlign: "center", my: 1, letterSpacing: 4 }}
               variant="h3"
             >
-              {inQueue}
+              <>{inQueue}</>
             </Typography>
             <Typography sx={styles.typo}>Cancel</Typography>
           </>

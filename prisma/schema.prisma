@@ -37,6 +37,7 @@ model Game {
   id            String    @id @default(cuid())
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  createdBy     String    
 
   round         Int       @default(1)
   currentPlayer Player    @default(player1)

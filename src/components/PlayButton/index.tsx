@@ -15,7 +15,7 @@ const Play: React.FC<Props> = (props) => {
   const { disabled, label, inQueue, onClick } = props;
   return (
     <Box
-      sx={styles.root}
+      sx={{ ...styles.root, cursor: disabled ? "default" : "pointer" }}
       onClick={disabled ? () => {} : onClick}
       className="play-button"
     >
@@ -46,7 +46,6 @@ const Play: React.FC<Props> = (props) => {
 const styles = {
   root: {
     position: "relative",
-    cursor: "pointer",
   },
   wrapper: {
     position: "absolute",

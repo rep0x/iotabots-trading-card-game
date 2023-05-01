@@ -5,13 +5,17 @@ import { TRANSITIONS } from "@/theme";
 import { api } from "@/utils/api";
 
 import RoundBG from "./icons/RoundBG";
-
-const MYTURN = true;
+import { useUser } from "@clerk/nextjs";
 
 const Round = () => {
   const { data: game } = api.games.getGame.useQuery();
 
-  if (!game) return null;
+  const { user } = useUser();
+
+  if (!game || !user) return null;
+
+  const myPlayerKey = game.player1Id === user.id ? "player1" : "player2";
+  const myturn = game.currentPlayer === myPlayerKey;
 
   return (
     <Box sx={styles.root}>
@@ -21,9 +25,9 @@ const Round = () => {
 
           "& svg": {
             transition: TRANSITIONS[300],
-            color: MYTURN ? "info.main" : "background.paper",
+            color: myturn ? "info.main" : "background.paper",
             position: "absolute",
-            transform: MYTURN
+            transform: myturn
               ? "scale(1) rotate(0)"
               : "scale(1) rotate(180deg)",
           },

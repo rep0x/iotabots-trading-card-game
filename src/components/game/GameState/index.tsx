@@ -8,6 +8,7 @@ import StepsBG from "./icons/StepsBG";
 import { api } from "@/utils/api";
 import { toast } from "react-hot-toast";
 import DrawCard from "./icons/DrawCard";
+import { useUser } from "@clerk/nextjs";
 
 const STEPS = [
   { id: 0, label: "Draw Card", icon: <DrawCard /> },
@@ -18,8 +19,12 @@ const STEPS = [
 
 const GameState = () => {
   const { data: game, refetch } = api.games.getGame.useQuery();
+  const { user } = useUser();
 
-  if (!game) return null;
+  if (!game || !user) return null;
+
+  const myPlayerKey = game.player1Id === user.id ? "player1" : "player2";
+  const myturn = game.currentPlayer === myPlayerKey;
 
   const { mutate: drawCard } = api.games.draw.useMutation({
     onSuccess: () => {
@@ -33,6 +38,20 @@ const GameState = () => {
 
   const onDraw = () => {
     drawCard({ gameId: game.id });
+  };
+
+  const { mutate: nextStep } = api.games.nextStep.useMutation({
+    onSuccess: () => {
+      toast.success("Continue to next step");
+      refetch();
+    },
+    onError: () => {
+      toast.error("Continue did not work");
+    },
+  });
+
+  const onNextStep = () => {
+    nextStep({ gameId: game.id });
   };
 
   const currentStep = game.step;
@@ -50,15 +69,15 @@ const GameState = () => {
     },
     1: {
       label: "End Play",
-      action: () => {}, // Continue
+      action: onNextStep, // Continue
     },
     2: {
       label: "End Attack",
-      action: () => {}, // Continue
+      action: onNextStep, // Continue
     },
     3: {
       label: "End Round",
-      action: () => {}, // Continue
+      action: onNextStep, // Continue
     },
   };
 
@@ -89,7 +108,7 @@ const GameState = () => {
       <Box sx={styles.progress}></Box>
       <Box sx={styles.button}>
         <PlayButton
-          disabled={false}
+          disabled={!myturn}
           label={currentAction.label}
           onClick={currentAction.action}
         />
@@ -117,7 +136,7 @@ const styles = {
     position: "relative",
     height: 64,
     width: 270,
-    marginLeft: "-44px",
+    marginLeft: "-32px",
   },
   stepsGrid: {
     position: "relative",
@@ -125,7 +144,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     gap: "12px",
-    pl: 5,
+    pl: 2,
     py: "12px",
   },
   stepsBG: { position: "absolute" },

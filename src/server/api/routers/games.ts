@@ -77,6 +77,46 @@ export const gamesRouter = createTRPCRouter({
       return nextGame;
     }),
 
+  nextStep: privateProcedure
+    .input(
+      z.object({
+        gameId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const game = await ctx.prisma.game.findUniqueOrThrow({
+        where: {
+          id: input.gameId,
+        },
+      });
+
+      if (game.step === 3) {
+        const nextGame = ctx.prisma.game.update({
+          where: {
+            id: input.gameId,
+          },
+          data: {
+            step: 0,
+            round:
+              game.currentPlayer === "player2" ? game.round + 1 : game.round,
+            currentPlayer:
+              game.currentPlayer === "player1" ? "player2" : "player1",
+          },
+        });
+        return nextGame;
+      }
+
+      const nextGame = ctx.prisma.game.update({
+        where: {
+          id: input.gameId,
+        },
+        data: {
+          step: game.step + 1,
+        },
+      });
+      return nextGame;
+    }),
+
   surrender: privateProcedure
     .input(
       z.object({

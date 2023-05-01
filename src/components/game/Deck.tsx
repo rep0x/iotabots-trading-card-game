@@ -19,11 +19,7 @@ const Deck = (props: Props) => {
 
   const count = currentPlayer.deck.length;
 
-  return (
-    <Box sx={{ ...styles.root, cursor: me ? "pointer" : "default" }}>
-      Deck {count}
-    </Box>
-  );
+  return <Box sx={styles.root}>Deck {count}</Box>;
 };
 
 export default Deck;

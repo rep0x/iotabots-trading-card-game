@@ -15,3 +15,8 @@ export interface DeckType {
   name: string;
   cards: DeckItemType[];
 }
+
+export interface Player {
+  health: number;
+  mana: number;
+}

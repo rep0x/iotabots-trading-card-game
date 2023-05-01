@@ -38,7 +38,9 @@ model Queue {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  createdBy     String
+  creator       String
+  creatorDeckId String
+
   opponent      String?
 }
 
@@ -64,8 +66,11 @@ model Game {
 
   status        Status    @default(active)
 
-  player1       String
-  player2       String
+  player1Id     String
+  player1       Json           
+  
+  player2Id     String
+  player2       Json
 
   winner        String?
 }

@@ -40,10 +40,10 @@ export default function History() {
                     </Box>
                     <Box>
                       <Typography fontWeight="bold" fontSize={20}>
-                        {shortenAddress(game.player1)}
+                        {shortenAddress(game.player1Id)}
                       </Typography>
                       <Typography color="text.secondary">
-                        {game.player1 === game.winner ? "Victory" : "Defeat"}
+                        {game.player1Id === game.winner ? "Victory" : "Defeat"}
                       </Typography>
                     </Box>
                   </Box>
@@ -60,10 +60,10 @@ export default function History() {
                     </Box>
                     <Box>
                       <Typography fontWeight="bold" fontSize={20}>
-                        {shortenAddress(game.player2)}
+                        {shortenAddress(game.player2Id)}
                       </Typography>
                       <Typography color="text.secondary">
-                        {game.player2 === game.winner ? "Victory" : "Defeat"}
+                        {game.player2Id === game.winner ? "Victory" : "Defeat"}
                       </Typography>
                     </Box>
                   </Box>

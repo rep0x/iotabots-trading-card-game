@@ -11,7 +11,7 @@ import Botzone from "./Botzone";
 import Surrender from "./Surrender";
 
 interface Props {
-  player: "player1" | "player2";
+  player: "player1Id" | "player2Id";
 }
 
 const Board = (props: Props) => {
@@ -27,7 +27,7 @@ const Board = (props: Props) => {
     <Box sx={styles.root} className={isMe ? "me" : "opponent"}>
       <Box sx={styles.left} className="column">
         <Player player={player} />
-        <Deck />
+        <Deck player={player} />
         {!!isMe && <Surrender />}
       </Box>
       <Box sx={styles.center} className="column">

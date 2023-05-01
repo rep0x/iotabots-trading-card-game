@@ -7,7 +7,7 @@ import { shortenAddress } from "@/utils/shortenAddress";
 import Energy from "./Energy";
 
 interface Props {
-  player: "player1" | "player2";
+  player: "player1Id" | "player2Id";
 }
 
 const Player = (props: Props) => {

@@ -16,10 +16,10 @@ export const gamesRouter = createTRPCRouter({
 
         OR: [
           {
-            player1: userId,
+            player1Id: userId,
           },
           {
-            player2: userId,
+            player2Id: userId,
           },
         ],
       },
@@ -52,7 +52,9 @@ export const gamesRouter = createTRPCRouter({
         data: {
           status: "finished",
           winner:
-            game?.player1 === ctx.currentUser ? game.player2 : game.player1,
+            game?.player1Id === ctx.currentUser
+              ? game.player2Id
+              : game.player1Id,
         },
       });
 
@@ -66,10 +68,10 @@ export const gamesRouter = createTRPCRouter({
       where: {
         OR: [
           {
-            player1: userId,
+            player1Id: userId,
           },
           {
-            player2: userId,
+            player2Id: userId,
           },
         ],
       },

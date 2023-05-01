@@ -19,8 +19,8 @@ const Infos = () => {
     { label: "currentPlayer", value: game.currentPlayer },
     { label: "step", value: game.step },
     { label: "round", value: game.round },
-    { label: "player1", value: game.player1 },
-    { label: "player2", value: game.player2 },
+    { label: "player1Id", value: game.player1Id },
+    { label: "player2Id", value: game.player2Id },
   ];
 
   return (

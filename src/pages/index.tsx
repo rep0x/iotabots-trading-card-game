@@ -68,7 +68,10 @@ export default function Home() {
 
   const startGame = () => {
     toast.success("Game found starting now");
-    if (queue) deleteQueue({ id: queue.id });
+    if (queue) {
+      deleteQueue({ id: queue.id });
+      console.log("queue should be deleted");
+    }
     setInQueue(false);
     push("/game");
   };
@@ -102,8 +105,12 @@ export default function Home() {
   }, [inQueue, queue]);
 
   const onPlay = () => {
-    joinQueue();
-    setInQueue(true);
+    if (selectedDeck) {
+      joinQueue({ deckId: selectedDeck?.id });
+      setInQueue(true);
+    } else {
+      toast.error("Make sure you got a deck selected");
+    }
   };
 
   const onCancel = () => {

@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
-import { toast } from "react-hot-toast";
 import { Box, Typography } from "@mui/material";
 
 import GameLayout from "@/layouts/Game";
@@ -9,8 +9,6 @@ import Infos from "@/components/game/Infos";
 import { GameContext } from "@/context/GameContext";
 import Board from "@/components/game/Board";
 import GameState from "@/components/game/GameState";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import Button from "@/components/Button";
 
 export default function Game() {
@@ -43,8 +41,8 @@ export default function Game() {
     );
   }
 
-  const me = game.player1 === user.id ? "player1" : "player2";
-  const opponent = me === "player1" ? "player2" : "player1";
+  const me = game.player1Id === user.id ? "player1Id" : "player2Id";
+  const opponent = me === "player1Id" ? "player2Id" : "player1Id";
 
   return (
     <>

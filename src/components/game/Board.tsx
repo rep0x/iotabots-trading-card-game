@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 
 import Player from "./Player";
 import { useUser } from "@clerk/nextjs";
@@ -32,7 +32,7 @@ const Board = (props: Props) => {
       </Box>
       <Box sx={styles.center} className="column">
         <Hand player={player} me={isMe} />
-        <Botzone />
+        <Botzone player={player} me={isMe} />
       </Box>
       <Box sx={styles.right} className="column">
         <Junk />

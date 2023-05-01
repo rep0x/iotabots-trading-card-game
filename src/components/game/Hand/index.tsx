@@ -2,10 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import { api } from "@/utils/api";
 import { Player } from "@/types";
-import { CARDS } from "@/mocks/cards";
-
-const BACK =
-  "https://cdn.discordapp.com/attachments/420674357652750367/946485073081946132/Back_copy.png";
+import Card from "./Card";
 
 interface Props {
   me: boolean;
@@ -23,18 +20,9 @@ const Hand = (props: Props) => {
   return (
     <Box sx={styles.root} className={me ? "me" : "opponent"}>
       <Box sx={styles.grid}>
-        {currentPlayer.hand.map((cardId, index) => {
-          const card = CARDS[Number(cardId)];
-          return (
-            <Box
-              key={index}
-              sx={{
-                ...styles.card,
-                backgroundImage: `url(${me ? card.image : BACK})`,
-              }}
-            />
-          );
-        })}
+        {currentPlayer.hand.map((cardId, index) => (
+          <Card key={index} index={index} id={cardId} me={me} />
+        ))}
       </Box>
     </Box>
   );

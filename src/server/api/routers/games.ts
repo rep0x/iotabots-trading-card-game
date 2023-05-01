@@ -2,6 +2,7 @@ import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { Player } from "@/types";
+import { CARDS } from "@/mocks/cards";
 
 export const gamesRouter = createTRPCRouter({
   /*  Find Game 
@@ -130,6 +131,69 @@ export const gamesRouter = createTRPCRouter({
         data: {
           step: game.step + 1,
         },
+      });
+      return nextGame;
+    }),
+
+  playCard: privateProcedure
+    .input(
+      z.object({
+        gameId: z.string(),
+        cardIndex: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const game = await ctx.prisma.game.findUniqueOrThrow({
+        where: {
+          id: input.gameId,
+        },
+      });
+
+      const playerKey =
+        ctx.currentUser === game.player1Id ? "player1" : "player2";
+      const currentPlayer = game[playerKey] as unknown as Player;
+      const currentMana = currentPlayer.mana;
+
+      const cardId = currentPlayer.hand[input.cardIndex];
+      const card = CARDS[Number(cardId)];
+      const manaCost = card.mana;
+      console.log("💎 MANACOST: ", manaCost);
+
+      if (currentMana < manaCost) {
+        new TRPCError({ code: "BAD_REQUEST", message: "Not enough mana" });
+      }
+
+      let nextMana = currentMana;
+
+      if (currentMana >= manaCost) {
+        nextMana = currentMana - manaCost;
+        currentPlayer.hand.splice(input.cardIndex, 1);
+      }
+
+      const data =
+        playerKey === "player1"
+          ? {
+              player1: {
+                ...currentPlayer,
+                mana: nextMana,
+                hand: [...currentPlayer.hand],
+                zone: [...currentPlayer.zone, cardId],
+              },
+            }
+          : {
+              player2: {
+                ...currentPlayer,
+                mana: nextMana,
+                hand: [...currentPlayer.hand],
+                zone: [...currentPlayer.zone, cardId],
+              },
+            };
+
+      const nextGame = ctx.prisma.game.update({
+        where: {
+          id: input.gameId,
+        },
+        data,
       });
       return nextGame;
     }),

@@ -1,4 +1,4 @@
-import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, privateProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { Player } from "@/types";
@@ -65,32 +65,19 @@ export const gamesRouter = createTRPCRouter({
       const totalMana = currentMana + manaPerRound;
       const nextMana = totalMana > 6 ? 6 : totalMana;
 
-      const data =
-        playerKey === "player1"
-          ? {
-              step: 1,
-              player1: {
-                ...currentPlayer,
-                mana: nextMana,
-                hand: [...currentPlayer.hand, ...drawnCards],
-                deck: [...currentPlayer.deck],
-              },
-            }
-          : {
-              step: 1,
-              player2: {
-                ...currentPlayer,
-                mana: nextMana,
-                hand: [...currentPlayer.hand, ...drawnCards],
-                deck: [...currentPlayer.deck],
-              },
-            };
-
       const nextGame = ctx.prisma.game.update({
         where: {
           id: input.gameId,
         },
-        data,
+        data: {
+          step: 1,
+          [playerKey]: {
+            ...currentPlayer,
+            mana: nextMana,
+            hand: [...currentPlayer.hand, ...drawnCards],
+            deck: [...currentPlayer.deck],
+          },
+        },
       });
       return nextGame;
     }),
@@ -157,7 +144,6 @@ export const gamesRouter = createTRPCRouter({
       const cardId = currentPlayer.hand[input.cardIndex];
       const card = CARDS[Number(cardId)];
       const manaCost = card.mana;
-      console.log("💎 MANACOST: ", manaCost);
 
       if (currentMana < manaCost) {
         new TRPCError({ code: "BAD_REQUEST", message: "Not enough mana" });
@@ -170,30 +156,18 @@ export const gamesRouter = createTRPCRouter({
         currentPlayer.hand.splice(input.cardIndex, 1);
       }
 
-      const data =
-        playerKey === "player1"
-          ? {
-              player1: {
-                ...currentPlayer,
-                mana: nextMana,
-                hand: [...currentPlayer.hand],
-                zone: [...currentPlayer.zone, cardId],
-              },
-            }
-          : {
-              player2: {
-                ...currentPlayer,
-                mana: nextMana,
-                hand: [...currentPlayer.hand],
-                zone: [...currentPlayer.zone, cardId],
-              },
-            };
-
       const nextGame = ctx.prisma.game.update({
         where: {
           id: input.gameId,
         },
-        data,
+        data: {
+          [playerKey]: {
+            ...currentPlayer,
+            mana: nextMana,
+            hand: [...currentPlayer.hand],
+            zone: [...currentPlayer.zone, cardId],
+          },
+        },
       });
       return nextGame;
     }),

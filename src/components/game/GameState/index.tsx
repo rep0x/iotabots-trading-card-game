@@ -6,17 +6,34 @@ import PlayButton from "../../PlayButton";
 import Round from "./Round";
 import StepsBG from "./icons/StepsBG";
 import { api } from "@/utils/api";
+import { toast } from "react-hot-toast";
+import DrawCard from "./icons/DrawCard";
 
 const STEPS = [
-  { id: 1, label: "Play", icon: <Deploy /> },
-  { id: 2, label: "Attack", icon: <Fight /> },
-  { id: 3, label: "Play", icon: <Deploy /> },
+  { id: 0, label: "Draw Card", icon: <DrawCard /> },
+  { id: 1, label: "Play Cards", icon: <Deploy /> },
+  { id: 2, label: "Attack with Bots", icon: <Fight /> },
+  { id: 3, label: "Play Cards", icon: <Deploy /> },
 ];
 
 const GameState = () => {
-  const { data: game } = api.games.getGame.useQuery();
+  const { data: game, refetch } = api.games.getGame.useQuery();
 
   if (!game) return null;
+
+  const { mutate: drawCard } = api.games.draw.useMutation({
+    onSuccess: () => {
+      toast.success("Drawn a card");
+      refetch();
+    },
+    onError: () => {
+      toast.error("Drawing a card errored");
+    },
+  });
+
+  const onDraw = () => {
+    drawCard({ gameId: game.id });
+  };
 
   const currentStep = game.step;
 
@@ -29,7 +46,7 @@ const GameState = () => {
   > = {
     0: {
       label: "Draw",
-      action: () => {}, // Draw
+      action: onDraw, // Draw
     },
     1: {
       label: "End Play",
@@ -100,7 +117,7 @@ const styles = {
     position: "relative",
     height: 64,
     width: 270,
-    marginLeft: "-70px",
+    marginLeft: "-44px",
   },
   stepsGrid: {
     position: "relative",
@@ -108,7 +125,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     gap: "12px",
-    pl: 6,
+    pl: 5,
     py: "12px",
   },
   stepsBG: { position: "absolute" },

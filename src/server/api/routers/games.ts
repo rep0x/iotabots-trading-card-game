@@ -52,6 +52,7 @@ export const gamesRouter = createTRPCRouter({
       const data =
         playerKey === "player1"
           ? {
+              step: 1,
               player1: {
                 ...currentPlayer,
                 hand: [...currentPlayer.hand, drawnCard],
@@ -59,6 +60,7 @@ export const gamesRouter = createTRPCRouter({
               },
             }
           : {
+              step: 1,
               player2: {
                 ...currentPlayer,
                 hand: [...currentPlayer.hand, drawnCard],

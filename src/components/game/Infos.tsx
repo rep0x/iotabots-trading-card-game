@@ -6,9 +6,10 @@ import { GameContext } from "@/context/GameContext";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { TRANSITIONS } from "@/theme";
+import { api } from "@/utils/api";
 
 const Infos = () => {
-  const { game } = React.useContext(GameContext);
+  const { data: game } = api.games.getGame.useQuery();
   const [open, setOpen] = React.useState(false);
 
   if (!game) return null;

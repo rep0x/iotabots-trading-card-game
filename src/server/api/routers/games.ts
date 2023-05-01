@@ -46,8 +46,23 @@ export const gamesRouter = createTRPCRouter({
         ctx.currentUser === game.player1Id ? "player1" : "player2";
       const currentPlayer = game[playerKey] as unknown as Player;
 
-      let drawnCard = currentPlayer.deck[0];
-      currentPlayer.deck.splice(0, 1);
+      const drawnCards = [];
+
+      if (game.round === 1) {
+        drawnCards.push(currentPlayer.deck[0]);
+        drawnCards.push(currentPlayer.deck[1]);
+        drawnCards.push(currentPlayer.deck[2]);
+        drawnCards.push(currentPlayer.deck[3]);
+        currentPlayer.deck.splice(0, 4);
+      } else {
+        drawnCards.push(currentPlayer.deck[0]);
+        currentPlayer.deck.splice(0, 1);
+      }
+
+      const currentMana = currentPlayer.mana;
+      const manaPerRound = game.round;
+      const totalMana = currentMana + manaPerRound;
+      const nextMana = totalMana > 6 ? 6 : totalMana;
 
       const data =
         playerKey === "player1"
@@ -55,7 +70,8 @@ export const gamesRouter = createTRPCRouter({
               step: 1,
               player1: {
                 ...currentPlayer,
-                hand: [...currentPlayer.hand, drawnCard],
+                mana: nextMana,
+                hand: [...currentPlayer.hand, ...drawnCards],
                 deck: [...currentPlayer.deck],
               },
             }
@@ -63,7 +79,8 @@ export const gamesRouter = createTRPCRouter({
               step: 1,
               player2: {
                 ...currentPlayer,
-                hand: [...currentPlayer.hand, drawnCard],
+                mana: nextMana,
+                hand: [...currentPlayer.hand, ...drawnCards],
                 deck: [...currentPlayer.deck],
               },
             };

@@ -16,6 +16,24 @@ const flatenDeck = (deck: CountCard[]) => {
   return flatDeck;
 };
 
+const shuffleDeck = (array: string[]) => {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // Fisher-Yates (aka Knuth) Shuffle
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+};
+
 export const queuesRouter = createTRPCRouter({
   /*  Join Queue 
       When a player hits play hes either
@@ -75,7 +93,7 @@ export const queuesRouter = createTRPCRouter({
             player1: {
               mana: 1,
               health: 20,
-              deck: flatenDeck(creatorsCards),
+              deck: shuffleDeck(flatenDeck(creatorsCards)),
               hand: [],
               zone: [],
               junk: [],
@@ -84,7 +102,7 @@ export const queuesRouter = createTRPCRouter({
             player2: {
               mana: 1,
               health: 20,
-              deck: flatenDeck(opponentsCards),
+              deck: shuffleDeck(flatenDeck(opponentsCards)),
               hand: [],
               zone: [],
               junk: [],

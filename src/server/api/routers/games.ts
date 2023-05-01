@@ -46,20 +46,29 @@ export const gamesRouter = createTRPCRouter({
         ctx.currentUser === game.player1Id ? "player1" : "player2";
       const currentPlayer = game[playerKey] as unknown as Player;
 
-      // Draw card function
       let drawnCard = currentPlayer.deck[0];
       currentPlayer.deck.splice(0, 1);
+
+      const data =
+        playerKey === "player1"
+          ? {
+              player1: {
+                hand: [...currentPlayer.hand, drawnCard],
+                deck: [...currentPlayer.deck],
+              },
+            }
+          : {
+              player2: {
+                hand: [...currentPlayer.hand, drawnCard],
+                deck: [...currentPlayer.deck],
+              },
+            };
 
       const nextGame = ctx.prisma.game.update({
         where: {
           id: input.gameId,
         },
-        data: {
-          player1: {
-            hand: [...currentPlayer.hand, drawnCard],
-            deck: [...currentPlayer.deck],
-          },
-        },
+        data,
       });
       return nextGame;
     }),

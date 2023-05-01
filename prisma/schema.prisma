@@ -62,7 +62,7 @@ model Game {
 
   round         Int       @default(1)
   currentPlayer Player    @default(player1)
-  step          Int       @default(1)
+  step          Int       @default(0)
 
   status        Status    @default(active)
 

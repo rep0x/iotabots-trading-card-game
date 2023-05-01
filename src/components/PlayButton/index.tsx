@@ -14,7 +14,11 @@ interface Props extends BoxProps {
 const Play: React.FC<Props> = (props) => {
   const { disabled, label, inQueue, onClick } = props;
   return (
-    <Box sx={styles.root} onClick={disabled ? () => {} : onClick}>
+    <Box
+      sx={styles.root}
+      onClick={disabled ? () => {} : onClick}
+      className="play-button"
+    >
       <Svg state={disabled ? "disabled" : "default"} />
       <Box sx={styles.wrapper}>
         {label && (

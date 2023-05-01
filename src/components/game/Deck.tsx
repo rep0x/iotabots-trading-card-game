@@ -5,15 +5,17 @@ import { api } from "@/utils/api";
 import { toast } from "react-hot-toast";
 
 interface Props {
+  me: boolean;
   player: "player1Id" | "player2Id";
 }
 
 const Deck = (props: Props) => {
-  const { player } = props;
+  const { player, me } = props;
   const { data: game, refetch } = api.games.getGame.useQuery();
   const { mutate: drawCard } = api.games.draw.useMutation({
     onSuccess: () => {
       toast.success("Drawn a card");
+      refetch();
     },
     onError: () => {
       toast.error("Drawing a card errored");
@@ -29,11 +31,13 @@ const Deck = (props: Props) => {
 
   const onDraw = () => {
     drawCard({ gameId: game.id });
-    refetch();
   };
 
   return (
-    <Box sx={styles.root} onClick={onDraw}>
+    <Box
+      sx={{ ...styles.root, cursor: me ? "pointer" : "default" }}
+      onClick={me ? onDraw : () => {}}
+    >
       Deck {count}
     </Box>
   );

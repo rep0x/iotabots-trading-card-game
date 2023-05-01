@@ -14,7 +14,7 @@ interface Props {
 
 const Hand = (props: Props) => {
   const { me, player } = props;
-  const { data: game, refetch } = api.games.getGame.useQuery();
+  const { data: game } = api.games.getGame.useQuery();
 
   if (!game) return null;
   const playerKey = player === "player1Id" ? "player1" : "player2";
@@ -45,7 +45,6 @@ export default Hand;
 const styles = {
   root: {
     position: "relative",
-    bgcolor: "rgba(0,0,0,0.5)",
     p: 2,
     textAlign: "center",
     borderRadius: 2,

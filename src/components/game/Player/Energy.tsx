@@ -1,15 +1,16 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import badge from "../../icons/badge.png";
-import Progress from "../../icons/Progress";
+import badge from "@/icons/badge.png";
+import Progress from "@/icons/Progress";
 
 interface Props {
+  id: string; // Required for mask ids
   type: "health" | "mana";
   value: number;
 }
 
 const Energy = (props: Props) => {
-  const { type, value } = props;
+  const { type, value, id } = props;
 
   const max = {
     health: 20,
@@ -17,18 +18,23 @@ const Energy = (props: Props) => {
   };
   const progress = value / max[type];
 
-  const color = {
-    health: "#B53232",
-    mana: "#02BAF5",
-  };
-
   return (
     <Box sx={styles.root}>
       <Box sx={styles.badge}>
         <Typography sx={styles.label}>{value}</Typography>
       </Box>
-      <Box sx={styles.progress}>
-        <Progress progress={progress} color={color[type]} />
+      <Box
+        sx={{
+          ...styles.progress,
+          transform: "translateY(6px)",
+        }}
+      >
+        {type === "health" && (
+          <Progress id={`${id}-health`} progress={progress} color={type} />
+        )}
+        {type === "mana" && (
+          <Progress id={`${id}-mana`} progress={progress} color={type} />
+        )}
       </Box>
     </Box>
   );

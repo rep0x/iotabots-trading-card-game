@@ -1,9 +1,12 @@
 import React from "react";
 import { Typography, Box } from "@mui/material";
+import { useUser } from "@clerk/nextjs";
 
 import { GameContext } from "@/context/GameContext";
-import Avatar from "../Avatar";
 import { shortenAddress } from "@/utils/shortenAddress";
+import { Player } from "@/types";
+
+import Avatar from "../../Avatar";
 import Energy from "./Energy";
 
 interface Props {
@@ -13,16 +16,18 @@ interface Props {
 const Player = (props: Props) => {
   const { player } = props;
   const { game } = React.useContext(GameContext);
+  const { user } = useUser();
 
-  if (!game) return null;
+  if (!game || !user) return null;
 
-  const currentPlayer = game[player];
+  const currentPlayerId = game[player];
+  const currentPlayer = (user.id === game.player1Id
+    ? game.player1
+    : game.player2) as unknown as Player;
 
   // TODO: Get these mocks from server
   const AVATAR =
     "https://assets.iotabots.io/compressed/1.png?auto=format&fit=max&w=828";
-  const HEALTH = 20;
-  const MANA = 1;
 
   return (
     <Box sx={styles.root}>
@@ -31,11 +36,11 @@ const Player = (props: Props) => {
       </Box>
       <Box ml={2}>
         <Typography variant="h6" fontWeight="bold">
-          {shortenAddress(currentPlayer)}
+          {shortenAddress(currentPlayerId)}
         </Typography>
         <Box sx={styles.energy}>
-          <Energy type="health" value={HEALTH} />
-          <Energy type="mana" value={MANA} />
+          <Energy id={user.id} type="health" value={currentPlayer.health} />
+          <Energy id={user.id} type="mana" value={currentPlayer.mana} />
         </Box>
       </Box>
     </Box>

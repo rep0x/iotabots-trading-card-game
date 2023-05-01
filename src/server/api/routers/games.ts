@@ -53,12 +53,14 @@ export const gamesRouter = createTRPCRouter({
         playerKey === "player1"
           ? {
               player1: {
+                ...currentPlayer,
                 hand: [...currentPlayer.hand, drawnCard],
                 deck: [...currentPlayer.deck],
               },
             }
           : {
               player2: {
+                ...currentPlayer,
                 hand: [...currentPlayer.hand, drawnCard],
                 deck: [...currentPlayer.deck],
               },

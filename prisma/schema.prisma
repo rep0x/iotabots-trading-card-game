@@ -67,7 +67,7 @@ model Game {
   status        Status    @default(active)
 
   player1Id     String
-  player1       Json           
+  player1       Json
   
   player2Id     String
   player2       Json

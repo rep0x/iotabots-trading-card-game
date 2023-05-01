@@ -1,7 +1,6 @@
-import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, privateProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { Deck, Prisma } from "@prisma/client";
 import { CountCard } from "@/mocks/deck";
 
 const flatenDeck = (deck: CountCard[]) => {
@@ -77,12 +76,18 @@ export const queuesRouter = createTRPCRouter({
               mana: 1,
               health: 20,
               deck: flatenDeck(creatorsCards),
+              hand: [],
+              zone: [],
+              junk: [],
             },
             player2Id: userId,
             player2: {
               mana: 1,
               health: 20,
               deck: flatenDeck(opponentsCards),
+              hand: [],
+              zone: [],
+              junk: [],
             },
           },
         });

@@ -1,20 +1,24 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { GameContext } from "@/context/GameContext";
+import { Player } from "@/types";
+import { api } from "@/utils/api";
+import { toast } from "react-hot-toast";
 
 interface Props {
   player: "player1Id" | "player2Id";
 }
 
-interface Player {
-  mana: number;
-  health: number;
-  deck: string[];
-}
-
 const Deck = (props: Props) => {
   const { player } = props;
-  const { game } = React.useContext(GameContext);
+  const { data: game, refetch } = api.games.getGame.useQuery();
+  const { mutate: drawCard } = api.games.draw.useMutation({
+    onSuccess: () => {
+      toast.success("Drawn a card");
+    },
+    onError: () => {
+      toast.error("Drawing a card errored");
+    },
+  });
 
   if (!game) return null;
 
@@ -23,7 +27,16 @@ const Deck = (props: Props) => {
 
   const count = currentPlayer.deck.length;
 
-  return <Box sx={styles.root}>Deck {count}</Box>;
+  const onDraw = () => {
+    drawCard({ gameId: game.id });
+    refetch();
+  };
+
+  return (
+    <Box sx={styles.root} onClick={onDraw}>
+      Deck {count}
+    </Box>
+  );
 };
 
 export default Deck;

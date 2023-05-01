@@ -19,4 +19,8 @@ export interface DeckType {
 export interface Player {
   health: number;
   mana: number;
+  deck: string[];
+  hand: string[];
+  zone: string[];
+  junk: string[];
 }

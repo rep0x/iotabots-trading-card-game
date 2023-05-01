@@ -31,7 +31,7 @@ const Board = (props: Props) => {
         {!!isMe && <Surrender />}
       </Box>
       <Box sx={styles.center} className="column">
-        <Hand me={isMe} />
+        <Hand player={player} me={isMe} />
         <Botzone />
       </Box>
       <Box sx={styles.right} className="column">

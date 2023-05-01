@@ -1,6 +1,7 @@
 import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { Player } from "@/types";
 
 export const gamesRouter = createTRPCRouter({
   /*  Find Game 
@@ -27,6 +28,41 @@ export const gamesRouter = createTRPCRouter({
 
     return game;
   }),
+
+  draw: privateProcedure
+    .input(
+      z.object({
+        gameId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const game = await ctx.prisma.game.findUniqueOrThrow({
+        where: {
+          id: input.gameId,
+        },
+      });
+
+      const playerKey =
+        ctx.currentUser === game.player1Id ? "player1" : "player2";
+      const currentPlayer = game[playerKey] as unknown as Player;
+
+      // Draw card function
+      let drawnCard = currentPlayer.deck[0];
+      currentPlayer.deck.splice(0, 1);
+
+      const nextGame = ctx.prisma.game.update({
+        where: {
+          id: input.gameId,
+        },
+        data: {
+          player1: {
+            hand: [...currentPlayer.hand, drawnCard],
+            deck: [...currentPlayer.deck],
+          },
+        },
+      });
+      return nextGame;
+    }),
 
   surrender: privateProcedure
     .input(

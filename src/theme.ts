@@ -2,6 +2,7 @@ import { createTheme } from "@mui/material/styles";
 
 export const TRANSITIONS = {
   300: "all 300ms cubic-bezier(0.65, 0, 0.35, 1) 0s",
+  180: "all 180ms cubic-bezier(0.65, 0, 0.35, 1) 0s",
   120: "all 120ms cubic-bezier(0.65, 0, 0.35, 1) 0s",
 };
 

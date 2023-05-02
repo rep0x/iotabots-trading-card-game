@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import { api } from "@/utils/api";
 import { Player } from "@/types";
 import Card from "./Card";
-
 interface Props {
   me: boolean;
   player: "player1Id" | "player2Id";
@@ -19,9 +18,9 @@ const Hand = (props: Props) => {
 
   return (
     <Box sx={styles.root} className={me ? "me" : "opponent"}>
-      <Box sx={styles.grid}>
-        {currentPlayer.hand.map((cardId, index) => (
-          <Card key={index} index={index} id={cardId} me={me} />
+      <Box className="hand" sx={styles.grid}>
+        {currentPlayer.hand.map((card, index) => (
+          <Card index={index} id={card} me={me} />
         ))}
       </Box>
     </Box>
@@ -33,6 +32,7 @@ export default Hand;
 const styles = {
   root: {
     position: "relative",
+    zIndex: 100,
     p: 2,
     textAlign: "center",
     borderRadius: 2,
@@ -42,26 +42,20 @@ const styles = {
     alignItems: "center",
 
     "&.me": {
-      mb: "-40px",
+      mb: "-60px",
     },
 
     "&.opponent": {
-      mt: "-40px",
-      transform: "rotate(180deg)",
+      mt: "-60px",
+      transform: "rotate(180deg) translateY(20px)",
     },
   },
 
   grid: {
+    width: "100%",
     display: "flex",
-    alignItems: "center",
+    flexDirection: "row",
     justifyContent: "center",
-    gap: 2,
-    position: "absolute",
-  },
-  card: {
-    height: 100,
-    width: 70,
-    bgcolor: "rgba(0,0,0,0.5)",
-    backgroundSize: "contain",
+    mb: 6,
   },
 };

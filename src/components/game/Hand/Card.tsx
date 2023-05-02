@@ -5,6 +5,7 @@ import { api } from "@/utils/api";
 import { toast } from "react-hot-toast";
 import { useUser } from "@clerk/nextjs";
 import { Player } from "@/types";
+import { TRANSITIONS } from "@/theme";
 
 const BACK =
   "https://cdn.discordapp.com/attachments/420674357652750367/946485073081946132/Back_copy.png";
@@ -53,52 +54,58 @@ const Card = (props: Props) => {
     }
   };
 
+  // Rotation Calculation
+  const length = currentPlayer.hand.length;
+  const angle = 5 + length * 0.1;
+  const sideElements = Math.floor(length / 2);
+  const increment = angle / sideElements;
+  let cardAngle = 0;
+  let translateX = 0;
+  let translateY = 0;
+  translateX = increment * (sideElements - index);
+  if (index < sideElements) {
+    cardAngle = -(increment * (sideElements - index));
+    translateY = 20 * (sideElements - index);
+  } else if (index > sideElements - 1) {
+    cardAngle = increment * (sideElements - (length - index) + 1);
+    translateY = 20 * (sideElements - (length - index) + 1);
+  }
   return (
     <Box
+      className="card"
       onClick={canPlay ? onPlayCard : () => {}}
       sx={{
         ...styles.card,
-        cursor: canPlay ? "pointer" : "default",
         backgroundImage: `url(${me ? card.image : BACK})`,
+        cursor: canPlay ? "pointer" : "default",
+        transition: TRANSITIONS[180],
+        transform: `
+          rotate(${cardAngle}deg) 
+          translate(${translateX * 8}px, ${translateY}px)
+        `,
+        "&:hover": {
+          zIndex: 100,
+          transform: me
+            ? "translateY(calc(-20% - 4px)) scale(1.5)"
+            : `
+          rotate(${cardAngle}deg) 
+          translate(${translateX * 8}px, ${translateY}px)
+        `,
+        },
       }}
     />
   );
 };
 
 const styles = {
-  root: {
-    position: "relative",
-    p: 2,
-    textAlign: "center",
-    borderRadius: 2,
-    height: 140,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-
-    "&.me": {
-      mb: "-40px",
-    },
-
-    "&.opponent": {
-      mt: "-40px",
-      transform: "rotate(180deg)",
-    },
-  },
-
-  grid: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 2,
-    position: "absolute",
-  },
   card: {
-    height: 120,
-    width: 86,
-    bgcolor: "rgba(0,0,0,0.5)",
+    height: "200px",
+    width: "160px",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
+    backgroundColor: "transparent",
+    border: "none",
+    transformOrigin: "bottom center",
   },
 };
 

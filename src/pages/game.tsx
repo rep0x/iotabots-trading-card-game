@@ -10,6 +10,7 @@ import { GameContext } from "@/context/GameContext";
 import Board from "@/components/game/Board";
 import GameState from "@/components/game/GameState";
 import Button from "@/components/Button";
+import Refetch from "@/components/game/Refetch";
 
 export default function Game() {
   const { game, refetch } = React.useContext(GameContext);
@@ -54,6 +55,7 @@ export default function Game() {
       </Head>
       <GameLayout>
         <Infos />
+        <Refetch />
         <Box sx={styles.root}>
           <Board player={opponent} />
           <GameState />

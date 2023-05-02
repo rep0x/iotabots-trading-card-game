@@ -7,7 +7,7 @@ import { GameContext } from "@/context/GameContext";
 import Deck from "./Deck";
 import Hand from "./Hand";
 import Junk from "./Junk";
-import Botzone from "./Botzone";
+import Botzone from "./botzone";
 import Surrender from "./Surrender";
 
 interface Props {
@@ -72,6 +72,7 @@ const styles = {
   },
   right: {
     width: 340,
+    pr: 8,
   },
 };
 

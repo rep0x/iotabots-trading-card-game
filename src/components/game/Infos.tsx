@@ -57,8 +57,8 @@ const styles = {
   infos: {
     position: "fixed",
     zIndex: 1000,
-    top: 16,
-    right: 16,
+    top: 40,
+    right: 40,
     opacity: 0,
 
     "&.open": {
@@ -68,8 +68,8 @@ const styles = {
   button: {
     position: "fixed",
     zIndex: 1001,
-    top: 28,
-    right: 28,
+    top: 32,
+    right: 32,
     height: 40,
     width: 40,
     display: "flex",

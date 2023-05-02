@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { Player } from "@/types";
 import { CARDS } from "@/mocks/cards";
+import Card from "./Card";
 
 interface Props {
   me: boolean;
@@ -18,21 +19,30 @@ const Botzone = (props: Props) => {
   if (!game || !user) return null;
   const playerKey = player === "player1Id" ? "player1" : "player2";
   const currentPlayer = game[playerKey] as unknown as Player;
+  const zone = currentPlayer.zone;
+
+  const fields: {
+    id: number;
+    image: string | null;
+  }[] = [
+    { id: 0, image: null },
+    { id: 1, image: null },
+    { id: 2, image: null },
+    { id: 3, image: null },
+    { id: 4, image: null },
+  ];
+
+  fields.map((field) => {
+    if (!!zone[field.id]) {
+      field.image = CARDS[Number(zone[field.id])].image;
+    }
+  });
 
   return (
     <Box sx={styles.root}>
       <Box sx={styles.grid}>
-        {currentPlayer.zone.map((card, index) => {
-          const image = CARDS[Number(card)].image;
-          return (
-            <Box
-              key={index}
-              sx={{
-                ...styles.card,
-                backgroundImage: `url(${image})`,
-              }}
-            />
-          );
+        {fields.map(({ id, image }, index) => {
+          return <Card key={id} image={image} />;
         })}
       </Box>
     </Box>
@@ -58,13 +68,5 @@ const styles = {
     justifyContent: "center",
     gap: 2,
     position: "absolute",
-  },
-  card: {
-    height: 200,
-    width: 143,
-    bgcolor: "rgba(0,0,0,0.5)",
-    backgroundSize: "contain",
-    borderRadius: 2,
-    boxShadow: 2,
   },
 };

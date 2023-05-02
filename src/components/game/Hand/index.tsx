@@ -20,7 +20,7 @@ const Hand = (props: Props) => {
     <Box sx={styles.root} className={me ? "me" : "opponent"}>
       <Box className="hand" sx={styles.grid}>
         {currentPlayer.hand.map((card, index) => (
-          <Card index={index} id={card} me={me} />
+          <Card key={index} index={index} id={card} me={me} />
         ))}
       </Box>
     </Box>

@@ -28,7 +28,7 @@ const Progress: React.FC<ProgressProps> = ({
       d="M9.77683 1.68978H9.36566L9.11225 2.01358L1.51706 11.7185L1.11002 12.2387L1.51706 12.7588L9.11225 22.4637L9.36566 22.7875H9.77683H227.039H227.45L227.703 22.4637L235.298 12.7588L235.705 12.2387L235.298 11.7185L227.703 2.01358L227.45 1.68978H227.039H9.77683Z"
       fill="#232B31"
       stroke="black"
-      stroke-width="1.68782"
+      strokeWidth="1.68782"
     />
     <path
       opacity="0.25"
@@ -36,8 +36,8 @@ const Progress: React.FC<ProgressProps> = ({
       fill={COLORS[color]}
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M8.95418 0.845947H227.86L236.777 12.2387L227.86 23.6315H8.95418L0.0380859 12.2387L8.95418 0.845947ZM227.038 21.9437H9.77652L2.18134 12.2387L9.77652 2.53377H227.038L234.633 12.2387L227.038 21.9437Z"
       fill="url(#paint0_linear_485_5342)"
     />
@@ -73,8 +73,8 @@ const Progress: React.FC<ProgressProps> = ({
         y2="23.6315"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#F0E0AC" />
-        <stop offset="1" stop-color="#715C39" />
+        <stop stopColor="#F0E0AC" />
+        <stop offset="1" stopColor="#715C39" />
       </linearGradient>
     </defs>
   </svg>

@@ -12,9 +12,9 @@ const StepsBG = () => {
       <path
         d="M1.54248 1.6001H252.483L269.403 32.6001L252.483 63.6001H1.54248V1.6001Z"
         fill="black"
-        fill-opacity="0.8"
+        fillOpacity="0.8"
         stroke="url(#paint0_linear_480_5280)"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <defs>
         <linearGradient
@@ -25,8 +25,8 @@ const StepsBG = () => {
           y2="64.6001"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#E3D8BC" />
-          <stop offset="1" stop-color="#423221" />
+          <stop stopColor="#E3D8BC" />
+          <stop offset="1" stopColor="#423221" />
         </linearGradient>
       </defs>
     </svg>

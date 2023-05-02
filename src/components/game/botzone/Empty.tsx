@@ -16,7 +16,7 @@ const Empty = () => {
         height="245.838"
         rx="13.5"
         fill="black"
-        fill-opacity="0.5"
+        fillOpacity="0.5"
         stroke="url(#paint0_linear_509_5281)"
       />
       <g opacity="0.5">
@@ -46,8 +46,8 @@ const Empty = () => {
           y2="246.838"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F0E0AC" />
-          <stop offset="1" stop-color="#715C39" />
+          <stop stopColor="#F0E0AC" />
+          <stop offset="1" stopColor="#715C39" />
         </linearGradient>
       </defs>
     </svg>

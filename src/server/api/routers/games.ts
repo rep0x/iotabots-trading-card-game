@@ -95,6 +95,11 @@ export const gamesRouter = createTRPCRouter({
         },
       });
 
+      const opponentKey =
+        game.currentPlayer === "player1" ? "player2" : "player1";
+
+      const opponent = game[opponentKey] as unknown as Player;
+
       if (game.step === 3) {
         const nextGame = ctx.prisma.game.update({
           where: {
@@ -106,6 +111,15 @@ export const gamesRouter = createTRPCRouter({
               game.currentPlayer === "player2" ? game.round + 1 : game.round,
             currentPlayer:
               game.currentPlayer === "player1" ? "player2" : "player1",
+            [opponentKey]: {
+              ...opponent,
+              zone: opponent.zone.map((bot) => {
+                return {
+                  ...bot,
+                  deployed: true,
+                };
+              }),
+            },
           },
         });
         return nextGame;

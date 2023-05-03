@@ -27,25 +27,27 @@ const Card = (props: Props) => {
   const { image } = card;
 
   const onAttack = () => {
-    if (myBoard) {
-      setAttack({
-        attacker: index,
-        defender: null,
-        player: false,
-      });
-    } else {
-      if (attack.attacker !== null) {
+    if (card.deployed) {
+      if (myBoard) {
         setAttack({
-          ...attack,
-          defender: index,
+          attacker: index,
+          defender: null,
           player: false,
         });
+      } else {
+        if (attack.attacker !== null) {
+          setAttack({
+            ...attack,
+            defender: index,
+            player: false,
+          });
+        }
       }
     }
   };
 
   return (
-    <Box sx={styles.root}>
+    <Box sx={styles.root} className={card.deployed ? "deployed" : ""}>
       <Empty />
 
       <Box
@@ -67,11 +69,21 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
 
+    "& .image": {
+      transform: "rotate(90deg) scale(0.7)",
+    },
+
+    "&.deployed": {
+      "& .image": {
+        transform: "rotate(0deg) scale(1)",
+      },
+    },
+
     "& svg": { opacity: 0.66 },
 
     "&:hover": {
       "& .image": {
-        transform: "scale(1.2)",
+        transform: "rotate(0deg) scale(1.2)",
       },
     },
   },

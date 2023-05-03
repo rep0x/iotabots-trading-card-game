@@ -20,11 +20,10 @@ interface Props {
 const Card = (props: Props) => {
   const { index, id, me } = props;
   const card = CARDS[Number(id) - 1];
-
-  if (!card) return null;
-
   const { user } = useUser();
   const { data: game, refetch } = api.games.getGame.useQuery();
+
+  if (!card) return null;
 
   if (!game || !user) return null;
 

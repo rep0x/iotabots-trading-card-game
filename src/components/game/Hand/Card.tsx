@@ -45,12 +45,6 @@ const Card = (props: Props) => {
   const canPlay = me && myTurn && (game.step === 1 || game.step === 3);
 
   const onPlayCard = () => {
-    console.log("CardId: ", id);
-    console.log("Mana: ", currentPlayer.mana);
-    console.log("Bot: ", CARDS[Number(id) - 1].name);
-    console.log("Mana Cost: ", CARDS[Number(id) - 1].mana);
-    console.log("Index of Card in Hand: ", index);
-
     if (currentPlayer.mana >= CARDS[Number(id) - 1].mana) {
       playCard({
         gameId: game.id,

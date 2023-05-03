@@ -2,8 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
-import { Player } from "@/types";
-import { CARDS } from "@/mocks/cards";
+import { Player, ZoneCard } from "@/types";
 import Card from "./Card";
 
 interface Props {
@@ -21,28 +20,13 @@ const Botzone = (props: Props) => {
   const currentPlayer = game[playerKey] as unknown as Player;
   const zone = currentPlayer.zone;
 
-  const fields: {
-    id: number;
-    image: string | null;
-  }[] = [
-    { id: 0, image: null },
-    { id: 1, image: null },
-    { id: 2, image: null },
-    { id: 3, image: null },
-    { id: 4, image: null },
-  ];
-
-  fields.map((field) => {
-    if (!!zone[field.id]) {
-      field.image = CARDS[Number(zone[field.id]) - 1].image;
-    }
-  });
+  const fields = [0, 1, 2, 3, 4];
 
   return (
     <Box sx={styles.root}>
       <Box sx={styles.grid}>
-        {fields.map(({ id, image }, index) => {
-          return <Card key={id} image={image} />;
+        {fields.map((field) => {
+          return <Card key={field} card={zone[field]} />;
         })}
       </Box>
     </Box>

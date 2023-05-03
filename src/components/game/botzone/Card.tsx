@@ -2,25 +2,35 @@ import React from "react";
 import { Box } from "@mui/material";
 import Empty from "./Empty";
 import { TRANSITIONS } from "@/theme";
+import { ZoneCard } from "@/types";
 
 interface Props {
-  image: string | null;
+  card: ZoneCard | null;
 }
 
 const Card = (props: Props) => {
-  const { image } = props;
+  const { card } = props;
+
+  if (!card)
+    return (
+      <Box sx={styles.root}>
+        <Empty />
+      </Box>
+    );
+
+  const { image } = card;
+
   return (
     <Box sx={styles.root}>
       <Empty />
-      {image && (
-        <Box
-          sx={{
-            ...styles.card,
-            backgroundImage: `url(${image})`,
-          }}
-          className="image"
-        />
-      )}
+
+      <Box
+        sx={{
+          ...styles.card,
+          backgroundImage: `url(${image})`,
+        }}
+        className="image"
+      />
     </Box>
   );
 };

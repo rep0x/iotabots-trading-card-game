@@ -70,7 +70,6 @@ export default function Home() {
     toast.success("Game found starting now");
     if (queue) {
       deleteQueue({ id: queue.id });
-      console.log("queue should be deleted");
     }
     setInQueue(false);
     push("/game");

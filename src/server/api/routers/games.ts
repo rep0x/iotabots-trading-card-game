@@ -1,7 +1,7 @@
 import { createTRPCRouter, privateProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { Player } from "@/types";
+import { Player, ZoneCard } from "@/types";
 import { CARDS } from "@/mocks/cards";
 
 export const gamesRouter = createTRPCRouter({
@@ -156,6 +156,16 @@ export const gamesRouter = createTRPCRouter({
         currentPlayer.hand.splice(input.cardIndex, 1);
       }
 
+      const zoneCard: ZoneCard = {
+        id: Number(card.id),
+        image: card.image,
+        attack: card.attack,
+        defense: card.defense,
+        mana: card.mana,
+        hits: card.hits,
+        deployed: false,
+      };
+
       const nextGame = ctx.prisma.game.update({
         where: {
           id: input.gameId,
@@ -165,7 +175,7 @@ export const gamesRouter = createTRPCRouter({
             ...currentPlayer,
             mana: nextMana,
             hand: [...currentPlayer.hand],
-            zone: [...currentPlayer.zone, cardId],
+            zone: [...currentPlayer.zone, zoneCard],
           },
         },
       });

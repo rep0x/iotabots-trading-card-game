@@ -21,6 +21,16 @@ export interface Player {
   mana: number;
   deck: string[];
   hand: string[];
-  zone: string[];
+  zone: ZoneCard[];
   junk: string[];
+}
+
+export interface ZoneCard {
+  image: string;
+  id: number;
+  attack: number;
+  defense: number;
+  mana: number;
+  hits: number;
+  deployed: boolean;
 }

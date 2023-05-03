@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 interface Attack {
   attacker: number | null;
   defender: number | null;
+  player: boolean;
 }
 
 export interface GameContextType {
@@ -26,6 +27,7 @@ interface Props {
 const DEFAULT_ATTACK = {
   attacker: null,
   defender: null,
+  player: false,
 };
 
 export const GameProvider: React.FC<Props> = ({ children }) => {
@@ -62,16 +64,26 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
   }, [game]);
 
   React.useEffect(() => {
-    console.log("attack", attack);
-    if (game && attack.attacker !== null && attack.defender !== null) {
-      console.log("Bot should attack");
-      attackMutation({
-        gameId: game.id,
-        attacker: attack.attacker,
-        defender: attack.defender,
-      });
-
-      // setAttack(DEFAULT_ATTACK);
+    console.log("Attack", attack);
+    if (game && attack.attacker !== null) {
+      if (attack.defender !== null) {
+        console.log("should attack a bot");
+        attackMutation({
+          gameId: game.id,
+          attacker: attack.attacker,
+          defender: attack.defender,
+          player: attack.player,
+        });
+      }
+      if (attack.defender === null && attack.player) {
+        console.log("should attack player");
+        attackMutation({
+          gameId: game.id,
+          attacker: attack.attacker,
+          defender: null,
+          player: attack.player,
+        });
+      }
     }
   }, [attack]);
 

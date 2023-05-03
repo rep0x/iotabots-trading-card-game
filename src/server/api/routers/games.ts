@@ -187,7 +187,8 @@ export const gamesRouter = createTRPCRouter({
       z.object({
         gameId: z.string(),
         attacker: z.number(),
-        defender: z.number(),
+        defender: z.number().nullable(),
+        player: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -210,20 +211,38 @@ export const gamesRouter = createTRPCRouter({
       const defender = game[defenderKey] as unknown as Player;
 
       const attackingBot = attacker.zone[input.attacker];
-      const defendingBot = defender.zone[input.defender];
 
-      // Attacker kills Defender
-      if (attackingBot.attack >= defendingBot.defense) {
-        defender.junk.push(String(input.defender)); // Add to junk
-        defender.zone.splice(input.defender, 1); // Remove from zone
-        defender.health += defendingBot.defense - attackingBot.attack; // Defender taking damage
+      if (input.defender !== null) {
+        const defendingBot = defender.zone[input.defender];
+
+        // Attacker kills Defender
+        if (attackingBot.attack >= defendingBot.defense) {
+          defender.junk.push(String(input.defender)); // Add to junk
+          defender.zone.splice(input.defender, 1); // Remove from zone
+          defender.health += defendingBot.defense - attackingBot.attack; // Defender taking damage
+        }
+
+        // Defender kills Attacker
+        if (defendingBot.attack >= attackingBot.defense) {
+          attacker.junk.push(String(input.attacker)); // Add to junk
+          attacker.zone.splice(input.defender, 1); // Remove from zone
+          attacker.health += attackingBot.defense - defendingBot.attack; // Attacker taking Damage
+        }
       }
 
-      // Defender kills Attacker
-      if (defendingBot.attack >= attackingBot.defense) {
-        attacker.junk.push(String(input.attacker)); // Add to junk
-        attacker.zone.splice(input.defender, 1); // Remove from zone
-        attacker.health += attackingBot.defense - defendingBot.attack; // Attacker taking Damage
+      // If Defender has no bots on the field and gets directly attacked
+      if (input.player) {
+        defender.health -= attackingBot.attack;
+      }
+
+      let winner: "player1" | "player2" | null = null;
+
+      if (attacker.health <= 0) {
+        winner = defenderKey;
+      }
+
+      if (defender.health <= 0) {
+        winner = attackerKey;
       }
 
       const updatedGame = await ctx.prisma.game.update({
@@ -233,6 +252,8 @@ export const gamesRouter = createTRPCRouter({
         data: {
           [attackerKey]: attacker,
           [defenderKey]: defender,
+          winner: winner,
+          status: winner !== null ? "finished" : "active",
         },
       });
 

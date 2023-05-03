@@ -31,12 +31,14 @@ const Card = (props: Props) => {
       setAttack({
         attacker: index,
         defender: null,
+        player: false,
       });
     } else {
       if (attack.attacker !== null) {
         setAttack({
           ...attack,
           defender: index,
+          player: false,
         });
       }
     }

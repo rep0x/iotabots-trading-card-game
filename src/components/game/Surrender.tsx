@@ -1,11 +1,10 @@
-import { GameContext } from "@/context/GameContext";
 import React from "react";
 import Button from "../Button";
 import { api } from "@/utils/api";
 import { toast } from "react-hot-toast";
 
 const Surrender = () => {
-  const { game, refetch } = React.useContext(GameContext);
+  const { data: game, refetch } = api.games.getGame.useQuery();
 
   if (!game) return null;
 

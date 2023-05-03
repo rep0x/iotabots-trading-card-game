@@ -2,12 +2,12 @@ import React from "react";
 import { Typography, Box } from "@mui/material";
 import { useUser } from "@clerk/nextjs";
 
-import { GameContext } from "@/context/GameContext";
 import { shortenAddress } from "@/utils/shortenAddress";
 import { Player } from "@/types";
 
 import Avatar from "../../Avatar";
 import Energy from "./Energy";
+import { api } from "@/utils/api";
 
 interface Props {
   player: "player1Id" | "player2Id";
@@ -15,7 +15,7 @@ interface Props {
 
 const Player = (props: Props) => {
   const { player } = props;
-  const { game } = React.useContext(GameContext);
+  const { data: game } = api.games.getGame.useQuery();
   const { user } = useUser();
 
   if (!game || !user) return null;

@@ -6,14 +6,14 @@ import { Box, Typography } from "@mui/material";
 
 import GameLayout from "@/layouts/Game";
 import Infos from "@/components/game/Infos";
-import { GameContext } from "@/context/GameContext";
 import Board from "@/components/game/Board";
 import GameState from "@/components/game/GameState";
 import Button from "@/components/Button";
 import Refetch from "@/components/game/Refetch";
+import { api } from "@/utils/api";
 
 export default function Game() {
-  const { game, refetch } = React.useContext(GameContext);
+  const { data: game, refetch } = api.games.getGame.useQuery();
   const { user } = useUser();
   const { push } = useRouter();
 

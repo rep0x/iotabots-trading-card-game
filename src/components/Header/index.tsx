@@ -15,8 +15,8 @@ import { ethers } from "ethers";
 import { shortenAddress } from "@/utils/shortenAddress";
 import Button from "../Button";
 import Logo from "../Logo";
-import { GameContext } from "@/context/GameContext";
 import { useRouter } from "next/router";
+import { api } from "@/utils/api";
 
 interface Player {
   name: string;
@@ -32,7 +32,7 @@ const PLAYER: Player | undefined = {
 const Header = () => {
   const { user } = useUser();
   const { push } = useRouter();
-  const { game } = React.useContext(GameContext);
+  const { data: game } = api.games.getGame.useQuery();
   const [balance, setBalance] = React.useState<string | null>(null);
 
   const address = user?.primaryWeb3Wallet?.web3Wallet || "";

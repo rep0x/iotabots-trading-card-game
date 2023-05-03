@@ -2,7 +2,6 @@ import React from "react";
 import { Typography, Box } from "@mui/material";
 
 import StyledBox from "../StyledBox";
-import { GameContext } from "@/context/GameContext";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { TRANSITIONS } from "@/theme";

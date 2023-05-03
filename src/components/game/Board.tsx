@@ -3,12 +3,12 @@ import { Box } from "@mui/material";
 
 import Player from "./Player";
 import { useUser } from "@clerk/nextjs";
-import { GameContext } from "@/context/GameContext";
 import Deck from "./Deck";
 import Hand from "./Hand";
 import Junk from "./Junk";
 import Botzone from "./botzone";
 import Surrender from "./Surrender";
+import { api } from "@/utils/api";
 
 interface Props {
   player: "player1Id" | "player2Id";
@@ -17,7 +17,7 @@ interface Props {
 const Board = (props: Props) => {
   const { player } = props;
   const { user } = useUser();
-  const { game } = React.useContext(GameContext);
+  const { data: game } = api.games.getGame.useQuery();
 
   if (!game || !user) return null;
 

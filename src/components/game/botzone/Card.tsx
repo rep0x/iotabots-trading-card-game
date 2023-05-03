@@ -13,7 +13,7 @@ interface Props {
 
 const Card = (props: Props) => {
   const { card, index, myBoard } = props;
-  const { attack, setAttack } = React.useContext(GameContext);
+  const { myTurn, attack, setAttack } = React.useContext(GameContext);
 
   if (!card)
     return (
@@ -49,7 +49,7 @@ const Card = (props: Props) => {
           ...styles.card,
           backgroundImage: `url(${image})`,
         }}
-        onClick={onAttack}
+        onClick={myTurn ? onAttack : () => {}}
         className="image"
       />
     </Box>

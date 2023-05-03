@@ -11,6 +11,7 @@ interface Attack {
 export interface GameContextType {
   attack: Attack;
   setAttack: Dispatch<SetStateAction<Attack>>;
+  myTurn: boolean;
 }
 
 export const GameContext = React.createContext<GameContextType>(
@@ -32,6 +33,14 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
   const { push } = useRouter();
 
   const [attack, setAttack] = React.useState<Attack>(DEFAULT_ATTACK);
+  const [myTurn, setMyTurn] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    if (!!user && !!game) {
+      const playerKey = user.id === game.player1Id ? "player1" : "player2";
+      setMyTurn(game.currentPlayer === playerKey);
+    }
+  }, [user, game]);
 
   React.useEffect(() => {
     if (game === null) {
@@ -53,6 +62,7 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
   const context: GameContextType = {
     attack,
     setAttack,
+    myTurn,
   };
 
   return (

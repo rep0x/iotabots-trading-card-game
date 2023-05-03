@@ -29,12 +29,7 @@ const Energy = (props: Props) => {
           transform: "translateY(6px)",
         }}
       >
-        {type === "health" && (
-          <Progress id={`${id}-health`} progress={progress} color={type} />
-        )}
-        {type === "mana" && (
-          <Progress id={`${id}-mana`} progress={progress} color={type} />
-        )}
+        <Progress id={`${id}-${type}`} progress={progress} color={type} />
       </Box>
     </Box>
   );

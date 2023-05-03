@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
+import { toast } from "react-hot-toast";
 
 interface Attack {
   attacker: number | null;
@@ -29,8 +30,17 @@ const DEFAULT_ATTACK = {
 
 export const GameProvider: React.FC<Props> = ({ children }) => {
   const { user } = useUser();
-  const { data: game } = api.games.getGame.useQuery();
+  const { data: game, refetch } = api.games.getGame.useQuery();
   const { push } = useRouter();
+  const { mutate: attackMutation } = api.games.attack.useMutation({
+    onSuccess: () => {
+      toast.success("Schön enner angreife");
+      refetch();
+    },
+    onError: () => {
+      toast.success("Das müsse ma nommo übe");
+    },
+  });
 
   const [attack, setAttack] = React.useState<Attack>(DEFAULT_ATTACK);
   const [myTurn, setMyTurn] = React.useState<boolean>(false);
@@ -53,9 +63,15 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
 
   React.useEffect(() => {
     console.log("attack", attack);
-    if (attack.attacker !== null && attack.defender !== null) {
+    if (game && attack.attacker !== null && attack.defender !== null) {
       console.log("Bot should attack");
-      setAttack(DEFAULT_ATTACK);
+      attackMutation({
+        gameId: game.id,
+        attacker: attack.attacker,
+        defender: attack.defender,
+      });
+
+      // setAttack(DEFAULT_ATTACK);
     }
   }, [attack]);
 

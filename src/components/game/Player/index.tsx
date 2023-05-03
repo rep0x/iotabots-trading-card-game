@@ -10,20 +10,27 @@ import Energy from "./Energy";
 import { api } from "@/utils/api";
 
 interface Props {
+  me: boolean;
   player: "player1Id" | "player2Id";
 }
 
 const Player = (props: Props) => {
-  const { player } = props;
+  const { player, me } = props;
   const { data: game } = api.games.getGame.useQuery();
   const { user } = useUser();
 
   if (!game || !user) return null;
 
+  const myPlayer = user.id === game.player1Id ? "player1" : "player2";
+  const myOpponent = myPlayer === "player1" ? "player2" : "player1";
+
+  const currentPlayer = (me
+    ? game[myPlayer]
+    : game[myOpponent]) as unknown as Player;
+
   const currentPlayerId = game[player];
-  const currentPlayer = (user.id === game.player1Id
-    ? game.player1
-    : game.player2) as unknown as Player;
+
+  console.log(`${me ? "Is me" : "Is not me"}`);
 
   // TODO: Get these mocks from server
   const AVATAR =
@@ -39,8 +46,16 @@ const Player = (props: Props) => {
           {shortenAddress(currentPlayerId)}
         </Typography>
         <Box sx={styles.energy}>
-          <Energy id={user.id} type="health" value={currentPlayer.health} />
-          <Energy id={user.id} type="mana" value={currentPlayer.mana} />
+          <Energy
+            id={me ? "player" : "opponent"}
+            type="health"
+            value={currentPlayer.health}
+          />
+          <Energy
+            id={me ? "player" : "opponent"}
+            type="mana"
+            value={currentPlayer.mana}
+          />
         </Box>
       </Box>
     </Box>

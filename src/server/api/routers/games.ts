@@ -182,6 +182,63 @@ export const gamesRouter = createTRPCRouter({
       return nextGame;
     }),
 
+  attack: privateProcedure
+    .input(
+      z.object({
+        gameId: z.string(),
+        attacker: z.number(),
+        defender: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const game = await ctx.prisma.game.findUnique({
+        where: {
+          id: input.gameId,
+        },
+      });
+
+      if (!game) {
+        return new TRPCError({ code: "NOT_FOUND", message: "Game not found." });
+      }
+
+      const currentUser = ctx.currentUser;
+      const attackerKey =
+        game.player1Id === currentUser ? "player1" : "player2";
+      const defenderKey = attackerKey === "player1" ? "player2" : "player1";
+
+      const attacker = game[attackerKey] as unknown as Player;
+      const defender = game[defenderKey] as unknown as Player;
+
+      const attackingBot = attacker.zone[input.attacker];
+      const defendingBot = defender.zone[input.defender];
+
+      // Attacker kills Defender
+      if (attackingBot.attack >= defendingBot.defense) {
+        defender.junk.push(String(input.defender)); // Add to junk
+        defender.zone.splice(input.defender, 1); // Remove from zone
+        defender.health += defendingBot.defense - attackingBot.attack; // Defender taking damage
+      }
+
+      // Defender kills Attacker
+      if (defendingBot.attack >= attackingBot.defense) {
+        attacker.junk.push(String(input.attacker)); // Add to junk
+        attacker.zone.splice(input.defender, 1); // Remove from zone
+        attacker.health += attackingBot.defense - defendingBot.attack; // Attacker taking Damage
+      }
+
+      const updatedGame = await ctx.prisma.game.update({
+        where: {
+          id: input.gameId,
+        },
+        data: {
+          [attackerKey]: attacker,
+          [defenderKey]: defender,
+        },
+      });
+
+      return updatedGame;
+    }),
+
   surrender: privateProcedure
     .input(
       z.object({

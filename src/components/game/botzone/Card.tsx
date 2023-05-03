@@ -4,6 +4,7 @@ import Empty from "./Empty";
 import { TRANSITIONS } from "@/theme";
 import { ZoneCard } from "@/types";
 import { GameContext } from "@/context/GameContext";
+import { api } from "@/utils/api";
 
 interface Props {
   index: number;
@@ -14,8 +15,9 @@ interface Props {
 const Card = (props: Props) => {
   const { card, index, myBoard } = props;
   const { myTurn, attack, setAttack } = React.useContext(GameContext);
+  const { data: game } = api.games.getGame.useQuery();
 
-  if (!card)
+  if (!card || !game)
     return (
       <Box sx={styles.root}>
         <Empty />
@@ -49,7 +51,7 @@ const Card = (props: Props) => {
           ...styles.card,
           backgroundImage: `url(${image})`,
         }}
-        onClick={myTurn ? onAttack : () => {}}
+        onClick={myTurn && game.step === 2 ? onAttack : () => {}}
         className="image"
       />
     </Box>

@@ -26,7 +26,7 @@ const Board = (props: Props) => {
   return (
     <Box sx={styles.root} className={isMe ? "me" : "opponent"}>
       <Box sx={styles.left} className="column">
-        <Player player={player} />
+        <Player me={isMe} player={player} />
         <Deck player={player} me={isMe} />
         {!!isMe && <Surrender />}
       </Box>

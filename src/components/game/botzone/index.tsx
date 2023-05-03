@@ -26,7 +26,9 @@ const Botzone = (props: Props) => {
     <Box sx={styles.root}>
       <Box sx={styles.grid}>
         {fields.map((field) => {
-          return <Card key={field} card={zone[field]} />;
+          return (
+            <Card key={field} index={field} card={zone[field]} myBoard={me} />
+          );
         })}
       </Box>
     </Box>

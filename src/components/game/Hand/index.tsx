@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { api } from "@/utils/api";
 import { Player } from "@/types";
 import Card from "./Card";
+
 interface Props {
   me: boolean;
   player: "player1Id" | "player2Id";

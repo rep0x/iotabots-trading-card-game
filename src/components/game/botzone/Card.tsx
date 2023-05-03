@@ -3,13 +3,17 @@ import { Box } from "@mui/material";
 import Empty from "./Empty";
 import { TRANSITIONS } from "@/theme";
 import { ZoneCard } from "@/types";
+import { GameContext } from "@/context/GameContext";
 
 interface Props {
+  index: number;
   card: ZoneCard | null;
+  myBoard: boolean;
 }
 
 const Card = (props: Props) => {
-  const { card } = props;
+  const { card, index, myBoard } = props;
+  const { attack, setAttack } = React.useContext(GameContext);
 
   if (!card)
     return (
@@ -20,6 +24,22 @@ const Card = (props: Props) => {
 
   const { image } = card;
 
+  const onAttack = () => {
+    if (myBoard) {
+      setAttack({
+        attacker: index,
+        defender: null,
+      });
+    } else {
+      if (attack.attacker !== null) {
+        setAttack({
+          ...attack,
+          defender: index,
+        });
+      }
+    }
+  };
+
   return (
     <Box sx={styles.root}>
       <Empty />
@@ -29,6 +49,7 @@ const Card = (props: Props) => {
           ...styles.card,
           backgroundImage: `url(${image})`,
         }}
+        onClick={onAttack}
         className="image"
       />
     </Box>

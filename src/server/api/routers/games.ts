@@ -142,7 +142,7 @@ export const gamesRouter = createTRPCRouter({
       const currentMana = currentPlayer.mana;
 
       const cardId = currentPlayer.hand[input.cardIndex];
-      const card = CARDS[Number(cardId)];
+      const card = CARDS[Number(cardId) - 1];
       const manaCost = card.mana;
 
       if (currentMana < manaCost) {

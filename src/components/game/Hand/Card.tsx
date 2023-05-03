@@ -15,10 +15,13 @@ interface Props {
   id: string;
   me: boolean;
 }
+// {"deck":["17","5","22","13","21","2","4","4","8","11","15","15","2","9","13","21","7","6","13","6","17","7","21","4","9","2","19","10","5"],"hand":["8","19","11","22"],"junk":[],"mana":2,"zone":[],"health":20}
 
 const Card = (props: Props) => {
   const { index, id, me } = props;
-  const card = CARDS[Number(id)];
+  const card = CARDS[Number(id) - 1];
+
+  if (!card) return null;
 
   const { user } = useUser();
   const { data: game, refetch } = api.games.getGame.useQuery();
@@ -41,10 +44,14 @@ const Card = (props: Props) => {
   const myTurn = currentPlayerKey === myPlayerKey;
   const canPlay = me && myTurn && (game.step === 1 || game.step === 3);
 
-  const cardId = currentPlayer.hand[index];
-
   const onPlayCard = () => {
-    if (currentPlayer.mana >= CARDS[Number(cardId)].mana) {
+    console.log("CardId: ", id);
+    console.log("Mana: ", currentPlayer.mana);
+    console.log("Bot: ", CARDS[Number(id) - 1].name);
+    console.log("Mana Cost: ", CARDS[Number(id) - 1].mana);
+    console.log("Index of Card in Hand: ", index);
+
+    if (currentPlayer.mana >= CARDS[Number(id) - 1].mana) {
       playCard({
         gameId: game.id,
         cardIndex: index,

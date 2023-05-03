@@ -34,7 +34,7 @@ const Botzone = (props: Props) => {
 
   fields.map((field) => {
     if (!!zone[field.id]) {
-      field.image = CARDS[Number(zone[field.id])].image;
+      field.image = CARDS[Number(zone[field.id]) - 1].image;
     }
   });
 

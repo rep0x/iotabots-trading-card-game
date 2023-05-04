@@ -3,6 +3,7 @@ import React from "react";
 const Empty = () => {
   return (
     <svg
+      className="empty"
       width="177"
       height="247"
       viewBox="0 0 177 247"

@@ -20,10 +20,16 @@ const Botzone = (props: Props) => {
   const currentPlayer = game[playerKey] as unknown as Player;
   const zone = currentPlayer.zone;
 
+  const isCurrentPlayer = playerKey === game.currentPlayer;
+  const canPlay = game.step === 2 && isCurrentPlayer;
+
   const fields = [0, 1, 2, 3, 4];
 
   return (
-    <Box sx={styles.root}>
+    <Box
+      sx={styles.root}
+      className={`${me ? "me" : "opponent"} ${canPlay ? "active" : ""}`}
+    >
       <Box sx={styles.grid}>
         {fields.map((field) => {
           return (
@@ -47,6 +53,10 @@ const styles = {
     borderRadius: 2,
     width: "100%",
     flex: 1,
+    "&.active": {
+      background:
+        "radial-gradient(50% 50% at 50% 50%, rgba(38, 238, 176, .66) 0%, rgba(40, 255, 189, 0) 100%);",
+    },
   },
   grid: {
     display: "flex",

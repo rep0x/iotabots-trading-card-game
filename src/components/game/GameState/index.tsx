@@ -9,6 +9,7 @@ import { api } from "@/utils/api";
 import { toast } from "react-hot-toast";
 import DrawCard from "./icons/DrawCard";
 import { useUser } from "@clerk/nextjs";
+import { GameContext } from "@/context/GameContext";
 
 const STEPS = [
   { id: 0, label: "Draw Card", icon: <DrawCard /> },
@@ -20,6 +21,7 @@ const STEPS = [
 const GameState = () => {
   const { data: game, refetch } = api.games.getGame.useQuery();
   const { user } = useUser();
+  const { setAttack } = React.useContext(GameContext);
 
   if (!game || !user) return null;
 
@@ -44,6 +46,11 @@ const GameState = () => {
     onSuccess: () => {
       toast.success("Continue to next step");
       refetch();
+      setAttack({
+        attacker: null,
+        defender: null,
+        player: false,
+      });
     },
     onError: () => {
       toast.error("Continue did not work");

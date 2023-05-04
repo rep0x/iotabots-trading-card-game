@@ -34,17 +34,18 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
   const { user } = useUser();
   const { data: game, refetch } = api.games.getGame.useQuery();
   const { push } = useRouter();
+  const [attack, setAttack] = React.useState<Attack>(DEFAULT_ATTACK);
   const { mutate: attackMutation } = api.games.attack.useMutation({
     onSuccess: () => {
       toast.success("Schön enner angreife");
       refetch();
+      setAttack(DEFAULT_ATTACK);
     },
     onError: () => {
       toast.success("Das müsse ma nommo übe");
     },
   });
 
-  const [attack, setAttack] = React.useState<Attack>(DEFAULT_ATTACK);
   const [myTurn, setMyTurn] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -67,7 +68,6 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
     console.log("Attack", attack);
     if (game && attack.attacker !== null) {
       if (attack.defender !== null) {
-        console.log("should attack a bot");
         attackMutation({
           gameId: game.id,
           attacker: attack.attacker,
@@ -76,7 +76,6 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
         });
       }
       if (attack.defender === null && attack.player) {
-        console.log("should attack player");
         attackMutation({
           gameId: game.id,
           attacker: attack.attacker,

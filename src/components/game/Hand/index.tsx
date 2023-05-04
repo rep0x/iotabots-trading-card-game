@@ -17,8 +17,15 @@ const Hand = (props: Props) => {
   const playerKey = player === "player1Id" ? "player1" : "player2";
   const currentPlayer = game[playerKey] as unknown as Player;
 
+  const isCurrentPlayer = playerKey === game.currentPlayer;
+  const canPlay = (game.step === 1 || game.step === 3) && isCurrentPlayer;
+
   return (
-    <Box sx={styles.root} className={me ? "me" : "opponent"}>
+    <Box
+      sx={styles.root}
+      className={`${me ? "me" : "opponent"} ${canPlay ? "active" : ""}`}
+    >
+      <Box sx={styles.gradient} className="gradient" />
       <Box className="hand" sx={styles.grid}>
         {currentPlayer.hand.map((card, index) => (
           <Card key={index} index={index} id={card} me={me} />
@@ -42,6 +49,13 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
 
+    "&.active": {
+      "& .gradient": {
+        background:
+          "radial-gradient(50% 50% at 50% 50%, rgba(38, 238, 176, .66) 0%, rgba(40, 255, 189, 0) 100%);",
+      },
+    },
+
     "&.me": {
       mb: "-60px",
     },
@@ -58,5 +72,13 @@ const styles = {
     flexDirection: "row",
     justifyContent: "center",
     mb: 6,
+  },
+  gradient: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    height: "150%",
+    width: "150%",
+    transform: "translate(-15%, -10%)",
   },
 };

@@ -28,34 +28,36 @@ const GameState = () => {
   const myPlayerKey = game.player1Id === user.id ? "player1" : "player2";
   const myturn = game.currentPlayer === myPlayerKey;
 
-  const { mutate: drawCard } = api.games.draw.useMutation({
-    onSuccess: () => {
-      toast.success("Drawn a card");
-      refetch();
-    },
-    onError: () => {
-      toast.error("Drawing a card errored");
-    },
-  });
+  const { mutate: drawCard, isLoading: drawLoading } =
+    api.games.draw.useMutation({
+      onSuccess: () => {
+        toast.success("Drawn a card");
+        refetch();
+      },
+      onError: () => {
+        toast.error("Drawing a card errored");
+      },
+    });
 
   const onDraw = () => {
     drawCard({ gameId: game.id });
   };
 
-  const { mutate: nextStep } = api.games.nextStep.useMutation({
-    onSuccess: () => {
-      toast.success("Continue to next step");
-      refetch();
-      setAttack({
-        attacker: null,
-        defender: null,
-        player: false,
-      });
-    },
-    onError: () => {
-      toast.error("Continue did not work");
-    },
-  });
+  const { mutate: nextStep, isLoading: nextStepLoading } =
+    api.games.nextStep.useMutation({
+      onSuccess: () => {
+        toast.success("Continue to next step");
+        refetch();
+        setAttack({
+          attacker: null,
+          defender: null,
+          player: false,
+        });
+      },
+      onError: () => {
+        toast.error("Continue did not work");
+      },
+    });
 
   const onNextStep = () => {
     nextStep({ gameId: game.id });
@@ -115,7 +117,7 @@ const GameState = () => {
       <Box sx={styles.progress}></Box>
       <Box sx={styles.button}>
         <PlayButton
-          disabled={!myturn}
+          disabled={!myturn || nextStepLoading || drawLoading}
           label={currentAction.label}
           onClick={currentAction.action}
         />

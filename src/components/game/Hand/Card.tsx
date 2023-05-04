@@ -27,15 +27,16 @@ const Card = (props: Props) => {
 
   if (!game || !user) return null;
 
-  const { mutate: playCard } = api.games.playCard.useMutation({
-    onSuccess: () => {
-      refetch();
-      toast.success("Card played");
-    },
-    onError: () => {
-      toast.error("Card cannot be played");
-    },
-  });
+  const { mutate: playCard, isLoading: playCardLoading } =
+    api.games.playCard.useMutation({
+      onSuccess: () => {
+        refetch();
+        toast.success("Card played");
+      },
+      onError: () => {
+        toast.error("Card cannot be played");
+      },
+    });
 
   const myPlayerKey = game.player1Id === user.id ? "player1" : "player2";
   const currentPlayerKey = game.currentPlayer;
@@ -73,7 +74,7 @@ const Card = (props: Props) => {
   return (
     <Box
       className="card"
-      onClick={canPlay ? onPlayCard : () => {}}
+      onClick={canPlay && !playCardLoading ? onPlayCard : () => {}}
       sx={{
         ...styles.card,
         backgroundImage: `url(${me ? card.image : BACK})`,

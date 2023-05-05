@@ -78,7 +78,7 @@ const styles = {
     top: 0,
     left: 0,
     height: "150%",
-    width: "150%",
-    transform: "translate(-15%, -10%)",
+    width: "100%",
+    transform: "translateY(0%)",
   },
 };

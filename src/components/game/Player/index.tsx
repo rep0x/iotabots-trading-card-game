@@ -11,6 +11,7 @@ import { api } from "@/utils/api";
 import Background from "./Background";
 import { TRANSITIONS } from "@/theme";
 import { GameContext } from "@/context/GameContext";
+import AttackIcon from "../botzone/AttackIcon";
 
 interface Props {
   me: boolean;
@@ -37,22 +38,16 @@ const Player = (props: Props) => {
   const currentPlayerId = game[player];
 
   const isAttackable =
-    !me && // Only if Player Board = opponent (mirrored one above)
+    !me && // Only if Player Board = opponent
     game.step === 2 && // Selected attacker in Context
     attack.attacker !== null && // Selected attacker in Context
     opponent.zone.length === 0; // No bots on opponents zone
-
-  console.log("!me", !me);
-  console.log("attack.attacker", attack.attacker);
-  console.log("opponent.zone.length === 0", opponent.zone.length === 0);
-  console.log("isAttackable", isAttackable);
 
   // TODO: Get these mocks from server
   const AVATAR =
     "https://assets.iotabots.io/compressed/1.png?auto=format&fit=max&w=828";
 
   const onAttack = () => {
-    console.log("isAttackable", isAttackable);
     if (isAttackable) {
       setAttack({
         ...attack,
@@ -66,7 +61,7 @@ const Player = (props: Props) => {
     <Box
       sx={styles.root}
       className={isAttackable ? "attackable" : ""}
-      onClick={onAttack}
+      onClick={isAttackable ? onAttack : () => {}}
     >
       <Box
         className={"background"}
@@ -76,13 +71,15 @@ const Player = (props: Props) => {
           left: 0,
           opacity: 0.5,
           transition: TRANSITIONS[180],
-          "& svg": {
-            width: 330,
-          },
         }}
       >
         <Background />
       </Box>
+      {isAttackable && (
+        <Box sx={styles.attackContainer}>
+          <AttackIcon id={`player1`} active={false} />
+        </Box>
+      )}
       <Box sx={styles.inner}>
         <Box sx={styles.avatar}>
           <Avatar avatar={AVATAR} />
@@ -115,15 +112,33 @@ const styles = {
     width: 340,
     p: 2,
 
-    "&:hover": {
+    "&.attackable": {
       "& .background": {
         opacity: 1,
       },
     },
 
-    "&.attackable": {
+    "& .player-bg": {
+      transition: TRANSITIONS[180],
+    },
+
+    "&:hover": {
+      "& .attack-icon svg": {
+        color: "#229BEC !important",
+        "& .sword": {
+          fill: "white",
+        },
+      },
+
       "& .background": {
         opacity: 1,
+      },
+
+      "&.attackable": {
+        "& .player-bg": {
+          borderRadius: 3,
+          boxShadow: "0px 0px 8px 4px #238FDEBF",
+        },
       },
     },
   },
@@ -132,6 +147,14 @@ const styles = {
     position: "relative",
     display: "flex",
     alignItems: "center",
+  },
+
+  attackContainer: {
+    position: "absolute",
+    zIndex: 1,
+    right: -25,
+    top: "50%",
+    transform: "translateY(-50%)",
   },
 
   avatar: {

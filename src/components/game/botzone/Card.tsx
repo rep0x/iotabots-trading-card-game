@@ -35,6 +35,10 @@ const Card = (props: Props) => {
   const selected = game.step === 2 && myBoard && index === attack.attacker;
 
   const onAttack = () => {
+    console.log("Card", card);
+    console.log("canAttack", canAttack);
+    console.log("canDefend", canDefend);
+    console.log("index of card on Board", index);
     if (canAttack) {
       setAttack({
         attacker: index,
@@ -51,9 +55,16 @@ const Card = (props: Props) => {
     }
   };
 
+  let hits: number[] = [1];
+
+  if (myBoard && card.hits === 2) hits = [2];
+
   return (
     <Box
-      sx={styles.root}
+      sx={{
+        ...styles.root,
+        cursor: canAttack || canDefend ? "pointer" : "default",
+      }}
       className={`
         ${myBoard ? "myboard" : "opponentBoard"}
         ${card.deployed ? "deployed" : ""} 
@@ -65,8 +76,14 @@ const Card = (props: Props) => {
       <Empty />
 
       <Box sx={styles.attacks} className="attack">
-        {card.hits >= 1 && <AttackIcon />}
-        {card.hits >= 2 && <AttackIcon />}
+        {hits &&
+          hits.map((hit) => (
+            <AttackIcon
+              key={`${hit}-${myBoard ? "player" : "opponent"}`}
+              id={`${myBoard ? "player" : "opponent"}${index}-hit-${hit}`}
+              active={selected}
+            />
+          ))}
       </Box>
 
       <Box
@@ -88,8 +105,9 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
 
-    "& .image": {
-      transform: "rotate(90deg) scale(0.7)",
+    "& .empty": {
+      transition: TRANSITIONS[180],
+      opacity: 0.66,
     },
 
     "&.deployed": {
@@ -97,8 +115,6 @@ const styles = {
         transform: "rotate(0deg) scale(1)",
       },
     },
-
-    "& .empty": { opacity: 0.66 },
 
     "&.myboard": {
       "& .attack": {
@@ -110,6 +126,12 @@ const styles = {
           opacity: 1,
         },
       },
+
+      "&.selected": {
+        "& .attack": {
+          color: "blue",
+        },
+      },
     },
 
     "&.opponentBoard": {
@@ -118,6 +140,17 @@ const styles = {
       },
 
       "&.defend": {
+        "& .empty": {
+          opacity: 1,
+        },
+        "&:hover": {
+          "& .empty": {
+            borderRadius: 4,
+            boxShadow: "0px 0px 8px 4px #238FDEBF",
+            opacity: 1,
+          },
+        },
+
         "& .attack": {
           bottom: 0,
           top: "auto",
@@ -127,12 +160,21 @@ const styles = {
       },
     },
 
+    "&.selected": {
+      "& .empty": {
+        opacity: 1,
+        boxShadow: "0px 0px 8px 4px #238FDEBF",
+        borderRadius: 4,
+      },
+    },
+
     "&:hover": {
       "& .image": {
-        transform: "rotate(0deg) scale(1.2)",
+        transform: "rotate(0deg) scale(1)",
       },
     },
   },
+
   card: {
     position: "absolute",
     height: 230,
@@ -142,7 +184,9 @@ const styles = {
     borderRadius: 2,
     boxShadow: 2,
     transition: TRANSITIONS[120],
+    transform: "rotate(90deg) scale(0.7)",
   },
+
   attacks: {
     position: "absolute",
     zIndex: 10,

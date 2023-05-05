@@ -3,6 +3,7 @@ import React from "react";
 const Background = () => {
   return (
     <svg
+      className="player-bg"
       width="340"
       height="133"
       viewBox="0 0 340 133"

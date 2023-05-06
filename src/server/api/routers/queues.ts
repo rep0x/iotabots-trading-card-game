@@ -91,7 +91,7 @@ export const queuesRouter = createTRPCRouter({
             status: "active",
             player1Id: updatedQueue.creator,
             player1: {
-              mana: 1,
+              mana: 0,
               health: 20,
               deck: shuffleDeck(flatenDeck(creatorsCards)),
               hand: [],
@@ -100,7 +100,7 @@ export const queuesRouter = createTRPCRouter({
             },
             player2Id: userId,
             player2: {
-              mana: 1,
+              mana: 0,
               health: 20,
               deck: shuffleDeck(flatenDeck(opponentsCards)),
               hand: [],

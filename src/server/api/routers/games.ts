@@ -95,10 +95,22 @@ export const gamesRouter = createTRPCRouter({
         },
       });
 
+      const playerKey =
+        game.currentPlayer === "player1" ? "player1" : "player2";
+      const player = game[playerKey] as unknown as Player;
+
       const opponentKey =
         game.currentPlayer === "player1" ? "player2" : "player1";
-
       const opponent = game[opponentKey] as unknown as Player;
+
+      const nextZone =
+        player.zone.length > 0 &&
+        player.zone.map((bot) => {
+          return {
+            ...bot,
+            hits: CARDS[Number(bot.id) - 1].hits,
+          };
+        });
 
       if (game.step === 3) {
         const nextGame = ctx.prisma.game.update({
@@ -111,6 +123,15 @@ export const gamesRouter = createTRPCRouter({
               game.currentPlayer === "player2" ? game.round + 1 : game.round,
             currentPlayer:
               game.currentPlayer === "player1" ? "player2" : "player1",
+            [playerKey]: {
+              ...player,
+              zone: player.zone.map((bot) => {
+                return {
+                  ...bot,
+                  hits: CARDS[Number(bot.id) - 1].hits,
+                };
+              }),
+            },
             [opponentKey]: {
               ...opponent,
               zone: opponent.zone.map((bot) => {
@@ -239,7 +260,7 @@ export const gamesRouter = createTRPCRouter({
         // Defender kills Attacker
         if (defendingBot.attack >= attackingBot.defense) {
           attacker.junk.push(String(input.attacker)); // Add to junk
-          attacker.zone.splice(input.defender, 1); // Remove from zone
+          attacker.zone.splice(input.attacker, 1); // Remove from zone
           attacker.health += attackingBot.defense - defendingBot.attack; // Attacker taking Damage
         }
       }
@@ -248,6 +269,8 @@ export const gamesRouter = createTRPCRouter({
       if (input.player) {
         defender.health -= attackingBot.attack;
       }
+
+      attackingBot.hits -= 1;
 
       let winner: "player1" | "player2" | null = null;
 

@@ -6,6 +6,7 @@ import { ZoneCard } from "@/types";
 import { GameContext } from "@/context/GameContext";
 import { api } from "@/utils/api";
 import AttackIcon from "./AttackIcon";
+import { CARDS } from "@/mocks/cards";
 
 interface Props {
   index: number;
@@ -35,10 +36,6 @@ const Card = (props: Props) => {
   const selected = game.step === 2 && myBoard && index === attack.attacker;
 
   const onAttack = () => {
-    console.log("Card", card);
-    console.log("canAttack", canAttack);
-    console.log("canDefend", canDefend);
-    console.log("index of card on Board", index);
     if (canAttack) {
       setAttack({
         attacker: index,
@@ -57,7 +54,7 @@ const Card = (props: Props) => {
 
   let hits: number[] = [1];
 
-  if (myBoard && card.hits === 2) hits = [2];
+  if (myBoard && card.hits === 2) hits = [1, 2];
 
   return (
     <Box
@@ -171,6 +168,12 @@ const styles = {
     "&:hover": {
       "& .image": {
         transform: "rotate(0deg) scale(1)",
+      },
+      "& .attack-icon svg": {
+        color: "#229BEC !important",
+        "& .sword": {
+          fill: "white",
+        },
       },
     },
   },

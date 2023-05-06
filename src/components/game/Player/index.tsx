@@ -59,7 +59,10 @@ const Player = (props: Props) => {
 
   return (
     <Box
-      sx={styles.root}
+      sx={{
+        ...styles.root,
+        cursor: isAttackable ? "pointer" : "default",
+      }}
       className={isAttackable ? "attackable" : ""}
       onClick={isAttackable ? onAttack : () => {}}
     >

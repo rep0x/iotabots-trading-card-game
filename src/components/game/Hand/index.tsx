@@ -67,6 +67,8 @@ const styles = {
   },
 
   grid: {
+    position: "realitve",
+    zIndex: 1,
     width: "100%",
     display: "flex",
     flexDirection: "row",

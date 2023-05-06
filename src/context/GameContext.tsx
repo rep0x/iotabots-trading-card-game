@@ -67,7 +67,6 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
   React.useEffect(() => {
     if (game && attack.attacker !== null) {
       if (attack.defender !== null) {
-        console.log("Actually Attacking bot...", attack);
         attackMutation({
           gameId: game.id,
           attacker: attack.attacker,
@@ -76,7 +75,6 @@ export const GameProvider: React.FC<Props> = ({ children }) => {
         });
       }
       if (attack.defender === null && attack.player) {
-        console.log("Actually Attacking player...", attack);
         attackMutation({
           gameId: game.id,
           attacker: attack.attacker,

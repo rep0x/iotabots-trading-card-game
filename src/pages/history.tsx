@@ -9,10 +9,7 @@ import { shortenAddress } from "@/utils/shortenAddress";
 
 import circle from "@/icons/historyCircle.png";
 import circleCaret from "@/icons/historyCircleCaret.png";
-
-// TODO: Get these mocks from server
-const AVATAR =
-  "https://assets.iotabots.io/compressed/1.png?auto=format&fit=max&w=828";
+import { Player } from "@/types";
 
 export default function History() {
   const { data } = api.games.getGames.useQuery();
@@ -32,43 +29,53 @@ export default function History() {
           </Typography>
           {!!data && (
             <Box sx={styles.grid}>
-              {data.map((game) => (
-                <Box key={game.id} sx={styles.card}>
-                  <Box sx={styles.player}>
-                    <Box sx={styles.avatar}>
-                      <Avatar avatar={AVATAR} />
+              {data.map((game) => {
+                const player1 = game.player1 as unknown as Player;
+                const player2 = game.player2 as unknown as Player;
+                return (
+                  <Box key={game.id} sx={styles.card}>
+                    <Box sx={styles.player}>
+                      <Box sx={styles.avatar}>
+                        <Avatar avatar={player1.avatarUrl || ""} />
+                      </Box>
+                      <Box>
+                        <Typography fontWeight="bold" fontSize={20}>
+                          {shortenAddress(game.player1Id)}
+                        </Typography>
+                        <Typography color="text.secondary">
+                          {game.player1Id === game.winner
+                            ? "Victory"
+                            : "Defeat"}
+                        </Typography>
+                      </Box>
                     </Box>
-                    <Box>
-                      <Typography fontWeight="bold" fontSize={20}>
-                        {shortenAddress(game.player1Id)}
-                      </Typography>
-                      <Typography color="text.secondary">
-                        {game.player1Id === game.winner ? "Victory" : "Defeat"}
-                      </Typography>
+                    <Box sx={styles.circle}>
+                      <Box
+                        sx={styles.circleCaret}
+                        className={
+                          game.player2 === game.winner ? "player2" : ""
+                        }
+                      />
+                      <Typography fontWeight="bold">vs</Typography>
+                    </Box>
+                    <Box sx={styles.player} className="player2">
+                      <Box sx={styles.avatar}>
+                        <Avatar avatar={player2.avatarUrl || ""} />
+                      </Box>
+                      <Box>
+                        <Typography fontWeight="bold" fontSize={20}>
+                          {shortenAddress(game.player2Id)}
+                        </Typography>
+                        <Typography color="text.secondary">
+                          {game.player2Id === game.winner
+                            ? "Victory"
+                            : "Defeat"}
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
-                  <Box sx={styles.circle}>
-                    <Box
-                      sx={styles.circleCaret}
-                      className={game.player2 === game.winner ? "player2" : ""}
-                    />
-                    <Typography fontWeight="bold">vs</Typography>
-                  </Box>
-                  <Box sx={styles.player} className="player2">
-                    <Box sx={styles.avatar}>
-                      <Avatar avatar={AVATAR} />
-                    </Box>
-                    <Box>
-                      <Typography fontWeight="bold" fontSize={20}>
-                        {shortenAddress(game.player2Id)}
-                      </Typography>
-                      <Typography color="text.secondary">
-                        {game.player2Id === game.winner ? "Victory" : "Defeat"}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
+                );
+              })}
             </Box>
           )}
         </Container>

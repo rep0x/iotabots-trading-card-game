@@ -44,6 +44,7 @@ export const queuesRouter = createTRPCRouter({
     .input(
       z.object({
         deckId: z.string(),
+        avatarUrl: z.string().nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -91,6 +92,7 @@ export const queuesRouter = createTRPCRouter({
             status: "active",
             player1Id: updatedQueue.creator,
             player1: {
+              avatarUrl: queue.creatorAvatarUrl,
               mana: 0,
               health: 20,
               deck: shuffleDeck(flatenDeck(creatorsCards)),
@@ -100,6 +102,7 @@ export const queuesRouter = createTRPCRouter({
             },
             player2Id: userId,
             player2: {
+              avatarUrl: input.avatarUrl,
               mana: 0,
               health: 20,
               deck: shuffleDeck(flatenDeck(opponentsCards)),
@@ -115,6 +118,7 @@ export const queuesRouter = createTRPCRouter({
         const newQueue = await ctx.prisma.queue.create({
           data: {
             creator: userId,
+            creatorAvatarUrl: input.avatarUrl || "",
             creatorDeckId: input.deckId,
           },
         });

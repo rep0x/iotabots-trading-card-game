@@ -34,14 +34,16 @@ model Deck {
 }
 
 model Queue {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  creator       String
-  creatorDeckId String
+  creator           String
+  creatorDeckId     String
+  creatorAvatarUrl  String
 
-  opponent      String?
+  opponent          String?
+  opponentAvatarUrl String?
 }
 
 

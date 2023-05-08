@@ -105,7 +105,10 @@ export default function Home() {
 
   const onPlay = () => {
     if (selectedDeck) {
-      joinQueue({ deckId: selectedDeck?.id });
+      joinQueue({
+        deckId: selectedDeck?.id,
+        avatarUrl: user?.profileImageUrl || null,
+      });
       setInQueue(true);
     } else {
       toast.error("Make sure you got a deck selected");

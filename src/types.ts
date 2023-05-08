@@ -17,6 +17,7 @@ export interface DeckType {
 }
 
 export interface Player {
+  avatarUrl?: string;
   health: number;
   mana: number;
   deck: string[];

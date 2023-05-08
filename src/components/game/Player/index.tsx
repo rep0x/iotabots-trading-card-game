@@ -19,33 +19,32 @@ interface Props {
 }
 
 const Player = (props: Props) => {
-  const { player, me } = props;
+  const { player: playerIdKey, me } = props;
   const { data: game } = api.games.getGame.useQuery();
   const { user } = useUser();
   const { attack, setAttack } = React.useContext(GameContext);
 
   if (!game || !user) return null;
 
-  const myPlayer = user.id === game.player1Id ? "player1" : "player2";
-  const myOpponent = myPlayer === "player1" ? "player2" : "player1";
+  const playerKey = user.id === game.player1Id ? "player1" : "player2";
+  const opponentKey = playerKey === "player1" ? "player2" : "player1";
 
+  const player = game[playerKey] as unknown as Player;
+  const opponent = game[opponentKey] as unknown as Player;
+
+  console.log(player);
+  console.log(opponent);
+
+  const currentPlayerId = game[playerIdKey];
   const currentPlayer = (me
-    ? game[myPlayer]
-    : game[myOpponent]) as unknown as Player;
-
-  const opponent = game[myOpponent] as unknown as Player;
-
-  const currentPlayerId = game[player];
+    ? game[playerKey]
+    : game[opponentKey]) as unknown as Player;
 
   const isAttackable =
     !me && // Only if Player Board = opponent
     game.step === 2 && // Selected attacker in Context
     attack.attacker !== null && // Selected attacker in Context
     opponent.zone.length === 0; // No bots on opponents zone
-
-  // TODO: Get these mocks from server
-  const AVATAR =
-    "https://assets.iotabots.io/compressed/1.png?auto=format&fit=max&w=828";
 
   const onAttack = () => {
     if (isAttackable) {
@@ -85,7 +84,7 @@ const Player = (props: Props) => {
       )}
       <Box sx={styles.inner}>
         <Box sx={styles.avatar}>
-          <Avatar avatar={AVATAR} />
+          <Avatar avatar={currentPlayer.avatarUrl || ""} />
         </Box>
         <Box ml={2}>
           <Typography variant="h6" fontWeight="bold">

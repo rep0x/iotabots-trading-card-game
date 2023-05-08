@@ -84,7 +84,10 @@ const Header = () => {
             {balance && <Currency type="default" value={balance} />}
           </Box>
           <Box sx={{ display: "flex", position: "relative" }}>
-            <PlayerInfo name={shortenAddress(address)} avatar={PLAYER.avatar} />
+            <PlayerInfo
+              name={shortenAddress(address)}
+              avatar={user?.profileImageUrl || ""}
+            />
             <Box
               sx={{
                 position: "absolute",
@@ -106,7 +109,7 @@ const Header = () => {
                 },
               }}
             >
-              <UserButton userProfileUrl="https://assets.iotabots.io/compressed/1.png?auto=format&fit=max&w=828" />
+              <UserButton />
             </Box>
           </Box>
         </Box>
